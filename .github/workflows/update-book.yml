@@ -5,6 +5,7 @@ on:
     paths:
       - 'ch*.html'
       - 'scripts/build_book.py'
+      - 'scripts/book_runtime.js'
       - '.github/workflows/update-book.yml'
   workflow_dispatch:
 
