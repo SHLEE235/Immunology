@@ -1,31 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Janeway's Immunobiology · Web Book</title>
-<link rel="stylesheet" href="book.css">
-<style>
-:root{--paper:#F3F0EC;--paper_raised:#FCFAF8;--paper_sunken:#EAE5EA;--ink:#211F2B;--ink_soft:#57525F;--ink_faint:#8D8894;--accent:#463876;--accent2:#BD5876;--line:#DAD2D8;--shadow:0 1px 2px rgba(32,34,42,.06),0 8px 28px -10px rgba(32,34,42,.14)}
-@media(prefers-color-scheme:dark){:root{--paper:#17151C;--paper_raised:#201D29;--paper_sunken:#121017;--ink:#EDEAF0;--ink_soft:#B7B1C0;--ink_faint:#756F80;--accent:#A896DE;--accent2:#E893AC;--line:#34303F}}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;line-height:1.6}
-header{border-bottom:1px solid var(--line);background:var(--paper_raised)}.head{max-width:900px;margin:auto;padding:28px 22px}
-.kicker{font:700 11px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;color:var(--accent2);text-transform:uppercase}
-h1{font-size:clamp(30px,6vw,48px);line-height:1.15;margin:8px 0 10px} .subtitle{color:var(--ink_soft);max-width:650px}
-main{max-width:900px;margin:auto;padding:28px 22px 80px}
-.card{display:block;padding:20px 22px;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--paper_raised);box-shadow:var(--shadow);text-decoration:none;color:inherit}
-.card:hover{background:var(--paper_sunken)}.num{font:700 10px ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase}
-.card h2{margin:5px 0 4px;font-size:20px;color:var(--accent)}.card p{margin:0;color:var(--ink_soft);font-size:14px}
-.note{margin-top:28px;padding:15px 17px;border-left:3px solid var(--accent);background:var(--paper_sunken);font-size:13px;color:var(--ink_soft);border-radius:5px}
-</style>
+<link href="book.css" rel="stylesheet">
 </head>
-<body>
-<header><div class="head"><div class="kicker">Web Book · Part I</div><h1>Janeway's Immunobiology</h1><div class="subtitle">챕터별 HTML을 하나의 책처럼 탐색할 수 있도록 구성한 GitHub Pages용 학습 사이트입니다.</div></div></header>
+<body class="book-home">
+<header>
+  <div class="head">
+    <div class="kicker">Web Book</div>
+    <h1>Janeway's Immunobiology</h1>
+    <div class="subtitle">장 → 소절까지 한 번에 탐색할 수 있는 웹 교재형 구성입니다.</div>
+  </div>
+</header>
 <main>
-<a class="card" href="ch1.html"><div class="num">Chapter 1</div><h2>Immunology의 기본 개념</h2><p>1장 본문</p></a>
-<a class="card" href="ch2.html"><div class="num">Chapter 2</div><h2>Innate Immunity: 1차 방어선</h2><p>2장 본문</p></a>
-<a class="card" href="ch2-exercises.html"><div class="num">Chapter 2 · Exercises</div><h2>2장 연습문제</h2><p>문제와 정답·해설</p></a>
-<div class="note">각 챕터에는 공통으로 <b>책 전체 목차</b>, <b>이전/다음 페이지</b>, 기존 챕터 내부 목차, 글자 크기·테마 기능이 제공됩니다. 기존 챕터 HTML의 본문과 기능은 그대로 유지합니다.</div>
+  <div class="home-intro">아래 목차는 repository에 있는 chapter HTML 파일을 기준으로 자동 생성됩니다. 새 챕터를 추가하고 push하면 GitHub Actions가 book.js를 다시 생성합니다.</div>
+  <div id="tocHome"></div>
 </main>
+<script src="book.js"></script>
 </body>
 </html>
