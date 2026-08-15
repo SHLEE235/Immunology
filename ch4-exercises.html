@@ -1,0 +1,528 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>4장 연습문제 · B-cell 및 T-cell Receptor에 의한 Antigen 인식</title>
+<style>
+:root{
+    --paper: #F1EEE7;
+    --paper_raised: #FAF8F3;
+    --paper_sunken: #E7E2DA;
+    --ink: #201E24;
+    --ink_soft: #56525C;
+    --ink_faint: #8B8790;
+    --accent: #2E4C8A;
+    --accent_soft: #5673AC;
+    --accent2: #A23B4E;
+    --accent2_soft: #C97A87;
+    --line: #DCD5C9;
+    --line_soft: #EAE4D9;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+      --paper: #14161C;
+      --paper_raised: #1B1E26;
+      --paper_sunken: #0F1116;
+      --ink: #E8E6E0;
+      --ink_soft: #AFACB5;
+      --ink_faint: #726F78;
+      --accent: #7C9AD6;
+      --accent_soft: #5C7AB8;
+      --accent2: #D98A97;
+      --accent2_soft: #B25E6C;
+      --line: #2B2E38;
+      --line_soft: #21232B;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+    --paper: #14161C;
+    --paper_raised: #1B1E26;
+    --paper_sunken: #0F1116;
+    --ink: #E8E6E0;
+    --ink_soft: #AFACB5;
+    --ink_faint: #726F78;
+    --accent: #7C9AD6;
+    --accent_soft: #5C7AB8;
+    --accent2: #D98A97;
+    --accent2_soft: #B25E6C;
+    --line: #2B2E38;
+    --line_soft: #21232B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+}
+:root[data-theme="light"]{
+    --paper: #F1EEE7;
+    --paper_raised: #FAF8F3;
+    --paper_sunken: #E7E2DA;
+    --ink: #201E24;
+    --ink_soft: #56525C;
+    --ink_faint: #8B8790;
+    --accent: #2E4C8A;
+    --accent_soft: #5673AC;
+    --accent2: #A23B4E;
+    --accent2_soft: #C97A87;
+    --line: #DCD5C9;
+    --line_soft: #EAE4D9;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+  :root{
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --content-scale: 1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--font-ui); -webkit-font-smoothing:antialiased; line-height:1.5; }
+  a{color:var(--accent);}
+
+  header.top{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{ max-width:720px; margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:10px; }
+  .brand{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
+  .brand .kicker{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent2); font-weight:600; }
+  .brand .name{ font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .iconbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    flex:none; cursor:pointer;
+  }
+  .iconbtn:active{ transform:scale(.94); }
+  .iconbtn svg{width:18px;height:18px;}
+  .barbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    height:36px; padding:0 12px; border-radius:9px; font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+    cursor:pointer; flex:none; white-space:nowrap;
+  }
+  .barbtn:active{ background:var(--paper_sunken); }
+  .fontctl{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:none;
+    background:var(--paper_raised);
+  }
+  .fontctl button{
+    appearance:none; border:none; background:transparent; color:var(--ink);
+    width:32px; height:36px; font-family:var(--font-ui); font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .fontctl button:first-child{border-right:1px solid var(--line);}
+  .fontctl button:active{background:var(--paper_sunken);}
+  .barbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markcount{
+    display:inline-block; margin-left:6px; min-width:16px; padding:0 5px; border-radius:999px;
+    background:color-mix(in srgb, var(--accent2) 22%, transparent); color:var(--accent2);
+    font-family:var(--font-mono); font-size:10.5px; line-height:16px; text-align:center;
+  }
+  .markcount:empty{ display:none; }
+
+  main{max-width:720px; margin:0 auto; padding:22px 18px 80px;}
+  .masthead{padding:6px 2px 24px;}
+  .masthead .parttag{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--ink_faint); text-transform:uppercase; margin-bottom:8px;}
+  .masthead h1{ font-size:calc(clamp(24px, 5.2vw, 30px) * var(--content-scale)); line-height:1.2; margin:0 0 10px; letter-spacing:-.01em; color:var(--ink); text-wrap:balance; font-weight:800;}
+  .masthead .desc{ color:var(--ink_soft); font-size:calc(14px * var(--content-scale)); line-height:1.6; max-width:58ch;}
+
+  .qcard{
+    background:var(--paper_raised); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 20px 18px; margin-bottom:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .qcard.marked{
+    border-color: color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background: linear-gradient(175deg, color-mix(in srgb, var(--accent2) 7%, var(--paper_raised)), var(--paper_raised));
+  }
+  .qhead{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .qnum{ font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px; }
+  .qtype{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent2); background:color-mix(in srgb, var(--accent2) 12%, transparent);
+    padding:2px 8px; border-radius:999px; font-weight:700;
+  }
+  .markbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_sunken); color:var(--ink_faint);
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    margin-left:auto; cursor:pointer; flex:none; transition:transform .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .markbtn svg{ width:15px; height:15px; }
+  .markbtn:active{ transform:scale(.9); }
+  .markbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markbtn[aria-pressed="true"] svg{ fill:var(--accent2); }
+
+  .emptystate{
+    display:none; text-align:center; padding:36px 20px; color:var(--ink_faint); font-size:14px;
+    border:1px dashed var(--line); border-radius:var(--radius);
+  }
+  body.filter-marked .qcard:not(.marked){ display:none; }
+  .qprompt{ font-size:calc(15.5px * var(--content-scale)); line-height:1.7; color:var(--ink); }
+  .qprompt p{ margin:0 0 10px; }
+  .qprompt p:last-child{ margin-bottom:0; }
+  .qprompt ul, .qprompt ol{ margin:8px 0 0; padding-left:1.4em; line-height:1.7; }
+  .qprompt li{ margin-bottom:4px; }
+
+  details.reveal{ margin-top:14px; }
+  details.reveal > summary{
+    list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-ui); font-weight:700; font-size:13.5px; color:var(--accent);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:8px;
+    padding:8px 14px; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  details.reveal > summary::-webkit-details-marker{ display:none; }
+  details.reveal > summary::before{
+    content:"▸"; display:inline-block; transition:transform .15s ease; font-size:11px;
+  }
+  details.reveal[open] > summary::before{ transform:rotate(90deg); }
+  details.reveal[open] > summary{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+  details.reveal > summary .show-label::after{ content:"정답 보기"; }
+  details.reveal[open] > summary .show-label::after{ content:"닫기"; }
+
+  .answerbox{
+    margin-top:10px; padding:14px 16px; border-radius:8px;
+    background:var(--paper_sunken); border:1px solid var(--line);
+    border-left:3px solid var(--accent2);
+  }
+  .answerbox .a-label{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:6px;
+  }
+  .answerbox .a-answer{ font-weight:700; font-size:calc(14.5px * var(--content-scale)); margin-bottom:8px; color:var(--ink); }
+  .answerbox .a-explain{ font-size:calc(14px * var(--content-scale)); line-height:1.7; color:var(--ink_soft); }
+  .answerbox .a-explain p{ margin:0 0 8px; }
+  .answerbox .a-explain p:last-child{ margin-bottom:0; }
+
+  footer.page-foot{ max-width:720px; margin:8px auto 40px; padding:18px; text-align:center; color:var(--ink_faint); font-size:12px; line-height:1.7; }
+
+  @media (max-width:560px){
+    main{padding:16px 14px 60px;}
+    .qcard{padding:16px 16px 14px;}
+    .top-inner{padding:9px 12px;}
+  }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="kicker">Janeway&#x27;s Immunobiology</span>
+      <span class="name">4장 연습문제 · B-cell 및 T-cell Receptor에 의한 Antigen 인식</span>
+    </div>
+    <button class="barbtn" id="markFilterBtn" aria-pressed="false">☆ 표시한 문제만<span id="markCount" class="markcount"></span></button>
+    <button class="barbtn" id="expandAll">모두 펼치기</button>
+    <div class="fontctl" aria-label="글자 크기 조절">
+      <button id="fontDown" aria-label="글자 작게">A−</button>
+      <button id="fontUp" aria-label="글자 크게">A+</button>
+    </div>
+    <button class="iconbtn" id="themeBtn" aria-label="테마 전환" title="테마 전환">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="masthead">
+    <div class="parttag">Part II · Antigen의 인식</div>
+    <h1>4장&ensp;연습문제</h1>
+    <p class="desc">정답과 해설은 원본에 없어 본문 내용을 근거로 직접 작성했습니다. 오른쪽 위 ☆로 문제를 표시해 두면 나중에 표시한 문제만 골라 볼 수 있습니다.</p>
+  </div>
+
+  <div class="qcard" id="q4-1" data-qid="q4-1">
+  <div class="qhead">
+    <span class="qnum">4.1</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Papain으로 단백질분해 절단된 antibody는 pepsin으로 절단된 antibody보다 동족 antigen에 대해 더 높은 avidity를 지닌 fragment를 만들어낸다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>거꾸로다. Papain은 antibody를 두 개의 독립된 <strong>Fab fragment</strong>로 절단하는데, 각 Fab는 antigen-binding site가 하나뿐인 1가(monovalent) 조각이라 avidity가 오히려 <em>낮다</em>. 반면 pepsin은 두 heavy chain을 잇는 disulfide bond의 carboxy-말단 쪽을 절단해 두 antigen-binding 팔이 여전히 연결된 <strong>F(ab′)2 fragment</strong>를 만들며, 이는 원래 antibody와 같은 2가 결합 특성(avidity)을 유지한다. 즉 pepsin 절단 fragment가 papain 절단 fragment보다 avidity가 더 높다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-2" data-qid="q4-2">
+  <div class="qhead">
+    <span class="qnum">4.2</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>CD4와 CD8 co-receptor가 MHC에 결합하는 것이 T-cell receptor signaling에 왜 중요한가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">MHC의 비다형성 부위에 결합해 Lck를 TCR 복합체 가까이로 끌어옴으로써 신호를 증폭시킨다.</div>
+      <div class="a-explain"><p>CD4와 CD8은 T-cell receptor가 인식하고 있는 것과 <strong>동일한 peptide:MHC 복합체</strong>에서, peptide-binding site와는 떨어진 MHC의 비다형성(nonpolymorphic) 부위에 결합한다. 이렇게 TCR과 나란히 결합함으로써 CD4·CD8의 세포질 꼬리에 붙어 있는 tyrosine kinase <strong>Lck</strong>가 TCR/CD3 복합체 바로 옆으로 모이게 되고, 이것이 signaling cascade를 촉발하는 방아쇠가 된다. 그 결과 co-receptor가 있을 때 T cell은 없을 때보다 약 100배 더 낮은 antigen 농도에도 반응할 수 있다 — 즉 co-receptor 결합은 TCR 신호의 민감도와 세기를 크게 높이는 필수 보조 장치다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-3" data-qid="q4-3">
+  <div class="qhead">
+    <span class="qnum">4.3</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>MHC locus에서 heterozygosity를 지니는 것이 왜, 그리고 어떻게 유리한가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">부모로부터 물려받은 서로 다른 allele를 모두 발현해, 결합·제시할 수 있는 peptide의 폭이 넓어지기 때문이다.</div>
+      <div class="a-explain"><p>개별 MHC allele는 저마다 특정한 anchor residue 패턴을 지닌 peptide 집합만을 우선적으로 결합한다. MHC locus에서 <strong>heterozygous</strong>한 개체는 각 MHC class I·II 유전자에 대해 서로 다른 두 개의 allele를 동시에 발현하므로, 동형접합(homozygous) 개체보다 훨씬 다양한 peptide를 세포 표면에 제시할 수 있다. 이는 어떤 pathogen이 우연히 한 종류의 MHC 변이체에는 결합하지 않는 peptide만 만들어내더라도 다른 allele가 이를 보완해 T cell에 제시할 가능성을 높여주므로, 감염원에 대한 면역 감시망이 더 촘촘해지는 효과(heterozygote advantage)를 낸다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-4" data-qid="q4-4">
+  <div class="qhead">
+    <span class="qnum">4.4</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>용어와 가장 적절한 설명을 짝지으시오:</p><ul><li>A. Antigenic determinant</li><li>B. Conformational/discontinuous epitope</li><li>C. Continuous/linear epitope</li><li>D. Hypervariable region</li></ul><ul><li>i. Antibody에 의해 인식되는 구조(즉 epitope)</li><li>ii. 서열 변이가 상당한 V region의 부위</li><li>iii. Polypeptide chain의 단일 절편으로 구성된 epitope</li><li>iv. 단백질 접힘에 의해 polypeptide chain의 서로 다른 부분에서 모인 amino acid로 구성된 epitope</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–i, B–iv, C–iii, D–ii</div>
+      <div class="a-explain"><p><strong>A–i</strong>: antigenic determinant는 epitope의 다른 이름이므로 정의 그 자체(i)와 짝지어진다. <strong>B–iv</strong>: conformational/discontinuous epitope는 1차 서열상으로는 떨어져 있던 amino acid들이 단백질이 접히면서 한 표면에 모여 만들어지는 구조다. <strong>C–iii</strong>: continuous/linear epitope는 polypeptide chain에서 끊기지 않은 한 구간으로만 이루어진다. <strong>D–ii</strong>: hypervariable region(=CDR)은 V region 중에서도 서열 변이가 특히 큰 부위를 가리킨다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-5" data-qid="q4-5">
+  <div class="qhead">
+    <span class="qnum">4.5</span>
+    <span class="qtype">빈칸 채우기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>사람과 생쥐를 포함한 대부분의 척추동물은 ________ chain과 ________ chain으로 구성된 antibody를 생산한다. 이들은 antigen을 인식하는 ____ region과 antibody의 class 및 isotype을 결정하는 ____ region을 지닌다. 그러나 camelid와 연골어류는 각각 ________________와 _______________를 생산하며, 이는 임상 응용을 위한 single-chain antibody 생산의 기반이 되고 있다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">heavy / light chain, variable(V) region, constant(C) region, heavy-chain-only IgG(hcIgG), IgNAR</div>
+      <div class="a-explain"><p>대부분의 척추동물은 <strong>heavy chain</strong>과 <strong>light chain</strong>이 쌍을 이룬 antibody를 만들며, 각 chain은 antigen을 인식하는 <strong>variable(V) region</strong>과 effector 기능·isotype을 결정하는 <strong>constant(C) region</strong>으로 나뉜다. 반면 camelid(낙타·라마·알파카)는 light chain 없이 heavy chain만으로 이루어진 <strong>heavy-chain-only IgG(hcIgG)</strong>를, 상어 등 연골어류는 이에 대응하는 <strong>IgNAR(immunoglobulin new antigen receptor)</strong>를 생산한다. 두 경우 모두 단일 VH domain만으로 antigen과 결합할 수 있어 single-chain antibody 개발의 출발점이 되었다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-6" data-qid="q4-6">
+  <div class="qhead">
+    <span class="qnum">4.6</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 옳지 않은 것은?</p><ul><li>A. T-cell receptor의 α chain과 β chain은 서로 짝을 이루지만, α chain은 γ chain이나 δ chain으로 바뀔 수 있다.</li><li>B. 정전기적 상호작용(예: salt bridge)은 하전된 amino acid 사이에서 일어난다.</li><li>C. 소수성 상호작용은 두 개의 소수성 표면 사이에서 일어나며 물을 배제한다.</li><li>D. Antibody는 흔히 antigen-binding site에 tyrosine 같은 방향족 amino acid를 많이 지닌다.</li><li>E. MHC restriction은 T cell이 특정 MHC molecule에 결합된 고유한 peptide 집합을 인식하는 현상이다.</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A</div>
+      <div class="a-explain"><p>α:β T-cell receptor와 γ:δ T-cell receptor는 서로 다른 두 chain 쌍(각각 α+β, γ+δ)으로 이루어진 <em>별개의</em> receptor이며, α chain이 γ나 δ chain과 짝을 이루는 일은 없다 — 두 계열은 섞이지 않는다. 따라서 A가 옳지 않은 설명이다. B~E는 모두 본문에 나온 antibody–antigen 결합력과 MHC restriction의 정의를 정확히 서술하고 있다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-7" data-qid="q4-7">
+  <div class="qhead">
+    <span class="qnum">4.7</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-7">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>건강한 성인 사람과 생쥐에서 가장 풍부한 immunoglobulin class는 다음 중 무엇인가?</p><ul><li>A. IgA</li><li>B. IgD</li><li>C. IgE</li><li>D. IgG</li><li>E. IgM</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">D. IgG</div>
+      <div class="a-explain"><p>본문에 명시된 대로 &quot;IgG는 혈청 내에서 단연 가장 풍부한 immunoglobulin&quot;이다. IgA는 점막 분비물에서, IgM은 1차 반응 초기에, IgD와 IgE는 혈청에서 상대적으로 낮은 농도로 존재한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-8" data-qid="q4-8">
+  <div class="qhead">
+    <span class="qnum">4.8</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 immunoglobulin fold의 구조를 설명하는 것은?</p><ul><li>A. α-helix 연결부와 disulfide bond로 연결된 두 개의 antiparallel β sheet</li><li>B. Disulfide bond로 연결된 두 개의 β strand</li><li>C. 두 개의 disulfide bond로 연결된 네 개의 α helix</li><li>D. 순서대로 이어진 일곱 개의 antiparallel α helix</li><li>E. 두 개의 β sheet가 함께 접혀 disulfide bond로 연결된 하나의 β sandwich</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">E</div>
+      <div class="a-explain"><p>Ig domain은 여러 β strand로 이루어진 두 개의 β sheet가 마치 빵 두 조각처럼 서로 겹쳐 <strong>β sandwich</strong>를 이루고, 두 sheet에서 유래한 cysteine 잔기 사이의 disulfide bond로 공유결합되어 있다. 이것이 immunoglobulin fold의 정의다. α helix는 이 fold의 핵심 요소가 아니므로 A·C·D는 해당하지 않고, B는 β sandwich 구조 전체를 담지 못한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-9" data-qid="q4-9">
+  <div class="qhead">
+    <span class="qnum">4.9</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-9">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Antibody는 분자 내 여러 지점에서 유연성을 지니는데, 특히 Fc 부위와 Fab 부위 사이의 hinge region, 그리고 어느 정도는 V region과 C region 사이의 접합부에서 그러하다. 다음 중 antibody의 유연성에 영향을 받지 않는 특성은 무엇인가?</p><ul><li>A. 작은 antigen(hapten)에 대한 결합</li><li>B. Antigen에 대한 avidity</li><li>C. Antigen에 대한 affinity</li><li>D. Antibody-binding protein과의 상호작용</li><li>E. 멀리 떨어져 있는 antigen에 대한 결합</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">C. Antigen에 대한 affinity</div>
+      <div class="a-explain"><p><strong>Affinity</strong>는 단일 antigen-binding site와 그 antigen 사이의 결합 세기로, CDR과 antigen 표면의 형태적 상보성만으로 정해지며 hinge의 유연성과는 무관하다. 반면 <strong>avidity</strong>(B)는 두 팔이 동시에 결합할 때 생기는 전체 결합 세기로 팔의 자유로운 움직임에 좌우되고, 서로 멀리 떨어진 antigen에 두 팔로 걸치는 결합(E)과 effector 단백질과의 상호작용(D) 역시 hinge·V–C 접합부의 유연성이 뒷받침해야 가능하다. Hapten 결합(A) 자체도 단일 site의 일이지만, 이 문항이 겨냥하는 핵심 대비는 본문이 명시적으로 구분하는 affinity 대 avidity이므로 C가 가장 정확한 답이다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-10" data-qid="q4-10">
+  <div class="qhead">
+    <span class="qnum">4.10</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>B cell과 T cell의 antigen receptor에서 antigen 인식과 특이성에 가장 중요한 부위는 무엇인가?</p><ul><li>A. FR1</li><li>B. CDR1</li><li>C. FR2</li><li>D. CDR2</li><li>E. FR3</li><li>F. CDR3</li><li>G. FR4</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">F. CDR3</div>
+      <div class="a-explain"><p>Framework region(FR1~FR4)은 CDR을 지지하는 구조적 뼈대일 뿐 antigen과 직접 접촉하는 일이 거의 없다. CDR1·CDR2·CDR3 중에서도 <strong>CDR3</strong>는 V(D)J 유전자 재배열의 접합부에 위치해 서열 다양성이 가장 크고(4-8절 참조), antibody와 T-cell receptor 모두에서 결합 pocket의 중심부—peptide의 중심 amino acid나 antigen 표면의 핵심 접촉면—와 맞닿아 최종 특이성을 좌우하는 경우가 많다.</p></div>
+    </div>
+  </details>
+</div>
+
+  <div class="emptystate" id="emptyState">표시해 둔 문제가 아직 없습니다. 각 문제 오른쪽 위의 <strong>☆</strong> 버튼을 눌러 표시하세요.</div>
+
+</main>
+
+<footer class="page-foot">원본 PDF: 04_Antigen Recognition by B-cell and T-cell Receptors_ko.pdf · 문제 원문은 그대로 옮겼으며, 정답·해설은 별도로 작성되었습니다.</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var STORAGE_PREFIX = "janewayimm4";
+  var THEME_KEY = STORAGE_PREFIX + '_theme';
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyThemeIcon(mode){
+    var isDark = mode === 'dark' || (mode === 'auto' && mq.matches);
+    document.getElementById('themeIcon').innerHTML = isDark
+      ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  }
+  var saved = localStorage.getItem(THEME_KEY) || 'auto';
+  if(saved !== 'auto'){ root.setAttribute('data-theme', saved); }
+  applyThemeIcon(saved);
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var cur = localStorage.getItem(THEME_KEY) || 'auto';
+    var isDarkNow = cur === 'dark' || (cur === 'auto' && mq.matches);
+    var next = isDarkNow ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    root.setAttribute('data-theme', next);
+    applyThemeIcon(next);
+  });
+
+  var FONT_KEY = STORAGE_PREFIX + '_fontscale';
+  var scale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+  root.style.setProperty('--content-scale', scale);
+  function setScale(v){
+    scale = Math.max(0.85, Math.min(1.35, v));
+    root.style.setProperty('--content-scale', scale);
+    localStorage.setItem(FONT_KEY, scale);
+  }
+  document.getElementById('fontUp').addEventListener('click', function(){ setScale(scale + 0.08); });
+  document.getElementById('fontDown').addEventListener('click', function(){ setScale(scale - 0.08); });
+
+  var expandBtn = document.getElementById('expandAll');
+  var expanded = false;
+  expandBtn.addEventListener('click', function(){
+    expanded = !expanded;
+    document.querySelectorAll('details.reveal').forEach(function(d){ d.open = expanded; });
+    expandBtn.textContent = expanded ? '모두 접기' : '모두 펼치기';
+  });
+
+  // ---------------- Mark / flag questions for later review ----------------
+  var MARK_KEY = STORAGE_PREFIX + '_marks';
+  var marks = {};
+  try { marks = JSON.parse(localStorage.getItem(MARK_KEY) || '{}'); } catch(e) { marks = {}; }
+
+  var markCountEl = document.getElementById('markCount');
+  var emptyStateEl = document.getElementById('emptyState');
+  var filterBtn = document.getElementById('markFilterBtn');
+  var filterOn = false;
+
+  function persistMarks(){ localStorage.setItem(MARK_KEY, JSON.stringify(marks)); }
+
+  function markedCount(){ return Object.keys(marks).filter(function(k){ return marks[k]; }).length; }
+
+  function refreshUI(){
+    var n = markedCount();
+    markCountEl.textContent = n > 0 ? n : '';
+    var showEmpty = filterOn && n === 0;
+    emptyStateEl.style.display = showEmpty ? 'block' : 'none';
+  }
+
+  function applyMarkState(card, on){
+    var btn = card.querySelector('.markbtn');
+    card.classList.toggle('marked', !!on);
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  document.querySelectorAll('.qcard').forEach(function(card){
+    var qid = card.getAttribute('data-qid');
+    applyMarkState(card, !!marks[qid]);
+  });
+  refreshUI();
+
+  document.querySelectorAll('.markbtn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var qid = btn.getAttribute('data-qid');
+      var card = btn.closest('.qcard');
+      var on = !marks[qid];
+      marks[qid] = on;
+      if (!on) delete marks[qid];
+      applyMarkState(card, on);
+      persistMarks();
+      refreshUI();
+    });
+  });
+
+  filterBtn.addEventListener('click', function(){
+    filterOn = !filterOn;
+    document.body.classList.toggle('filter-marked', filterOn);
+    filterBtn.setAttribute('aria-pressed', filterOn ? 'true' : 'false');
+    filterBtn.innerHTML = (filterOn ? '★ 전체 문제 보기' : '☆ 표시한 문제만') + '<span id="markCount" class="markcount"></span>';
+    markCountEl = document.getElementById('markCount');
+    refreshUI();
+  });
+})();
+</script>

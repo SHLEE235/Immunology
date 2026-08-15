@@ -1,0 +1,566 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3장 연습문제 · Innate Immunity의 유도 반응</title>
+<style>
+:root{
+    --paper: #F3F0EC;
+    --paper_raised: #FCFAF8;
+    --paper_sunken: #EAE5EA;
+    --ink: #211F2B;
+    --ink_soft: #57525F;
+    --ink_faint: #8D8894;
+    --accent: #463876;
+    --accent_soft: #6C5AA0;
+    --accent2: #BD5876;
+    --accent2_soft: #DFA0B2;
+    --line: #DAD2D8;
+    --line_soft: #E9E3E7;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+      --paper: #17151C;
+      --paper_raised: #201D29;
+      --paper_sunken: #121017;
+      --ink: #EDEAF0;
+      --ink_soft: #B7B1C0;
+      --ink_faint: #756F80;
+      --accent: #A896DE;
+      --accent_soft: #8879BE;
+      --accent2: #E893AC;
+      --accent2_soft: #C36F8B;
+      --line: #34303F;
+      --line_soft: #29262F;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+    --paper: #17151C;
+    --paper_raised: #201D29;
+    --paper_sunken: #121017;
+    --ink: #EDEAF0;
+    --ink_soft: #B7B1C0;
+    --ink_faint: #756F80;
+    --accent: #A896DE;
+    --accent_soft: #8879BE;
+    --accent2: #E893AC;
+    --accent2_soft: #C36F8B;
+    --line: #34303F;
+    --line_soft: #29262F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+}
+:root[data-theme="light"]{
+    --paper: #F3F0EC;
+    --paper_raised: #FCFAF8;
+    --paper_sunken: #EAE5EA;
+    --ink: #211F2B;
+    --ink_soft: #57525F;
+    --ink_faint: #8D8894;
+    --accent: #463876;
+    --accent_soft: #6C5AA0;
+    --accent2: #BD5876;
+    --accent2_soft: #DFA0B2;
+    --line: #DAD2D8;
+    --line_soft: #E9E3E7;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+  :root{
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --content-scale: 1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--font-ui); -webkit-font-smoothing:antialiased; line-height:1.5; }
+  a{color:var(--accent);}
+
+  header.top{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{ max-width:720px; margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:10px; }
+  .brand{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
+  .brand .kicker{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent2); font-weight:600; }
+  .brand .name{ font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .iconbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    flex:none; cursor:pointer;
+  }
+  .iconbtn:active{ transform:scale(.94); }
+  .iconbtn svg{width:18px;height:18px;}
+  .barbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    height:36px; padding:0 12px; border-radius:9px; font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+    cursor:pointer; flex:none; white-space:nowrap;
+  }
+  .barbtn:active{ background:var(--paper_sunken); }
+  .fontctl{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:none;
+    background:var(--paper_raised);
+  }
+  .fontctl button{
+    appearance:none; border:none; background:transparent; color:var(--ink);
+    width:32px; height:36px; font-family:var(--font-ui); font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .fontctl button:first-child{border-right:1px solid var(--line);}
+  .fontctl button:active{background:var(--paper_sunken);}
+  .barbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markcount{
+    display:inline-block; margin-left:6px; min-width:16px; padding:0 5px; border-radius:999px;
+    background:color-mix(in srgb, var(--accent2) 22%, transparent); color:var(--accent2);
+    font-family:var(--font-mono); font-size:10.5px; line-height:16px; text-align:center;
+  }
+  .markcount:empty{ display:none; }
+
+  main{max-width:720px; margin:0 auto; padding:22px 18px 80px;}
+  .masthead{padding:6px 2px 24px;}
+  .masthead .parttag{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--ink_faint); text-transform:uppercase; margin-bottom:8px;}
+  .masthead h1{ font-size:calc(clamp(24px, 5.2vw, 30px) * var(--content-scale)); line-height:1.2; margin:0 0 10px; letter-spacing:-.01em; color:var(--ink); text-wrap:balance; font-weight:800;}
+  .masthead .desc{ color:var(--ink_soft); font-size:calc(14px * var(--content-scale)); line-height:1.6; max-width:58ch;}
+
+  .qcard{
+    background:var(--paper_raised); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 20px 18px; margin-bottom:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .qcard.marked{
+    border-color: color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background: linear-gradient(175deg, color-mix(in srgb, var(--accent2) 7%, var(--paper_raised)), var(--paper_raised));
+  }
+  .qhead{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .qnum{ font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px; }
+  .qtype{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent2); background:color-mix(in srgb, var(--accent2) 12%, transparent);
+    padding:2px 8px; border-radius:999px; font-weight:700;
+  }
+  .markbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_sunken); color:var(--ink_faint);
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    margin-left:auto; cursor:pointer; flex:none; transition:transform .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .markbtn svg{ width:15px; height:15px; }
+  .markbtn:active{ transform:scale(.9); }
+  .markbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markbtn[aria-pressed="true"] svg{ fill:var(--accent2); }
+
+  .emptystate{
+    display:none; text-align:center; padding:36px 20px; color:var(--ink_faint); font-size:14px;
+    border:1px dashed var(--line); border-radius:var(--radius);
+  }
+  body.filter-marked .qcard:not(.marked){ display:none; }
+  .qprompt{ font-size:calc(15.5px * var(--content-scale)); line-height:1.7; color:var(--ink); }
+  .qprompt p{ margin:0 0 10px; }
+  .qprompt p:last-child{ margin-bottom:0; }
+  .qprompt ul, .qprompt ol{ margin:8px 0 0; padding-left:1.4em; line-height:1.7; }
+  .qprompt li{ margin-bottom:4px; }
+
+  details.reveal{ margin-top:14px; }
+  details.reveal > summary{
+    list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-ui); font-weight:700; font-size:13.5px; color:var(--accent);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:8px;
+    padding:8px 14px; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  details.reveal > summary::-webkit-details-marker{ display:none; }
+  details.reveal > summary::before{
+    content:"▸"; display:inline-block; transition:transform .15s ease; font-size:11px;
+  }
+  details.reveal[open] > summary::before{ transform:rotate(90deg); }
+  details.reveal[open] > summary{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+  details.reveal > summary .show-label::after{ content:"정답 보기"; }
+  details.reveal[open] > summary .show-label::after{ content:"닫기"; }
+
+  .answerbox{
+    margin-top:10px; padding:14px 16px; border-radius:8px;
+    background:var(--paper_sunken); border:1px solid var(--line);
+    border-left:3px solid var(--accent2);
+  }
+  .answerbox .a-label{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:6px;
+  }
+  .answerbox .a-answer{ font-weight:700; font-size:calc(14.5px * var(--content-scale)); margin-bottom:8px; color:var(--ink); }
+  .answerbox .a-explain{ font-size:calc(14px * var(--content-scale)); line-height:1.7; color:var(--ink_soft); }
+  .answerbox .a-explain p{ margin:0 0 8px; }
+  .answerbox .a-explain p:last-child{ margin-bottom:0; }
+
+  footer.page-foot{ max-width:720px; margin:8px auto 40px; padding:18px; text-align:center; color:var(--ink_faint); font-size:12px; line-height:1.7; }
+
+  @media (max-width:560px){
+    main{padding:16px 14px 60px;}
+    .qcard{padding:16px 16px 14px;}
+    .top-inner{padding:9px 12px;}
+  }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="kicker">Janeway&#x27;s Immunobiology</span>
+      <span class="name">3장 연습문제 · Innate Immunity의 유도 반응</span>
+    </div>
+    <button class="barbtn" id="markFilterBtn" aria-pressed="false">☆ 표시한 문제만<span id="markCount" class="markcount"></span></button>
+    <button class="barbtn" id="expandAll">모두 펼치기</button>
+    <div class="fontctl" aria-label="글자 크기 조절">
+      <button id="fontDown" aria-label="글자 작게">A−</button>
+      <button id="fontUp" aria-label="글자 크게">A+</button>
+    </div>
+    <button class="iconbtn" id="themeBtn" aria-label="테마 전환" title="테마 전환">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="masthead">
+    <div class="parttag">Part I · Innate Immunity의 유도 반응</div>
+    <h1>3장&ensp;연습문제</h1>
+    <p class="desc">정답과 해설은 원본에 없어 본문 내용을 근거로 직접 작성했습니다. 오른쪽 위 ☆로 문제를 표시해 두면 나중에 표시한 문제만 골라 볼 수 있습니다.</p>
+  </div>
+
+  <div class="qcard" id="q3-1" data-qid="q3-1">
+  <div class="qhead">
+    <span class="qnum">3.1</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Toll-like receptor(TLR)를 그 ligand와 짝지으시오.</p><ul><li>A. TLR-2:TLR-1 또는 TLR-2:TLR-6</li><li>B. TLR-3</li><li>C. TLR-4</li><li>D. TLR-5</li><li>E. TLR-7</li><li>F. TLR-9</li></ul><ul><li>i. ssRNA</li><li>ii. Lipopolysaccharide</li><li>iii. Lipoteichoic acid와 di-/triacyl lipoprotein</li><li>iv. dsRNA</li><li>v. Flagellin</li><li>vi. Methylation되지 않은 CpG DNA</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–iii, B–iv, C–ii, D–v, E–i, F–vi</div>
+      <div class="a-explain"><p>TLR-2와 TLR-1 또는 TLR-6의 heterodimer는 lipoteichoic acid와 di-/triacyl lipoprotein을(3-5절), TLR-3는 dsRNA를, TLR-4는 MD-2·CD14와 함께 LPS를(3-6절), TLR-5는 flagellin을, TLR-7은 ssRNA를, TLR-9는 methylation되지 않은 CpG DNA를 인식한다(3-5절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-2" data-qid="q3-2">
+  <div class="qhead">
+    <span class="qnum">3.2</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>유전 질환을 그 원인 유전자와 짝지으시오.</p><ul><li>A. Chronic granulomatous disease</li><li>B. X-linked hypohidrotic ectodermal dysplasia and immunodeficiency</li><li>C. Crohn's disease</li><li>D. X-linked SCID</li><li>E. SCID(X-linked이 아닌)</li><li>F. Familial cold inflammatory syndrome</li></ul><ul><li>i. NOD2</li><li>ii. IKKγ(NEMO)</li><li>iii. Jak3</li><li>iv. NADPH oxidase</li><li>v. NLRP3</li><li>vi. γc</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–iv, B–ii, C–i, D–vi, E–iii, F–v</div>
+      <div class="a-explain"><p>CGD는 NADPH oxidase(gp91 등) 결핍(3-2절), NEMO deficiency는 IKKγ 돌연변이(3-7절), Crohn's disease는 NOD2 기능상실 돌연변이(3-8절), X-linked SCID는 γc 불활성화(3-15절), non-X-linked SCID는 Jak3 불활성화(3-16절), familial cold inflammatory syndrome은 NLRP3 돌연변이(3-9절)와 연관된다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-3" data-qid="q3-3">
+  <div class="qhead">
+    <span class="qnum">3.3</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 염증 반응 중에 일어나지 않는 것은?</p><ul><li>A. 국소 혈액 응고</li><li>B. 조직 손상 복구</li><li>C. Endothelial cell 활성화</li><li>D. 혈관 투과성 감소</li><li>E. 염증 조직으로의 leukocyte extravasation</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">D</div>
+      <div class="a-explain"><p>염증 반응의 국소 혈관 변화 중 하나는 혈관 투과성의 <strong>증가</strong>다(3-3절) — 이는 혈장 단백질과 체액이 조직으로 빠져나가 부종을 일으키는 원인이다. 나머지(A, B, C, E)는 모두 염증의 실제 구성 요소다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-4" data-qid="q3-4">
+  <div class="qhead">
+    <span class="qnum">3.4</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Conventional dendritic cell(cDC)과 plasmacytoid dendritic cell(pDC)의 차이는 무엇인가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">cDC는 미생물을 섭취·가공해 T cell에 antigen을 제시하여 adaptive immunity를 여는 다리 역할을 하고, pDC는 TLR-7·TLR-9를 통해 바이러스를 감지해 type I interferon을 압도적으로 많이 생산하는 데 특화되어 있다.</div>
+      <div class="a-explain"><p>cDC의 주된 역할은 섭취한 미생물을 가공해 T cell을 활성화할 peptide antigen을 만들고 co-stimulatory molecule·cytokine을 생산하여 innate와 adaptive immunity를 잇는 것이다(3-1절). 반면 pDC는 interferon-producing cell이라고도 불리며, 다른 세포 유형보다 최대 1000배 많은 IFN-α·IFN-β를 생산하는 데 특화되어 있고, 이는 endosomal TLR-7·TLR-9가 interferon 생산 경로와 효율적으로 결합되어 있기 때문이다(3-1절, 3-22절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-5" data-qid="q3-5">
+  <div class="qhead">
+    <span class="qnum">3.5</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 G-protein-coupled receptor는 무엇인가?</p><ul><li>A. fMLF receptor</li><li>B. TLR-4</li><li>C. IL-1R</li><li>D. CD14</li><li>E. STING</li><li>F. B7.1(CD80)</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A</div>
+      <div class="a-explain"><p>fMLF receptor는 일곱 개의 막관통 분절을 특징으로 하는 G-protein-coupled receptor(GPCR) 계열에 속한다(3-2절). TLR-4와 IL-1R은 TIR domain을 가진 단일 통과 막단백질, CD14는 GPI-anchor 표면 단백질, STING은 ER 막에 고정된 4회 막관통 단백질, B7.1은 co-stimulatory immunoglobulin superfamily 단백질로 모두 GPCR이 아니다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-6" data-qid="q3-6">
+  <div class="qhead">
+    <span class="qnum">3.6</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>모든 형태의 ubiquitination은 proteasomal degradation으로 이어진다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>TLR·NOD·RIG-I 신호에서 생성되는 K63-연결 polyubiquitin 사슬은 단백질을 분해로 보내지 않고, TAK1·IKK 복합체를 모으는 신호 지지체(scaffold) 역할을 한다(3-7절). 단백질을 proteasome으로 보내는 분해 신호는 주로 K48-연결 polyubiquitin이다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-7" data-qid="q3-7">
+  <div class="qhead">
+    <span class="qnum">3.7</span>
+    <span class="qtype">빈칸 채우기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-7">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 각 문장의 빈칸을 채우시오.</p><p>A. Toll-like receptor(TLR)는 TIR라는 세포질 신호 domain을 지니고 있는데, 이는 ________와도 공유된다.</p><p>B. Hematopoietin family의 cytokine receptor는 ________ family의 tyrosine kinase를 활성화하며, 신호를 전달하기 위해 이들은 ________라 불리는 SH2 domain을 함유한 transcription factor를 모집한다.</p><p>C. 서로 다른 모든 TLR 중에서 MyD88/MAL과 TRIF/TRAM adaptor 짝을 모두 사용하는 유일한 것은 ________이다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A: IL-1 receptor(IL-1β의 receptor) / B: JAK / STAT / C: TLR-4</div>
+      <div class="a-explain"><p>A: 모든 mammalian TLR 단백질의 TIR domain은 cytokine interleukin-1β(IL-1β)의 receptor 세포질 꼬리에서도 발견된다(3-5절). B: Hematopoietin receptor는 JAK family tyrosine kinase와 결합되어 있으며, 활성화된 JAK가 STAT transcription factor를 인산화·활성화한다(3-16절). C: TLR-4는 MyD88/MAL과 TRIF/TRAM 두 adaptor 짝을 모두 이용하는 유일한 TLR이며, 후자는 TLR-4의 endosomal 신호에 쓰인다(3-7절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-8" data-qid="q3-8">
+  <div class="qhead">
+    <span class="qnum">3.8</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>세포질 DNA는 cGAS에 의해 감지되며 이는 STING을 통해 신호하는 반면, 세포질 ssRNA와 dsRNA는 각각 RIG-I와 MDA-5에 의해 감지되며 이들은 하류 adaptor 단백질인 MAVS와 상호작용한다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">참</div>
+      <div class="a-explain"><p>본문 그대로다. cGAS는 세포질 dsDNA를 감지해 cGAMP를 생성, STING을 활성화한다(3-11절). RIG-I는 변형되지 않은 5'-triphosphate ssRNA를, MDA-5는 dsRNA를 감지하며 둘 다 MAVS를 통해 신호한다(3-10절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-9" data-qid="q3-9">
+  <div class="qhead">
+    <span class="qnum">3.9</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-9">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 옳지 않은 것은?</p><ul><li>A. CCL2는 CCR2를 통해 macrophage를 끌어들인다.</li><li>B. IL-3, IL-5, GM-CSF는 공통 β chain을 공유하는 class I cytokine receptor의 한 하위 그룹이다.</li><li>C. IL-2, IL-4, IL-7, IL-9, IL-15, IL-21은 공통 γc를 공유한다.</li><li>D. Inflammasome은 감지기 NLRP3, adaptor ASC, caspase 8로 구성된 큰 oligomer다.</li><li>E. CXCL8은 CXCR2를 통해 neutrophil을 끌어들인다.</li><li>F. ILC1은 IFN-γ를 분비하고, ILC2는 IL-4, IL-5, IL-13을 분비하며, ILC3는 IL-17과 IL-22를 분비한다.</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">D</div>
+      <div class="a-explain"><p>NLRP3 inflammasome은 NLRP3, adaptor ASC와 함께 <strong>caspase 1</strong>(caspase 8이 아님)로 구성된다(3-9절). 나머지 A, B, C, E, F는 모두 본문의 내용과 일치한다(3-17절, 3-15절, 3-23절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-10" data-qid="q3-10">
+  <div class="qhead">
+    <span class="qnum">3.10</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Natural killer(NK) cell은 killer-cell immunoglobulin-like receptor(KIR)를 지니고 있으며, 이는 self MHC molecule 위의 pathogen peptide를 감지한다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>KIR은 MHC class I molecule 자체의 존재(또는 부재)를 인식하는 것이지, 그 위에 실린 특정 pathogen peptide를 인식하는 것이 아니다(3-25절). 특정 peptide-MHC 조합을 인식하는 것은 T cell의 antigen-specific receptor(TCR)의 특징이며, NK cell의 &quot;missing self&quot; 인식과 대비된다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-11" data-qid="q3-11">
+  <div class="qhead">
+    <span class="qnum">3.11</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-11">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>염증 조직으로의 neutrophil 동원 단계를 관련된 핵심 effector와 짝지으시오.</p><ul><li>A. Endothelial cell 활성화</li><li>B. Rolling</li><li>C. Neutrophil integrin이 '활성' 상태를 취함</li><li>D. 강한 부착</li><li>E. Diapedesis</li></ul><ul><li>i. Neutrophil LFA-1과 endothelial ICAM-1</li><li>ii. TNF-α와 다른 cytokine의 국소 분비</li><li>iii. CXCR2를 통한 CXCL8 신호에 의한 talin 활성화</li><li>iv. Endothelial cell과 neutrophil의 CD31</li><li>v. Endothelial P-selectin, E-selectin과 neutrophil sulfated sialyl-LewisX의 상호작용</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–ii, B–v, C–iii, D–i, E–iv</div>
+      <div class="a-explain"><p>Extravasation의 4단계(3-19절): ① TNF-α 등 cytokine의 국소 분비로 endothelial cell이 활성화되고, ② selectin–sialyl-LewisX 상호작용으로 neutrophil이 내피를 따라 rolling하며, ③ CXCL8·CXCR2 신호가 talin을 활성화해 integrin을 '활성' 상태로 전환하고, ④ 활성화된 LFA-1이 ICAM-1과 강하게 결합해 rolling이 멈추며, ⑤ CD31(PECAM) 상호작용을 통해 diapedesis가 일어난다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q3-12" data-qid="q3-12">
+  <div class="qhead">
+    <span class="qnum">3.12</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q3-12">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Pathogen recognition 시 macrophage와 dendritic cell에서 유도되는 co-stimulatory molecule은 무엇이며, 그 기능은 무엇인가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">B7.1(CD80)과 B7.2(CD86). CD4 T cell의 co-stimulatory receptor에 인식되어 T cell 활성화에 필요한 두 번째 신호를 제공함으로써 adaptive immune response를 개시한다.</div>
+      <div class="a-explain"><p>TLR 같은 innate sensor에 의한 활성화에 반응하여 macrophage와 조직 dendritic cell은 세포 표면 단백질 B7.1(CD80)과 B7.2(CD86)를 발현한다(3-12절). 이들은 CD4 T cell이 발현하는 특정 co-stimulatory receptor에 인식되며, 이 상호작용은 antigen 인식만으로는 부족한 T cell의 완전한 활성화에 필요한 '두 번째 신호'를 제공해 adaptive immune response를 여는 핵심 연결 고리 역할을 한다.</p></div>
+    </div>
+  </details>
+</div>
+
+  <div class="emptystate" id="emptyState">표시해 둔 문제가 아직 없습니다. 각 문제 오른쪽 위의 <strong>☆</strong> 버튼을 눌러 표시하세요.</div>
+
+</main>
+
+<footer class="page-foot">원본 PDF: 03_The Induced Responses of Innate Immunity_ko.pdf · 문제 원문은 그대로 옮겼으며, 정답·해설은 별도로 작성되었습니다.</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var STORAGE_PREFIX = "janewayimm3";
+  var THEME_KEY = STORAGE_PREFIX + '_theme';
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyThemeIcon(mode){
+    var isDark = mode === 'dark' || (mode === 'auto' && mq.matches);
+    document.getElementById('themeIcon').innerHTML = isDark
+      ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  }
+  var saved = localStorage.getItem(THEME_KEY) || 'auto';
+  if(saved !== 'auto'){ root.setAttribute('data-theme', saved); }
+  applyThemeIcon(saved);
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var cur = localStorage.getItem(THEME_KEY) || 'auto';
+    var isDarkNow = cur === 'dark' || (cur === 'auto' && mq.matches);
+    var next = isDarkNow ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    root.setAttribute('data-theme', next);
+    applyThemeIcon(next);
+  });
+
+  var FONT_KEY = STORAGE_PREFIX + '_fontscale';
+  var scale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+  root.style.setProperty('--content-scale', scale);
+  function setScale(v){
+    scale = Math.max(0.85, Math.min(1.35, v));
+    root.style.setProperty('--content-scale', scale);
+    localStorage.setItem(FONT_KEY, scale);
+  }
+  document.getElementById('fontUp').addEventListener('click', function(){ setScale(scale + 0.08); });
+  document.getElementById('fontDown').addEventListener('click', function(){ setScale(scale - 0.08); });
+
+  var expandBtn = document.getElementById('expandAll');
+  var expanded = false;
+  expandBtn.addEventListener('click', function(){
+    expanded = !expanded;
+    document.querySelectorAll('details.reveal').forEach(function(d){ d.open = expanded; });
+    expandBtn.textContent = expanded ? '모두 접기' : '모두 펼치기';
+  });
+
+  // ---------------- Mark / flag questions for later review ----------------
+  var MARK_KEY = STORAGE_PREFIX + '_marks';
+  var marks = {};
+  try { marks = JSON.parse(localStorage.getItem(MARK_KEY) || '{}'); } catch(e) { marks = {}; }
+
+  var markCountEl = document.getElementById('markCount');
+  var emptyStateEl = document.getElementById('emptyState');
+  var filterBtn = document.getElementById('markFilterBtn');
+  var filterOn = false;
+
+  function persistMarks(){ localStorage.setItem(MARK_KEY, JSON.stringify(marks)); }
+
+  function markedCount(){ return Object.keys(marks).filter(function(k){ return marks[k]; }).length; }
+
+  function refreshUI(){
+    var n = markedCount();
+    markCountEl.textContent = n > 0 ? n : '';
+    var showEmpty = filterOn && n === 0;
+    emptyStateEl.style.display = showEmpty ? 'block' : 'none';
+  }
+
+  function applyMarkState(card, on){
+    var btn = card.querySelector('.markbtn');
+    card.classList.toggle('marked', !!on);
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  document.querySelectorAll('.qcard').forEach(function(card){
+    var qid = card.getAttribute('data-qid');
+    applyMarkState(card, !!marks[qid]);
+  });
+  refreshUI();
+
+  document.querySelectorAll('.markbtn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var qid = btn.getAttribute('data-qid');
+      var card = btn.closest('.qcard');
+      var on = !marks[qid];
+      marks[qid] = on;
+      if (!on) delete marks[qid];
+      applyMarkState(card, on);
+      persistMarks();
+      refreshUI();
+    });
+  });
+
+  filterBtn.addEventListener('click', function(){
+    filterOn = !filterOn;
+    document.body.classList.toggle('filter-marked', filterOn);
+    filterBtn.setAttribute('aria-pressed', filterOn ? 'true' : 'false');
+    filterBtn.innerHTML = (filterOn ? '★ 전체 문제 보기' : '☆ 표시한 문제만') + '<span id="markCount" class="markcount"></span>';
+    markCountEl = document.getElementById('markCount');
+    refreshUI();
+  });
+})();
+</script>

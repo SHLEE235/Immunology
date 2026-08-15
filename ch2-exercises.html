@@ -1,0 +1,585 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2장 연습문제 · Innate Immunity: 1차 방어선</title>
+<style>
+:root{
+    --paper: #F3F0EC;
+    --paper_raised: #FCFAF8;
+    --paper_sunken: #EAE5EA;
+    --ink: #211F2B;
+    --ink_soft: #57525F;
+    --ink_faint: #8D8894;
+    --accent: #463876;
+    --accent_soft: #6C5AA0;
+    --accent2: #BD5876;
+    --accent2_soft: #DFA0B2;
+    --line: #DAD2D8;
+    --line_soft: #E9E3E7;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+      --paper: #17151C;
+      --paper_raised: #201D29;
+      --paper_sunken: #121017;
+      --ink: #EDEAF0;
+      --ink_soft: #B7B1C0;
+      --ink_faint: #756F80;
+      --accent: #A896DE;
+      --accent_soft: #8879BE;
+      --accent2: #E893AC;
+      --accent2_soft: #C36F8B;
+      --line: #34303F;
+      --line_soft: #29262F;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+    --paper: #17151C;
+    --paper_raised: #201D29;
+    --paper_sunken: #121017;
+    --ink: #EDEAF0;
+    --ink_soft: #B7B1C0;
+    --ink_faint: #756F80;
+    --accent: #A896DE;
+    --accent_soft: #8879BE;
+    --accent2: #E893AC;
+    --accent2_soft: #C36F8B;
+    --line: #34303F;
+    --line_soft: #29262F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+}
+:root[data-theme="light"]{
+    --paper: #F3F0EC;
+    --paper_raised: #FCFAF8;
+    --paper_sunken: #EAE5EA;
+    --ink: #211F2B;
+    --ink_soft: #57525F;
+    --ink_faint: #8D8894;
+    --accent: #463876;
+    --accent_soft: #6C5AA0;
+    --accent2: #BD5876;
+    --accent2_soft: #DFA0B2;
+    --line: #DAD2D8;
+    --line_soft: #E9E3E7;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+  :root{
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --content-scale: 1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--font-ui); -webkit-font-smoothing:antialiased; line-height:1.5; }
+  a{color:var(--accent);}
+
+  header.top{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{ max-width:720px; margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:10px; }
+  .brand{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
+  .brand .kicker{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent2); font-weight:600; }
+  .brand .name{ font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .iconbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    flex:none; cursor:pointer;
+  }
+  .iconbtn:active{ transform:scale(.94); }
+  .iconbtn svg{width:18px;height:18px;}
+  .barbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    height:36px; padding:0 12px; border-radius:9px; font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+    cursor:pointer; flex:none; white-space:nowrap;
+  }
+  .barbtn:active{ background:var(--paper_sunken); }
+  .fontctl{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:none;
+    background:var(--paper_raised);
+  }
+  .fontctl button{
+    appearance:none; border:none; background:transparent; color:var(--ink);
+    width:32px; height:36px; font-family:var(--font-ui); font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .fontctl button:first-child{border-right:1px solid var(--line);}
+  .fontctl button:active{background:var(--paper_sunken);}
+  .barbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markcount{
+    display:inline-block; margin-left:6px; min-width:16px; padding:0 5px; border-radius:999px;
+    background:color-mix(in srgb, var(--accent2) 22%, transparent); color:var(--accent2);
+    font-family:var(--font-mono); font-size:10.5px; line-height:16px; text-align:center;
+  }
+  .markcount:empty{ display:none; }
+
+  main{max-width:720px; margin:0 auto; padding:22px 18px 80px;}
+  .masthead{padding:6px 2px 24px;}
+  .masthead .parttag{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--ink_faint); text-transform:uppercase; margin-bottom:8px;}
+  .masthead h1{ font-size:calc(clamp(24px, 5.2vw, 30px) * var(--content-scale)); line-height:1.2; margin:0 0 10px; letter-spacing:-.01em; color:var(--ink); text-wrap:balance; font-weight:800;}
+  .masthead .desc{ color:var(--ink_soft); font-size:calc(14px * var(--content-scale)); line-height:1.6; max-width:58ch;}
+
+  .qcard{
+    background:var(--paper_raised); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 20px 18px; margin-bottom:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .qcard.marked{
+    border-color: color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background: linear-gradient(175deg, color-mix(in srgb, var(--accent2) 7%, var(--paper_raised)), var(--paper_raised));
+  }
+  .qhead{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .qnum{ font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px; }
+  .qtype{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent2); background:color-mix(in srgb, var(--accent2) 12%, transparent);
+    padding:2px 8px; border-radius:999px; font-weight:700;
+  }
+  .markbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_sunken); color:var(--ink_faint);
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    margin-left:auto; cursor:pointer; flex:none; transition:transform .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .markbtn svg{ width:15px; height:15px; }
+  .markbtn:active{ transform:scale(.9); }
+  .markbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markbtn[aria-pressed="true"] svg{ fill:var(--accent2); }
+
+  .emptystate{
+    display:none; text-align:center; padding:36px 20px; color:var(--ink_faint); font-size:14px;
+    border:1px dashed var(--line); border-radius:var(--radius);
+  }
+  body.filter-marked .qcard:not(.marked){ display:none; }
+  .qprompt{ font-size:calc(15.5px * var(--content-scale)); line-height:1.7; color:var(--ink); }
+  .qprompt p{ margin:0 0 10px; }
+  .qprompt p:last-child{ margin-bottom:0; }
+  .qprompt ul, .qprompt ol{ margin:8px 0 0; padding-left:1.4em; line-height:1.7; }
+  .qprompt li{ margin-bottom:4px; }
+
+  details.reveal{ margin-top:14px; }
+  details.reveal > summary{
+    list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-ui); font-weight:700; font-size:13.5px; color:var(--accent);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:8px;
+    padding:8px 14px; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  details.reveal > summary::-webkit-details-marker{ display:none; }
+  details.reveal > summary::before{
+    content:"▸"; display:inline-block; transition:transform .15s ease; font-size:11px;
+  }
+  details.reveal[open] > summary::before{ transform:rotate(90deg); }
+  details.reveal[open] > summary{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+  details.reveal > summary .show-label::after{ content:"정답 보기"; }
+  details.reveal[open] > summary .show-label::after{ content:"닫기"; }
+
+  .answerbox{
+    margin-top:10px; padding:14px 16px; border-radius:8px;
+    background:var(--paper_sunken); border:1px solid var(--line);
+    border-left:3px solid var(--accent2);
+  }
+  .answerbox .a-label{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:6px;
+  }
+  .answerbox .a-answer{ font-weight:700; font-size:calc(14.5px * var(--content-scale)); margin-bottom:8px; color:var(--ink); }
+  .answerbox .a-explain{ font-size:calc(14px * var(--content-scale)); line-height:1.7; color:var(--ink_soft); }
+  .answerbox .a-explain p{ margin:0 0 8px; }
+  .answerbox .a-explain p:last-child{ margin-bottom:0; }
+
+  footer.page-foot{ max-width:720px; margin:8px auto 40px; padding:18px; text-align:center; color:var(--ink_faint); font-size:12px; line-height:1.7; }
+
+  @media (max-width:560px){
+    main{padding:16px 14px 60px;}
+    .qcard{padding:16px 16px 14px;}
+    .top-inner{padding:9px 12px;}
+  }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="kicker">Janeway&#x27;s Immunobiology</span>
+      <span class="name">2장 연습문제 · Innate Immunity: 1차 방어선</span>
+    </div>
+    <button class="barbtn" id="markFilterBtn" aria-pressed="false">☆ 표시한 문제만<span id="markCount" class="markcount"></span></button>
+    <button class="barbtn" id="expandAll">모두 펼치기</button>
+    <div class="fontctl" aria-label="글자 크기 조절">
+      <button id="fontDown" aria-label="글자 작게">A−</button>
+      <button id="fontUp" aria-label="글자 크게">A+</button>
+    </div>
+    <button class="iconbtn" id="themeBtn" aria-label="테마 전환" title="테마 전환">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="masthead">
+    <div class="parttag">Part I · Innate Immunity: 1차 방어선</div>
+    <h1>2장&ensp;연습문제</h1>
+    <p class="desc">정답과 해설은 원본에 없어 본문 내용을 근거로 직접 작성했습니다. 오른쪽 위 ☆로 문제를 표시해 두면 나중에 표시한 문제만 골라 볼 수 있습니다.</p>
+  </div>
+
+  <div class="qcard" id="q2-1" data-qid="q2-1">
+  <div class="qhead">
+    <span class="qnum">2.1</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>널리 쓰이는 β-lactam 항생제는 주로 Gram-positive 세균에 활성을 갖는다. 이들은 세균 세포벽의 주요 성분으로 microorganism의 생존에 필수적인 peptidoglycan 합성의 transpeptidation 단계를 억제한다. 다음 중 β-lactam이 궁극적으로 표적으로 삼는 것과 같은 세균 구조를 파괴하는 antimicrobial enzyme은 무엇인가?</p><ul><li>A. Phospholipase A</li><li>B. Lysozyme</li><li>C. Defensin</li><li>D. Histatin</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">B. Lysozyme</div>
+      <div class="a-explain"><p>β-lactam 항생제는 peptidoglycan 합성(transpeptidation)을 막아 세포벽을 표적으로 삼는다. Lysozyme 역시 완성된 peptidoglycan의 GlcNAc–MurNAc 사이 β-(1,4) 결합을 직접 절단하는 효소로, 같은 구조(peptidoglycan)를 파괴한다는 점에서 β-lactam과 표적이 겹친다(2-4절). Phospholipase A2는 세포막의 phospholipid를, defensin과 histatin은 세포막을 표적으로 삼아 peptidoglycan과는 무관하다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-2" data-qid="q2-2">
+  <div class="qhead">
+    <span class="qnum">2.2</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Mannose-binding lectin(MBL) 삼량체가 oligomer를 형성하는 능력이 그 기능에 왜 중요한가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">각 결합 부위의 친화도는 낮지만, oligomer화로 다가(multivalent) 결합을 이루어 총 결합력(avidity)이 크게 높아지고, 동시에 MASP 활성화에 필요한 conformational change를 일으킬 수 있다.</div>
+      <div class="a-explain"><p>MBL의 단일 carbohydrate-recognition domain은 mannose·fucose·GlcNAc에 대한 친화도가 낮다(2-6절). 그러나 여러 삼량체가 모여 oligomer를 이루면 미생물 표면에 반복적으로 배열된 탄수화물에 다가로 동시에 결합할 수 있어 총 결합력(avidity)이 크게 증가하고, 척추동물 세포 표면(sialic acid로 마무리됨)에는 결합하지 않는 선택성을 유지한다. 또한 MBL이 표면에 결합해야만 결합된 MASP-1에 conformational change가 일어나 MASP-2를 절단·활성화할 수 있으므로, oligomer 형성 자체가 신호 전달(activation)의 전제조건이다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-3" data-qid="q2-3">
+  <div class="qhead">
+    <span class="qnum">2.3</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Ficolin을 올바르게 기술한 것을 고르시오.</p><ul><li>A. C-type lectin domain, fucose와 N-acetylglucosamine(GlcNAc) 같은 탄수화물에 친화도, 간에서 합성</li><li>B. Fibrinogen 유사 domain, 아세틸화된 당을 포함하는 oligosaccharide에 친화도, 간에서 합성</li><li>C. C-type lectin domain, 아세틸화된 당을 포함하는 oligosaccharide에 친화도, 간에서 합성</li><li>D. Fibrinogen 유사 domain, fucose와 N-acetylglucosamine(GlcNAc) 같은 탄수화물에 친화도, 간과 폐에서 합성</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">B</div>
+      <div class="a-explain"><p>Ficolin은 MBL과 달리 lectin domain이 아니라 fibrinogen 유사 domain을 가지며, mannose가 아니라 아세틸화된 당(GlcNAc, GalNAc 등)을 포함하는 oligosaccharide를 인식한다(2-6절). L-ficolin과 H-ficolin은 간에서 합성되어 혈액을 순환한다(M-ficolin만 폐·혈액세포에서 합성되지만, 이는 세 ficolin 중 하나에 대한 예외이므로 전체를 대표하는 기술로는 B가 가장 정확하다).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-4" data-qid="q2-4">
+  <div class="qhead">
+    <span class="qnum">2.4</span>
+    <span class="qtype">빈칸 채우기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 문장에서 아래 목록 중 가장 알맞은 단어를 골라 빈칸을 채우시오. 모든 단어가 쓰이는 것은 아니며, 각 단어는 한 번만 사용해야 한다.</p><p>MBL과 마찬가지로 ficolin도 ________와 ________로 oligomer를 형성한다. 이러한 상호작용은 이 oligomer가 complement 성분 ________와 ________를 절단할 수 있게 한다. 이들이 절단되면 C3 convertase인 ________가 형성되며, 이는 ________를 절단하여 membrane-attack complex의 형성을 가능하게 한다.</p><p class="end-note">단어 목록: MASP-1, C2, MASP-2, C4a, C4, C4b2a, C4b2b, C3, C2a, C3b</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">MASP-1, MASP-2 / C4, C2 / C4b2a / C3</div>
+      <div class="a-explain"><p>Ficolin은 MASP-1과 MASP-2(첫 두 빈칸)와 복합체를 이루어 oligomer를 형성한다. 미생물 표면 인식 후 MASP-1이 MASP-2를 활성화하면, 활성 MASP-2가 C4와 C2(세 번째·네 번째 빈칸)를 절단한다. 그 결과 C3 convertase인 C4b2a(다섯 번째 빈칸)가 형성되고, 이는 C3(여섯 번째 빈칸)를 절단하여 C3b를 생성 — 이후 C5 convertase 형성과 membrane-attack complex 조립으로 이어진다(2-6절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-5" data-qid="q2-5">
+  <div class="qhead">
+    <span class="qnum">2.5</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Alternative pathway가 활성화되는 한 방식은, 정상적으로는 pathogen 표면에 공유결합하는 데 쓰이는 C3의 thioester 결합이 자발적으로 가수분해되는 것이다. 이 과정을 개시하는 C3 convertase가 액상이라면 alternative pathway는 어떻게 membrane-attack complex 형성으로 진행될 수 있는가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">액상의 C3(H2O)Bb가 만든 C3b 중 일부가 가수분해되기 전에 인근 세포(미생물이든 숙주세포든) 표면에 공유결합으로 부착되고, 그 표면에서 factor B·D와 결합해 안정된 표면결합 C3bBb를 형성하면서 증폭 고리가 표면 위에서 자체적으로 계속된다.</div>
+      <div class="a-explain"><p>C3 tickover로 생긴 액상 C3(H2O)Bb는 다량의 C3를 C3a와 C3b로 절단한다(2-9절). 이 C3b 대부분은 가수분해로 비활성화되지만, 일부는 노출된 thioester가 반응하기 전에 근처 표면(미생물 또는 손상된 숙주세포)에 공유결합으로 부착된다. 표면에 결합한 이 C3b는 factor B에 결합하고 factor D에 의해 절단되어 안정적인 표면결합 C3bBb convertase를 형성하며, properdin이 이를 안정화한다. 이 표면결합 convertase가 더 많은 C3b를 표면에 침착시키는 증폭 고리를 시작하고, 축적된 C3b가 C3bBb에 결합해 C5 convertase(C3b2Bb)를 형성하면 C5가 절단되어 C5b가 생성되고 membrane-attack complex 조립이 개시된다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-6" data-qid="q2-6">
+  <div class="qhead">
+    <span class="qnum">2.6</span>
+    <span class="qtype">빈칸 채우기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>혈관내 적혈구 lysis 발작을 특징으로 하는 질환인 paroxysmal nocturnal hemoglobinuria는 적혈구가 ________와 ________의 발현을 잃어 complement system의 ________ pathway에 의한 lysis에 취약해진 결과이다.</p><p class="end-note">단어 목록: C3b, classical, DAF, lectin, alternative, factor I, C1 inhibitor (C1INH)</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">DAF(와 CD59) / alternative pathway</div>
+      <div class="a-explain"><p>PIGA 유전자의 체세포 돌연변이로 GPI-anchor 합성이 안 되면 GPI로 세포 표면에 붙는 DAF와 CD59가 모두 소실된다(2-16절). 첫 빈칸은 제시된 단어 목록 중 DAF가 정답이며, 실제 병태생리에는 CD59 소실도 함께 필요하다(목록에는 없지만 본문에서 함께 언급됨). 조절 단백질이 없으면 alternative pathway가 표면에서 끊임없이 자발적으로(tickover) 활성화되며 억제되지 못해, 적혈구가 만성적인 complement 매개 혈관내 용혈에 노출된다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-7" data-qid="q2-7">
+  <div class="qhead">
+    <span class="qnum">2.7</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-7">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 각 complement 조절 단백질을, 그 인자가 결함이 있을 때 발생할 병리 소견과 짝지으시오.</p><ul><li>A. C1INH</li><li>B. Factor H와 factor I</li><li>C. DAF</li></ul><ul><li>1. Atypical hemolytic uremic syndrome</li><li>2. Hereditary angioedema</li><li>3. Paroxysmal nocturnal hemoglobinuria</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–2, B–1, C–3</div>
+      <div class="a-explain"><p>C1INH 결핍은 C1의 만성적 자발 활성화로 C2 kinin이 과다 생산되어 hereditary angioedema를 일으킨다(2-16절). Factor H·factor I 이형접합 돌연변이는 alternative pathway 조절 실패로 atypical hemolytic uremic syndrome의 소인이 된다. DAF(와 CD59)의 GPI-anchor 소실은 적혈구를 alternative pathway 매개 용혈에 취약하게 만들어 paroxysmal nocturnal hemoglobinuria를 일으킨다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-8" data-qid="q2-8">
+  <div class="qhead">
+    <span class="qnum">2.8</span>
+    <span class="qtype">객관식</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Cryoglobulinemia와 systemic lupus erythematosus 같은 질환은 classical complement pathway의 활성화로 인해 대개 혈중 C3와 C4 수치가 낮게 나타난다. 이와 달리 dense deposit disease나 C3 glomerulonephritis 같은 질환은 대개 alternative complement pathway의 활성화로 인해 C3가 낮다. Dense deposit disease나 C3 glomerulonephritis를 앓는 환자에서 예상되는 C2와 C4 수치는 어떠하겠는가?</p><ul><li>A. 정상</li><li>B. 높음</li><li>C. 낮음</li><li>D. C4는 높고 C3는 낮음</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A. 정상</div>
+      <div class="a-explain"><p>C2와 C4는 classical/lectin pathway의 C3 convertase(C4b2a)를 구성하는 성분이다(2-5절, 2-7절). Dense deposit disease와 C3 glomerulonephritis는 alternative pathway(C3bBb convertase, C3와 factor B를 사용하며 C2·C4는 관여하지 않음)의 만성 활성화로 발생하므로, C2와 C4는 소모되지 않고 정상 수치를 유지한다. 이는 두 질환군을 감별하는 임상적 단서로 쓰인다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-9" data-qid="q2-9">
+  <div class="qhead">
+    <span class="qnum">2.9</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-9">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Mucosal surface에서 분비되는 mucin은 직접적인 microbicidal 활성을 나타낸다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>Mucin이 이루는 mucus는 미생물의 부착을 막고 cilia 운동으로 미생물을 쓸어내는 물리적·기계적 장벽으로 작용할 뿐, mucin 자체가 미생물을 직접 죽이는 효소·독성 활성을 갖는다는 내용은 본문에 없다(2-2절). 직접적인 microbicidal 활성은 mucus 층에 함께 존재하는 lysozyme, defensin 같은 별도의 antimicrobial protein이 담당한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-10" data-qid="q2-10">
+  <div class="qhead">
+    <span class="qnum">2.10</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Neisseria meningitidis와 Staphylococcus aureus는 각각 서로 다른 방식으로 complement activation을 막는다. 각각이 어떻게 그렇게 하는지 설명하시오.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">N. meningitidis는 숙주의 조절 단백질(factor H, C4BP)을 자기 표면으로 끌어들여 이용하고, S. aureus는 complement 성분을 직접 억제·절단하는 단백질을 분비한다.</div>
+      <div class="a-explain"><p>N. meningitidis는 factor H binding protein(fHbp)으로 factor H를, 외막 단백질 PorA로 C4BP를 끌어들여 자신의 표면에 침착된 C3b·C4b를 숙주 조절 단백질의 힘으로 비활성화한다(2-17절) — 이른바 '숙주 표면 위장' 전략이다. 반면 S. aureus는 Spa(Fc region에 결합해 C1 동원 방해), staphylokinase(표면 결합 immunoglobulin 절단), SCIN(C4b2a와 C3bBb C3 convertase에 직접 결합해 활성 억제) 같은 단백질을 분비하여 complement 성분 자체를 직접 공격·억제한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-11" data-qid="q2-11">
+  <div class="qhead">
+    <span class="qnum">2.11</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-11">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Neutrophil과 장의 Paneth cell은 모두 defensin 같은 antimicrobial peptide를 자극이 있을 때만 분비한다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>장의 Paneth cell은 cryptdin(α-defensin)을 특정 자극과 무관하게 항상(constitutively) 생산·분비한다(2-4절). 반면 β-defensin은 미생물 산물의 존재에 반응하여 유도적으로 생산되는 경우가 많다. 따라서 '모두 자극이 있을 때만 분비한다'는 진술은 Paneth cell의 항시적 분비 양상과 맞지 않아 거짓이다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-12" data-qid="q2-12">
+  <div class="qhead">
+    <span class="qnum">2.12</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-12">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>C3 convertase의 두 산물은 무엇인가? 이 산물의 형성으로 일어날 수 있고 미생물의 제거로 이어지는 하류 사건 세 가지를 드시오.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">산물: C3a, C3b. 하류 사건: ① C3b의 opsonization과 phagocyte의 complement receptor 매개 섭취, ② C3b가 C5 convertase 형성에 참여해 C5a(염증)·C5b(MAC 개시) 생성, ③ C3a에 의한 국소 염증 반응(혈관 투과성 증가, 세포 동원).</div>
+      <div class="a-explain"><p>C3 convertase(C4b2a 또는 C3bBb)는 C3를 작은 조각 C3a와 큰 조각 C3b로 절단한다(2-5절, 2-12절). C3b는 pathogen 표면에 공유결합해 opsonin으로 작용, complement receptor(CR1, CR3, CR4, CRIg)를 가진 phagocyte에 의한 섭취를 촉진한다(2-13절). 또한 C3b는 C3 convertase에 결합해 C5 convertase를 형성함으로써 C5를 절단해 anaphylatoxin C5a와 membrane-attack complex를 개시하는 C5b를 만든다(2-12절, 2-15절). 한편 유리된 C3a는 mast cell·내피세포에 작용해 국소 염증을 일으켜 항체·complement·phagocyte를 감염 부위로 불러들인다(2-14절).</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q2-13" data-qid="q2-13">
+  <div class="qhead">
+    <span class="qnum">2.13</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q2-13">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>CD21(CR1)은 B cell에서 발현되는 complement receptor로 C3dg(C3b 분해 산물)에 결합하며, 신호를 증강하고 더 강한 antibody response를 촉발하는 co-receptor 역할을 한다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>진술의 기능 설명(B cell에서 C3dg에 결합하는 co-receptor)은 맞지만, 그 receptor의 이름이 틀렸다. C3dg를 인식하고 B-cell co-receptor 복합체를 이루는 것은 CR1이 아니라 CR2(CD21이라고도 함)이다(2-13절). CR1(CD35)은 주로 macrophage·neutrophil에서 발현되어 C3b에 결합하고 convertase 해리를 촉진하는 별개의 receptor로, C3dg에는 결합하지 않는다.</p></div>
+    </div>
+  </details>
+</div>
+
+  <div class="emptystate" id="emptyState">표시해 둔 문제가 아직 없습니다. 각 문제 오른쪽 위의 <strong>☆</strong> 버튼을 눌러 표시하세요.</div>
+
+</main>
+
+<footer class="page-foot">원본 PDF: 02_Innate Immunity The First Lines of Defense_ko.pdf · 문제 원문은 그대로 옮겼으며, 정답·해설은 별도로 작성되었습니다.</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var STORAGE_PREFIX = "janewayimm2";
+  var THEME_KEY = STORAGE_PREFIX + '_theme';
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyThemeIcon(mode){
+    var isDark = mode === 'dark' || (mode === 'auto' && mq.matches);
+    document.getElementById('themeIcon').innerHTML = isDark
+      ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  }
+  var saved = localStorage.getItem(THEME_KEY) || 'auto';
+  if(saved !== 'auto'){ root.setAttribute('data-theme', saved); }
+  applyThemeIcon(saved);
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var cur = localStorage.getItem(THEME_KEY) || 'auto';
+    var isDarkNow = cur === 'dark' || (cur === 'auto' && mq.matches);
+    var next = isDarkNow ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    root.setAttribute('data-theme', next);
+    applyThemeIcon(next);
+  });
+
+  var FONT_KEY = STORAGE_PREFIX + '_fontscale';
+  var scale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+  root.style.setProperty('--content-scale', scale);
+  function setScale(v){
+    scale = Math.max(0.85, Math.min(1.35, v));
+    root.style.setProperty('--content-scale', scale);
+    localStorage.setItem(FONT_KEY, scale);
+  }
+  document.getElementById('fontUp').addEventListener('click', function(){ setScale(scale + 0.08); });
+  document.getElementById('fontDown').addEventListener('click', function(){ setScale(scale - 0.08); });
+
+  var expandBtn = document.getElementById('expandAll');
+  var expanded = false;
+  expandBtn.addEventListener('click', function(){
+    expanded = !expanded;
+    document.querySelectorAll('details.reveal').forEach(function(d){ d.open = expanded; });
+    expandBtn.textContent = expanded ? '모두 접기' : '모두 펼치기';
+  });
+
+  // ---------------- Mark / flag questions for later review ----------------
+  var MARK_KEY = STORAGE_PREFIX + '_marks';
+  var marks = {};
+  try { marks = JSON.parse(localStorage.getItem(MARK_KEY) || '{}'); } catch(e) { marks = {}; }
+
+  var markCountEl = document.getElementById('markCount');
+  var emptyStateEl = document.getElementById('emptyState');
+  var filterBtn = document.getElementById('markFilterBtn');
+  var filterOn = false;
+
+  function persistMarks(){ localStorage.setItem(MARK_KEY, JSON.stringify(marks)); }
+
+  function markedCount(){ return Object.keys(marks).filter(function(k){ return marks[k]; }).length; }
+
+  function refreshUI(){
+    var n = markedCount();
+    markCountEl.textContent = n > 0 ? n : '';
+    var showEmpty = filterOn && n === 0;
+    emptyStateEl.style.display = showEmpty ? 'block' : 'none';
+  }
+
+  function applyMarkState(card, on){
+    var btn = card.querySelector('.markbtn');
+    card.classList.toggle('marked', !!on);
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  document.querySelectorAll('.qcard').forEach(function(card){
+    var qid = card.getAttribute('data-qid');
+    applyMarkState(card, !!marks[qid]);
+  });
+  refreshUI();
+
+  document.querySelectorAll('.markbtn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var qid = btn.getAttribute('data-qid');
+      var card = btn.closest('.qcard');
+      var on = !marks[qid];
+      marks[qid] = on;
+      if (!on) delete marks[qid];
+      applyMarkState(card, on);
+      persistMarks();
+      refreshUI();
+    });
+  });
+
+  filterBtn.addEventListener('click', function(){
+    filterOn = !filterOn;
+    document.body.classList.toggle('filter-marked', filterOn);
+    filterBtn.setAttribute('aria-pressed', filterOn ? 'true' : 'false');
+    filterBtn.innerHTML = (filterOn ? '★ 전체 문제 보기' : '☆ 표시한 문제만') + '<span id="markCount" class="markcount"></span>';
+    markCountEl = document.getElementById('markCount');
+    refreshUI();
+  });
+})();
+</script>
