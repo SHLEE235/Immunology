@@ -1,0 +1,1255 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>4장 연습문제 · B-cell 및 T-cell Receptor에 의한 Antigen 인식</title>
+<style>
+:root{
+    --paper: #F1EEE7;
+    --paper_raised: #FAF8F3;
+    --paper_sunken: #E7E2DA;
+    --ink: #201E24;
+    --ink_soft: #56525C;
+    --ink_faint: #8B8790;
+    --accent: #2E4C8A;
+    --accent_soft: #5673AC;
+    --accent2: #A23B4E;
+    --accent2_soft: #C97A87;
+    --line: #DCD5C9;
+    --line_soft: #EAE4D9;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+      --paper: #14161C;
+      --paper_raised: #1B1E26;
+      --paper_sunken: #0F1116;
+      --ink: #E8E6E0;
+      --ink_soft: #AFACB5;
+      --ink_faint: #726F78;
+      --accent: #7C9AD6;
+      --accent_soft: #5C7AB8;
+      --accent2: #D98A97;
+      --accent2_soft: #B25E6C;
+      --line: #2B2E38;
+      --line_soft: #21232B;
+        --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+    --paper: #14161C;
+    --paper_raised: #1B1E26;
+    --paper_sunken: #0F1116;
+    --ink: #E8E6E0;
+    --ink_soft: #AFACB5;
+    --ink_faint: #726F78;
+    --accent: #7C9AD6;
+    --accent_soft: #5C7AB8;
+    --accent2: #D98A97;
+    --accent2_soft: #B25E6C;
+    --line: #2B2E38;
+    --line_soft: #21232B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -10px rgba(0,0,0,.55);
+}
+:root[data-theme="light"]{
+    --paper: #F1EEE7;
+    --paper_raised: #FAF8F3;
+    --paper_sunken: #E7E2DA;
+    --ink: #201E24;
+    --ink_soft: #56525C;
+    --ink_faint: #8B8790;
+    --accent: #2E4C8A;
+    --accent_soft: #5673AC;
+    --accent2: #A23B4E;
+    --accent2_soft: #C97A87;
+    --line: #DCD5C9;
+    --line_soft: #EAE4D9;
+    --shadow: 0 1px 2px rgba(32,34,42,.06), 0 6px 20px -8px rgba(32,34,42,.12);
+}
+  :root{
+    --radius: 10px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    --content-scale: 1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--font-ui); -webkit-font-smoothing:antialiased; line-height:1.5; }
+  a{color:var(--accent);}
+
+  header.top{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{ max-width:720px; margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:10px; }
+  .brand{ display:flex; flex-direction:column; gap:1px; min-width:0; flex:1; }
+  .brand .kicker{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent2); font-weight:600; }
+  .brand .name{ font-size:15px; font-weight:700; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .iconbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    flex:none; cursor:pointer;
+  }
+  .iconbtn:active{ transform:scale(.94); }
+  .iconbtn svg{width:18px;height:18px;}
+  .barbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_raised); color:var(--ink);
+    height:36px; padding:0 12px; border-radius:9px; font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+    cursor:pointer; flex:none; white-space:nowrap;
+  }
+  .barbtn:active{ background:var(--paper_sunken); }
+  .fontctl{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:none;
+    background:var(--paper_raised);
+  }
+  .fontctl button{
+    appearance:none; border:none; background:transparent; color:var(--ink);
+    width:32px; height:36px; font-family:var(--font-ui); font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .fontctl button:first-child{border-right:1px solid var(--line);}
+  .fontctl button:active{background:var(--paper_sunken);}
+  .barbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markcount{
+    display:inline-block; margin-left:6px; min-width:16px; padding:0 5px; border-radius:999px;
+    background:color-mix(in srgb, var(--accent2) 22%, transparent); color:var(--accent2);
+    font-family:var(--font-mono); font-size:10.5px; line-height:16px; text-align:center;
+  }
+  .markcount:empty{ display:none; }
+
+  main{max-width:720px; margin:0 auto; padding:22px 18px 80px;}
+  .masthead{padding:6px 2px 24px;}
+  .masthead .parttag{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--ink_faint); text-transform:uppercase; margin-bottom:8px;}
+  .masthead h1{ font-size:calc(clamp(24px, 5.2vw, 30px) * var(--content-scale)); line-height:1.2; margin:0 0 10px; letter-spacing:-.01em; color:var(--ink); text-wrap:balance; font-weight:800;}
+  .masthead .desc{ color:var(--ink_soft); font-size:calc(14px * var(--content-scale)); line-height:1.6; max-width:58ch;}
+
+  .qcard{
+    background:var(--paper_raised); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 20px 18px; margin-bottom:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .qcard.marked{
+    border-color: color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background: linear-gradient(175deg, color-mix(in srgb, var(--accent2) 7%, var(--paper_raised)), var(--paper_raised));
+  }
+  .qhead{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .qnum{ font-family:var(--font-mono); font-weight:800; color:var(--accent); font-size:15px; }
+  .qtype{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent2); background:color-mix(in srgb, var(--accent2) 12%, transparent);
+    padding:2px 8px; border-radius:999px; font-weight:700;
+  }
+  .markbtn{
+    appearance:none; border:1px solid var(--line); background:var(--paper_sunken); color:var(--ink_faint);
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    margin-left:auto; cursor:pointer; flex:none; transition:transform .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .markbtn svg{ width:15px; height:15px; }
+  .markbtn:active{ transform:scale(.9); }
+  .markbtn[aria-pressed="true"]{
+    color:var(--accent2); border-color:color-mix(in srgb, var(--accent2) 55%, var(--line));
+    background:color-mix(in srgb, var(--accent2) 14%, transparent);
+  }
+  .markbtn[aria-pressed="true"] svg{ fill:var(--accent2); }
+
+  .emptystate{
+    display:none; text-align:center; padding:36px 20px; color:var(--ink_faint); font-size:14px;
+    border:1px dashed var(--line); border-radius:var(--radius);
+  }
+  body.filter-marked .qcard:not(.marked){ display:none; }
+  .qprompt{ font-size:calc(15.5px * var(--content-scale)); line-height:1.7; color:var(--ink); }
+  .qprompt p{ margin:0 0 10px; }
+  .qprompt p:last-child{ margin-bottom:0; }
+  .qprompt ul, .qprompt ol{ margin:8px 0 0; padding-left:1.4em; line-height:1.7; }
+  .qprompt li{ margin-bottom:4px; }
+
+  details.reveal{ margin-top:14px; }
+  details.reveal > summary{
+    list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--font-ui); font-weight:700; font-size:13.5px; color:var(--accent);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:8px;
+    padding:8px 14px; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  details.reveal > summary::-webkit-details-marker{ display:none; }
+  details.reveal > summary::before{
+    content:"▸"; display:inline-block; transition:transform .15s ease; font-size:11px;
+  }
+  details.reveal[open] > summary::before{ transform:rotate(90deg); }
+  details.reveal[open] > summary{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+  details.reveal > summary .show-label::after{ content:"정답 보기"; }
+  details.reveal[open] > summary .show-label::after{ content:"닫기"; }
+
+  .answerbox{
+    margin-top:10px; padding:14px 16px; border-radius:8px;
+    background:var(--paper_sunken); border:1px solid var(--line);
+    border-left:3px solid var(--accent2);
+  }
+  .answerbox .a-label{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:6px;
+  }
+  .answerbox .a-answer{ font-weight:700; font-size:calc(14.5px * var(--content-scale)); margin-bottom:8px; color:var(--ink); }
+  .answerbox .a-explain{ font-size:calc(14px * var(--content-scale)); line-height:1.7; color:var(--ink_soft); }
+  .answerbox .a-explain p{ margin:0 0 8px; }
+  .answerbox .a-explain p:last-child{ margin-bottom:0; }
+
+  footer.page-foot{ max-width:720px; margin:8px auto 40px; padding:18px; text-align:center; color:var(--ink_faint); font-size:12px; line-height:1.7; }
+
+  @media (max-width:560px){
+    main{padding:16px 14px 60px;}
+    .qcard{padding:16px 16px 14px;}
+    .top-inner{padding:9px 12px; gap:8px; flex-wrap:wrap;}
+    .brand{flex:1 1 120px; order:1;}
+    #themeBtn{order:2;}
+    .top-inner::after{content:""; order:3; flex-basis:100%; height:0;}
+    #markFilterBtn{order:4;}
+    #expandAll{order:5;}
+    .fontctl{order:6;}
+  }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="kicker">Janeway&#x27;s Immunobiology</span>
+      <span class="name">4장 연습문제 · B-cell 및 T-cell Receptor에 의한 Antigen 인식</span>
+    </div>
+    <button class="barbtn" id="markFilterBtn" aria-pressed="false">☆ 표시한 문제만<span id="markCount" class="markcount"></span></button>
+    <button class="barbtn" id="expandAll">모두 펼치기</button>
+    <div class="fontctl" aria-label="글자 크기 조절">
+      <button id="fontDown" aria-label="글자 작게">A−</button>
+      <button id="fontUp" aria-label="글자 크게">A+</button>
+    </div>
+    <button class="iconbtn" id="themeBtn" aria-label="테마 전환" title="테마 전환">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="masthead">
+    <div class="parttag">Part II · Antigen의 인식</div>
+    <h1>4장&ensp;연습문제</h1>
+    <p class="desc">정답과 해설은 원본에 없어 본문 내용을 근거로 직접 작성했습니다. 오른쪽 위 ☆로 문제를 표시해 두면 나중에 표시한 문제만 골라 볼 수 있습니다.</p>
+  </div>
+
+  <div class="qcard" id="q4-1" data-qid="q4-1">
+  <div class="qhead">
+    <span class="qnum">4.1</span>
+    <span class="qtype">참/거짓</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Papain으로 단백질분해 절단된 antibody는 pepsin으로 절단된 antibody보다 동족 antigen에 대해 더 높은 avidity를 지닌 fragment를 만들어낸다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">거짓</div>
+      <div class="a-explain"><p>거꾸로다. Papain은 antibody를 두 개의 독립된 <strong>Fab fragment</strong>로 절단하는데, 각 Fab는 antigen-binding site가 하나뿐인 1가(monovalent) 조각이라 avidity가 오히려 <em>낮다</em>. 반면 pepsin은 두 heavy chain을 잇는 disulfide bond의 carboxy-말단 쪽을 절단해 두 antigen-binding 팔이 여전히 연결된 <strong>F(ab′)2 fragment</strong>를 만들며, 이는 원래 antibody와 같은 2가 결합 특성(avidity)을 유지한다. 즉 pepsin 절단 fragment가 papain 절단 fragment보다 avidity가 더 높다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-2" data-qid="q4-2">
+  <div class="qhead">
+    <span class="qnum">4.2</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>CD4와 CD8 co-receptor가 MHC에 결합하는 것이 T-cell receptor signaling에 왜 중요한가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">MHC의 비다형성 부위에 결합해 Lck를 TCR 복합체 가까이로 끌어옴으로써 신호를 증폭시킨다.</div>
+      <div class="a-explain"><p>CD4와 CD8은 T-cell receptor가 인식하고 있는 것과 <strong>동일한 peptide:MHC 복합체</strong>에서, peptide-binding site와는 떨어진 MHC의 비다형성(nonpolymorphic) 부위에 결합한다. 이렇게 TCR과 나란히 결합함으로써 CD4·CD8의 세포질 꼬리에 붙어 있는 tyrosine kinase <strong>Lck</strong>가 TCR/CD3 복합체 바로 옆으로 모이게 되고, 이것이 signaling cascade를 촉발하는 방아쇠가 된다. 그 결과 co-receptor가 있을 때 T cell은 없을 때보다 약 100배 더 낮은 antigen 농도에도 반응할 수 있다 — 즉 co-receptor 결합은 TCR 신호의 민감도와 세기를 크게 높이는 필수 보조 장치다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-3" data-qid="q4-3">
+  <div class="qhead">
+    <span class="qnum">4.3</span>
+    <span class="qtype">단답형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>MHC locus에서 heterozygosity를 지니는 것이 왜, 그리고 어떻게 유리한가?</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">부모로부터 물려받은 서로 다른 allele를 모두 발현해, 결합·제시할 수 있는 peptide의 폭이 넓어지기 때문이다.</div>
+      <div class="a-explain"><p>개별 MHC allele는 저마다 특정한 anchor residue 패턴을 지닌 peptide 집합만을 우선적으로 결합한다. MHC locus에서 <strong>heterozygous</strong>한 개체는 각 MHC class I·II 유전자에 대해 서로 다른 두 개의 allele를 동시에 발현하므로, 동형접합(homozygous) 개체보다 훨씬 다양한 peptide를 세포 표면에 제시할 수 있다. 이는 어떤 pathogen이 우연히 한 종류의 MHC 변이체에는 결합하지 않는 peptide만 만들어내더라도 다른 allele가 이를 보완해 T cell에 제시할 가능성을 높여주므로, 감염원에 대한 면역 감시망이 더 촘촘해지는 효과(heterozygote advantage)를 낸다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-4" data-qid="q4-4">
+  <div class="qhead">
+    <span class="qnum">4.4</span>
+    <span class="qtype">짝짓기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-4">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>용어와 가장 적절한 설명을 짝지으시오:</p><ul><li>A. Antigenic determinant</li><li>B. Conformational/discontinuous epitope</li><li>C. Continuous/linear epitope</li><li>D. Hypervariable region</li></ul><ul><li>i. Antibody에 의해 인식되는 구조(즉 epitope)</li><li>ii. 서열 변이가 상당한 V region의 부위</li><li>iii. Polypeptide chain의 단일 절편으로 구성된 epitope</li><li>iv. 단백질 접힘에 의해 polypeptide chain의 서로 다른 부분에서 모인 amino acid로 구성된 epitope</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A–i, B–iv, C–iii, D–ii</div>
+      <div class="a-explain"><p><strong>A–i</strong>: antigenic determinant는 epitope의 다른 이름이므로 정의 그 자체(i)와 짝지어진다. <strong>B–iv</strong>: conformational/discontinuous epitope는 1차 서열상으로는 떨어져 있던 amino acid들이 단백질이 접히면서 한 표면에 모여 만들어지는 구조다. <strong>C–iii</strong>: continuous/linear epitope는 polypeptide chain에서 끊기지 않은 한 구간으로만 이루어진다. <strong>D–ii</strong>: hypervariable region(=CDR)은 V region 중에서도 서열 변이가 특히 큰 부위를 가리킨다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-5" data-qid="q4-5">
+  <div class="qhead">
+    <span class="qnum">4.5</span>
+    <span class="qtype">빈칸 채우기</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-5">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>사람과 생쥐를 포함한 대부분의 척추동물은 ________ chain과 ________ chain으로 구성된 antibody를 생산한다. 이들은 antigen을 인식하는 ____ region과 antibody의 class 및 isotype을 결정하는 ____ region을 지닌다. 그러나 camelid와 연골어류는 각각 ________________와 _______________를 생산하며, 이는 임상 응용을 위한 single-chain antibody 생산의 기반이 되고 있다.</p></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">heavy / light chain, variable(V) region, constant(C) region, heavy-chain-only IgG(hcIgG), IgNAR</div>
+      <div class="a-explain"><p>대부분의 척추동물은 <strong>heavy chain</strong>과 <strong>light chain</strong>이 쌍을 이룬 antibody를 만들며, 각 chain은 antigen을 인식하는 <strong>variable(V) region</strong>과 effector 기능·isotype을 결정하는 <strong>constant(C) region</strong>으로 나뉜다. 반면 camelid(낙타·라마·알파카)는 light chain 없이 heavy chain만으로 이루어진 <strong>heavy-chain-only IgG(hcIgG)</strong>를, 상어 등 연골어류는 이에 대응하는 <strong>IgNAR(immunoglobulin new antigen receptor)</strong>를 생산한다. 두 경우 모두 단일 VH domain만으로 antigen과 결합할 수 있어 single-chain antibody 개발의 출발점이 되었다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-6" data-qid="q4-6">
+  <div class="qhead">
+    <span class="qnum">4.6</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 옳지 않은 것은?</p><ul><li>A. T-cell receptor의 α chain과 β chain은 서로 짝을 이루지만, α chain은 γ chain이나 δ chain으로 바뀔 수 있다.</li><li>B. 정전기적 상호작용(예: salt bridge)은 하전된 amino acid 사이에서 일어난다.</li><li>C. 소수성 상호작용은 두 개의 소수성 표면 사이에서 일어나며 물을 배제한다.</li><li>D. Antibody는 흔히 antigen-binding site에 tyrosine 같은 방향족 amino acid를 많이 지닌다.</li><li>E. MHC restriction은 T cell이 특정 MHC molecule에 결합된 고유한 peptide 집합을 인식하는 현상이다.</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">A</div>
+      <div class="a-explain"><p>α:β T-cell receptor와 γ:δ T-cell receptor는 서로 다른 두 chain 쌍(각각 α+β, γ+δ)으로 이루어진 <em>별개의</em> receptor이며, α chain이 γ나 δ chain과 짝을 이루는 일은 없다 — 두 계열은 섞이지 않는다. 따라서 A가 옳지 않은 설명이다. B~E는 모두 본문에 나온 antibody–antigen 결합력과 MHC restriction의 정의를 정확히 서술하고 있다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-7" data-qid="q4-7">
+  <div class="qhead">
+    <span class="qnum">4.7</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-7">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>건강한 성인 사람과 생쥐에서 가장 풍부한 immunoglobulin class는 다음 중 무엇인가?</p><ul><li>A. IgA</li><li>B. IgD</li><li>C. IgE</li><li>D. IgG</li><li>E. IgM</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">D. IgG</div>
+      <div class="a-explain"><p>본문에 명시된 대로 &quot;IgG는 혈청 내에서 단연 가장 풍부한 immunoglobulin&quot;이다. IgA는 점막 분비물에서, IgM은 1차 반응 초기에, IgD와 IgE는 혈청에서 상대적으로 낮은 농도로 존재한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-8" data-qid="q4-8">
+  <div class="qhead">
+    <span class="qnum">4.8</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>다음 중 immunoglobulin fold의 구조를 설명하는 것은?</p><ul><li>A. α-helix 연결부와 disulfide bond로 연결된 두 개의 antiparallel β sheet</li><li>B. Disulfide bond로 연결된 두 개의 β strand</li><li>C. 두 개의 disulfide bond로 연결된 네 개의 α helix</li><li>D. 순서대로 이어진 일곱 개의 antiparallel α helix</li><li>E. 두 개의 β sheet가 함께 접혀 disulfide bond로 연결된 하나의 β sandwich</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">E</div>
+      <div class="a-explain"><p>Ig domain은 여러 β strand로 이루어진 두 개의 β sheet가 마치 빵 두 조각처럼 서로 겹쳐 <strong>β sandwich</strong>를 이루고, 두 sheet에서 유래한 cysteine 잔기 사이의 disulfide bond로 공유결합되어 있다. 이것이 immunoglobulin fold의 정의다. α helix는 이 fold의 핵심 요소가 아니므로 A·C·D는 해당하지 않고, B는 β sandwich 구조 전체를 담지 못한다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-9" data-qid="q4-9">
+  <div class="qhead">
+    <span class="qnum">4.9</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-9">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>Antibody는 분자 내 여러 지점에서 유연성을 지니는데, 특히 Fc 부위와 Fab 부위 사이의 hinge region, 그리고 어느 정도는 V region과 C region 사이의 접합부에서 그러하다. 다음 중 antibody의 유연성에 영향을 받지 않는 특성은 무엇인가?</p><ul><li>A. 작은 antigen(hapten)에 대한 결합</li><li>B. Antigen에 대한 avidity</li><li>C. Antigen에 대한 affinity</li><li>D. Antibody-binding protein과의 상호작용</li><li>E. 멀리 떨어져 있는 antigen에 대한 결합</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">C. Antigen에 대한 affinity</div>
+      <div class="a-explain"><p><strong>Affinity</strong>는 단일 antigen-binding site와 그 antigen 사이의 결합 세기로, CDR과 antigen 표면의 형태적 상보성만으로 정해지며 hinge의 유연성과는 무관하다. 반면 <strong>avidity</strong>(B)는 두 팔이 동시에 결합할 때 생기는 전체 결합 세기로 팔의 자유로운 움직임에 좌우되고, 서로 멀리 떨어진 antigen에 두 팔로 걸치는 결합(E)과 effector 단백질과의 상호작용(D) 역시 hinge·V–C 접합부의 유연성이 뒷받침해야 가능하다. Hapten 결합(A) 자체도 단일 site의 일이지만, 이 문항이 겨냥하는 핵심 대비는 본문이 명시적으로 구분하는 affinity 대 avidity이므로 C가 가장 정확한 답이다.</p></div>
+    </div>
+  </details>
+</div>
+
+<div class="qcard" id="q4-10" data-qid="q4-10">
+  <div class="qhead">
+    <span class="qnum">4.10</span>
+    <span class="qtype">선다형</span>
+    <button class="markbtn" type="button" aria-pressed="false" aria-label="이 문제 표시" data-qid="q4-10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+    </button>
+  </div>
+  <div class="qprompt"><p>B cell과 T cell의 antigen receptor에서 antigen 인식과 특이성에 가장 중요한 부위는 무엇인가?</p><ul><li>A. FR1</li><li>B. CDR1</li><li>C. FR2</li><li>D. CDR2</li><li>E. FR3</li><li>F. CDR3</li><li>G. FR4</li></ul></div>
+  <details class="reveal">
+    <summary><span class="show-label"></span></summary>
+    <div class="answerbox">
+      <div class="a-label">정답 및 해설</div>
+      <div class="a-answer">F. CDR3</div>
+      <div class="a-explain"><p>Framework region(FR1~FR4)은 CDR을 지지하는 구조적 뼈대일 뿐 antigen과 직접 접촉하는 일이 거의 없다. CDR1·CDR2·CDR3 중에서도 <strong>CDR3</strong>는 V(D)J 유전자 재배열의 접합부에 위치해 서열 다양성이 가장 크고(4-8절 참조), antibody와 T-cell receptor 모두에서 결합 pocket의 중심부—peptide의 중심 amino acid나 antigen 표면의 핵심 접촉면—와 맞닿아 최종 특이성을 좌우하는 경우가 많다.</p></div>
+    </div>
+  </details>
+</div>
+
+  <div class="emptystate" id="emptyState">표시해 둔 문제가 아직 없습니다. 각 문제 오른쪽 위의 <strong>☆</strong> 버튼을 눌러 표시하세요.</div>
+
+</main>
+
+<footer class="page-foot">원본 PDF: 04_Antigen Recognition by B-cell and T-cell Receptors_ko.pdf · 문제 원문은 그대로 옮겼으며, 정답·해설은 별도로 작성되었습니다.</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var STORAGE_PREFIX = "janewayimm4";
+  var THEME_KEY = STORAGE_PREFIX + '_theme';
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyThemeIcon(mode){
+    var isDark = mode === 'dark' || (mode === 'auto' && mq.matches);
+    document.getElementById('themeIcon').innerHTML = isDark
+      ? '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>'
+      : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  }
+  var saved = localStorage.getItem(THEME_KEY) || 'auto';
+  if(saved !== 'auto'){ root.setAttribute('data-theme', saved); }
+  applyThemeIcon(saved);
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var cur = localStorage.getItem(THEME_KEY) || 'auto';
+    var isDarkNow = cur === 'dark' || (cur === 'auto' && mq.matches);
+    var next = isDarkNow ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    root.setAttribute('data-theme', next);
+    applyThemeIcon(next);
+  });
+
+  var FONT_KEY = STORAGE_PREFIX + '_fontscale';
+  var scale = parseFloat(localStorage.getItem(FONT_KEY) || '1');
+  root.style.setProperty('--content-scale', scale);
+  function setScale(v){
+    scale = Math.max(0.85, Math.min(1.35, v));
+    root.style.setProperty('--content-scale', scale);
+    localStorage.setItem(FONT_KEY, scale);
+  }
+  document.getElementById('fontUp').addEventListener('click', function(){ setScale(scale + 0.08); });
+  document.getElementById('fontDown').addEventListener('click', function(){ setScale(scale - 0.08); });
+
+  var expandBtn = document.getElementById('expandAll');
+  var expanded = false;
+  expandBtn.addEventListener('click', function(){
+    expanded = !expanded;
+    document.querySelectorAll('details.reveal').forEach(function(d){ d.open = expanded; });
+    expandBtn.textContent = expanded ? '모두 접기' : '모두 펼치기';
+  });
+
+  // ---------------- Mark / flag questions for later review ----------------
+  var MARK_KEY = STORAGE_PREFIX + '_marks';
+  var marks = {};
+  try { marks = JSON.parse(localStorage.getItem(MARK_KEY) || '{}'); } catch(e) { marks = {}; }
+
+  var markCountEl = document.getElementById('markCount');
+  var emptyStateEl = document.getElementById('emptyState');
+  var filterBtn = document.getElementById('markFilterBtn');
+  var filterOn = false;
+
+  function persistMarks(){ localStorage.setItem(MARK_KEY, JSON.stringify(marks)); }
+
+  function markedCount(){ return Object.keys(marks).filter(function(k){ return marks[k]; }).length; }
+
+  function refreshUI(){
+    var n = markedCount();
+    markCountEl.textContent = n > 0 ? n : '';
+    var showEmpty = filterOn && n === 0;
+    emptyStateEl.style.display = showEmpty ? 'block' : 'none';
+  }
+
+  function applyMarkState(card, on){
+    var btn = card.querySelector('.markbtn');
+    card.classList.toggle('marked', !!on);
+    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  document.querySelectorAll('.qcard').forEach(function(card){
+    var qid = card.getAttribute('data-qid');
+    applyMarkState(card, !!marks[qid]);
+  });
+  refreshUI();
+
+  document.querySelectorAll('.markbtn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var qid = btn.getAttribute('data-qid');
+      var card = btn.closest('.qcard');
+      var on = !marks[qid];
+      marks[qid] = on;
+      if (!on) delete marks[qid];
+      applyMarkState(card, on);
+      persistMarks();
+      refreshUI();
+    });
+  });
+
+  filterBtn.addEventListener('click', function(){
+    filterOn = !filterOn;
+    document.body.classList.toggle('filter-marked', filterOn);
+    filterBtn.setAttribute('aria-pressed', filterOn ? 'true' : 'false');
+    filterBtn.innerHTML = (filterOn ? '★ 전체 문제 보기' : '☆ 표시한 문제만') + '<span id="markCount" class="markcount"></span>';
+    markCountEl = document.getElementById('markCount');
+    refreshUI();
+  });
+})();
+</script>
+<!--BOOK-NAV-START-->
+<style>
+/* ============================================================
+   Janeway Web Book — shared navigation layer
+   Loaded by index.html and by every chapter page.
+
+   Chapter pages define their own palette (--paper, --ink, --accent …)
+   in an inline <style> block, so every rule here uses those variables
+   and inherits each chapter's colours and light/dark state for free.
+   The book-level palette below is scoped to .book-home so it can never
+   clobber a chapter's own palette.
+   ============================================================ */
+
+/* ---------- book-level palette (home page only) ---------- */
+:root{
+  --bk-paper:#F6F4F1;
+  --bk-paper-raised:#FFFDFB;
+  --bk-paper-sunken:#EBE7E1;
+  --bk-ink:#1D2126;
+  --bk-ink-soft:#525B65;
+  --bk-ink-faint:#8A929B;
+  --bk-accent:#2C3440;
+  --bk-accent-soft:#5A6675;
+  --bk-accent2:#7A6652;
+  --bk-line:#DDD8D1;
+  --bk-line-soft:#EBE7E1;
+  --bk-shadow:0 1px 2px rgba(28,30,36,.05), 0 8px 24px -12px rgba(28,30,36,.16);
+  --bk-font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --bk-font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bk-paper:#14161A;
+    --bk-paper-raised:#1C1F25;
+    --bk-paper-sunken:#0E1013;
+    --bk-ink:#E8EAED;
+    --bk-ink-soft:#AEB6C0;
+    --bk-ink-faint:#727C87;
+    --bk-accent:#C3CEDC;
+    --bk-accent-soft:#8E9CAD;
+    --bk-accent2:#C4A882;
+    --bk-line:#2A2E35;
+    --bk-line-soft:#1F2228;
+    --bk-shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bk-paper:#14161A;
+  --bk-paper-raised:#1C1F25;
+  --bk-paper-sunken:#0E1013;
+  --bk-ink:#E8EAED;
+  --bk-ink-soft:#AEB6C0;
+  --bk-ink-faint:#727C87;
+  --bk-accent:#C3CEDC;
+  --bk-accent-soft:#8E9CAD;
+  --bk-accent2:#C4A882;
+  --bk-line:#2A2E35;
+  --bk-line-soft:#1F2228;
+  --bk-shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.55);
+}
+
+/* The home page maps the book palette onto the same variable names the
+   navigation components use, so one set of rules serves both contexts. */
+body.book-home{
+  --paper:var(--bk-paper); --paper_raised:var(--bk-paper-raised); --paper_sunken:var(--bk-paper-sunken);
+  --ink:var(--bk-ink); --ink_soft:var(--bk-ink-soft); --ink_faint:var(--bk-ink-faint);
+  --accent:var(--bk-accent); --accent_soft:var(--bk-accent-soft); --accent2:var(--bk-accent2);
+  --line:var(--bk-line); --line_soft:var(--bk-line-soft);
+  --shadow:var(--bk-shadow); --font-ui:var(--bk-font-ui); --font-mono:var(--bk-font-mono);
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-ui); -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- home page ---------- */
+.book-home header.book-top{
+  position:sticky; top:0; z-index:40;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(10px) saturate(1.1);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--line);
+}
+.book-home .book-top-inner{
+  max-width:960px; margin:0 auto; padding:14px 20px;
+  display:flex; align-items:flex-start; gap:12px;
+}
+.book-home .book-brand{flex:1; min-width:0}
+.book-home .kicker{
+  font:600 10.5px/1.3 var(--font-mono); letter-spacing:.09em;
+  text-transform:uppercase; color:var(--accent2);
+}
+.book-home h1{margin:3px 0 0; font-size:22px; line-height:1.25; letter-spacing:-.01em; font-weight:800}
+.book-home .subtitle{margin:5px 0 0; color:var(--ink_soft); font-size:12.5px; line-height:1.55}
+.book-home main{max-width:960px; margin:0 auto; padding:24px 20px 80px}
+.home-intro{
+  margin:0 0 22px; padding:13px 15px; border:1px solid var(--line);
+  border-radius:10px; background:var(--paper_raised);
+  color:var(--ink_soft); font-size:12.5px; line-height:1.65;
+}
+.home-toolbar{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px}
+.home-section{margin:0 0 30px}
+.home-section-title{
+  font:700 10px/1.3 var(--font-mono); letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink_faint); padding:6px 2px 10px;
+}
+.home-chapter-card{
+  border:1px solid var(--line); border-radius:13px; background:var(--paper_raised);
+  box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden;
+}
+.home-chapter{
+  display:block; padding:16px 18px 14px; color:inherit; text-decoration:none;
+}
+.home-chapter:hover{background:var(--paper_sunken)}
+.home-num{
+  display:block; font:700 10px/1.3 var(--font-mono);
+  letter-spacing:.09em; text-transform:uppercase; color:var(--accent2);
+}
+.home-title{
+  display:block; font-size:18px; line-height:1.35; font-weight:800;
+  color:var(--accent); margin-top:4px;
+}
+.home-meta{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  padding:0 18px 14px; margin-top:-4px;
+}
+.home-exlink{
+  display:inline-block; padding:5px 11px; border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent2) 45%,var(--line));
+  background:color-mix(in srgb,var(--accent2) 10%,transparent);
+  color:var(--accent2); text-decoration:none;
+  font-size:11.5px; font-weight:700; line-height:1.4;
+}
+.home-exlink:hover{background:color-mix(in srgb,var(--accent2) 20%,transparent)}
+.home-count{color:var(--ink_faint); font:600 11px/1.4 var(--font-mono)}
+
+/* collapsible subsection list — closed by default */
+.home-details{border-top:1px dashed var(--line)}
+.home-details>summary{
+  list-style:none; cursor:pointer; padding:10px 18px;
+  color:var(--ink_soft); font-size:12px; font-weight:700;
+  display:flex; align-items:center; gap:7px; user-select:none;
+}
+.home-details>summary::-webkit-details-marker{display:none}
+.home-details>summary:hover{background:var(--paper_sunken); color:var(--accent)}
+.home-details>summary .chev{
+  width:14px; height:14px; flex:none; transition:transform .18s ease;
+  color:var(--ink_faint);
+}
+.home-details[open]>summary .chev{transform:rotate(90deg)}
+.home-details[open]>summary{color:var(--accent)}
+.home-subsections{
+  margin:0 18px 14px 26px; border-left:2px solid var(--line);
+  padding:6px 0 6px 10px;
+}
+.home-subsection{
+  display:block; color:var(--ink_soft); text-decoration:none;
+  font-size:12.5px; line-height:1.45; padding:5px 9px; border-radius:7px;
+}
+.home-subsection:hover{background:var(--paper_sunken); color:var(--accent)}
+.home-subsection.level-3{padding-left:18px; font-size:12px}
+.home-subsection.level-4{padding-left:27px; font-size:11.5px; color:var(--ink_faint)}
+.book-home footer.book-foot{
+  max-width:960px; margin:0 auto; padding:0 20px 60px;
+  color:var(--ink_faint); font-size:11.5px; line-height:1.7; text-align:center;
+}
+
+/* ---------- shared button ---------- */
+.bk-btn{
+  appearance:none; border:1px solid var(--line); background:var(--paper_raised);
+  color:var(--ink); height:36px; padding:0 12px; border-radius:9px;
+  font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+  cursor:pointer; white-space:nowrap; flex:none;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.bk-btn:hover{background:var(--paper_sunken)}
+.bk-btn:active{transform:scale(.97)}
+.bk-btn svg{width:16px; height:16px}
+.bk-iconbtn{width:36px; padding:0; justify-content:center}
+
+/* ---------- chapter sidebar ---------- */
+#bookScrim{
+  position:fixed; inset:0; background:rgba(10,10,14,.45);
+  backdrop-filter:blur(2px); z-index:100;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+#bookScrim.show{opacity:1; pointer-events:auto}
+#bookPanel{
+  position:fixed; left:0; top:0; height:100%; width:min(360px,90vw);
+  background:var(--paper_raised); border-right:1px solid var(--line);
+  z-index:105; transform:translateX(-100%);
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  display:flex; flex-direction:column;
+  box-shadow:12px 0 34px -22px rgba(0,0,0,.4);
+}
+#bookPanel.show{transform:translateX(0)}
+.book-head{
+  padding:16px 18px; border-bottom:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+}
+.book-head h2{margin:0; font-size:15px; line-height:1.3; font-weight:800}
+.book-head p{margin:4px 0 0; color:var(--ink_faint); font:600 10.5px/1.3 var(--font-mono); letter-spacing:.06em}
+.book-close{
+  appearance:none; border:1px solid var(--line); background:transparent;
+  color:var(--ink); width:32px; height:32px; border-radius:8px;
+  cursor:pointer; font-size:17px; line-height:1; flex:none;
+}
+.book-close:hover{background:var(--paper_sunken)}
+.book-list{overflow:auto; overscroll-behavior:contain; padding:10px 10px 28px; flex:1}
+.book-part{
+  margin:10px 2px 6px; padding:7px 10px 4px; color:var(--ink_faint);
+  font:700 9.5px/1.3 var(--font-mono); letter-spacing:.09em; text-transform:uppercase;
+}
+.book-chapter{margin-bottom:2px}
+.book-row{display:flex; align-items:stretch; gap:2px}
+.book-link{
+  flex:1; min-width:0; display:block; padding:9px 11px; border-radius:9px;
+  color:var(--ink); text-decoration:none; line-height:1.35;
+}
+.book-link:hover{background:var(--paper_sunken)}
+.book-link.current{
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  color:var(--accent);
+}
+.chapter-num{
+  display:block; font:700 9.5px/1.2 var(--font-mono);
+  color:var(--accent2); letter-spacing:.08em; text-transform:uppercase;
+}
+.book-link.current .chapter-num{color:var(--accent)}
+.chapter-title{display:block; font-size:13.5px; margin-top:2px}
+.book-link.current .chapter-title{font-weight:800}
+.book-subtoggle{
+  appearance:none; border:none; background:transparent; color:var(--ink_faint);
+  width:30px; border-radius:8px; cursor:pointer; flex:none;
+  display:flex; align-items:center; justify-content:center;
+}
+.book-subtoggle:hover{background:var(--paper_sunken); color:var(--accent)}
+.book-subtoggle svg{width:13px; height:13px; transition:transform .18s ease}
+.book-subtoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.book-subtoggle[aria-expanded="true"]{color:var(--accent)}
+.book-sublist{display:none; padding:2px 0 8px 16px}
+.book-sublist.expanded{display:block}
+.book-sublink{
+  display:block; padding:5px 9px; border-left:2px solid var(--line);
+  color:var(--ink_soft); text-decoration:none; font-size:11.5px; line-height:1.45;
+}
+.book-sublink:hover{background:var(--paper_sunken); color:var(--accent)}
+.book-sublink.level-3{padding-left:20px; font-size:11px}
+.book-sublink.level-4{padding-left:31px; font-size:10.5px; color:var(--ink_faint)}
+.book-sublink.active-section{
+  border-left-color:var(--accent2); color:var(--accent2); font-weight:700;
+  background:color-mix(in srgb,var(--accent2) 9%,transparent);
+}
+.book-exlink{
+  display:block; margin:1px 0 0 11px; padding:5px 10px; border-radius:7px;
+  color:var(--ink_faint); text-decoration:none; font-size:11px; font-weight:600;
+}
+.book-exlink:hover{background:var(--paper_sunken); color:var(--accent2)}
+.book-exlink.current{color:var(--accent2); font-weight:800}
+
+/* ---------- previous / next pager ---------- */
+#bookPager{
+  max-width:720px; margin:8px auto 0; padding:0 18px 44px;
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.book-page-link{
+  display:flex; flex-direction:column; gap:4px; min-width:0;
+  padding:13px 15px; border:1px solid var(--line); border-radius:11px;
+  background:var(--paper_raised); text-decoration:none; color:var(--ink);
+  box-shadow:var(--shadow);
+}
+.book-page-link:hover{background:var(--paper_sunken); border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.book-page-link.next{text-align:right; align-items:flex-end}
+.book-page-link .label{
+  font:700 9.5px/1.3 var(--font-mono); letter-spacing:.09em;
+  color:var(--accent2); text-transform:uppercase;
+}
+.book-page-link .title{
+  font-size:12.5px; font-weight:700; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden; max-width:100%;
+}
+.book-page-link.disabled{opacity:.4; pointer-events:none}
+
+/* ---------- chapter header: keep every control reachable on phones ---------- */
+@media (max-width:560px){
+  header.top .top-inner{flex-wrap:wrap; gap:8px}
+  header.top .top-inner .brand{flex:1 1 120px; order:1}
+  header.top .top-inner #bookNavBtn{order:2}
+  header.top .top-inner #themeBtn{order:3}
+  header.top .top-inner::after{content:""; order:4; flex-basis:100%; height:0}
+  header.top .top-inner #markFilterBtn{order:5}
+  header.top .top-inner #expandAll{order:6}
+  header.top .top-inner .fontctl{order:7}
+  header.top .top-inner #tocBtn{order:8}
+  #bookPager{grid-template-columns:1fr; padding-left:14px; padding-right:14px}
+  .book-page-link{padding:11px 13px}
+  .book-page-link.next{text-align:left; align-items:flex-start}
+  .book-home .book-top-inner{padding:12px 14px}
+  .book-home main{padding:18px 14px 60px}
+  .book-home h1{font-size:19px}
+  .home-title{font-size:16px}
+  .home-subsections{margin-left:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  #bookPanel,#bookScrim,.book-subtoggle svg,.home-details>summary .chev{transition:none}
+}
+
+</style>
+<script>
+// AUTO-GENERATED by scripts/build_book.py. Do not edit manually.
+// Behaviour lives in book-nav.js, which is NOT generated.
+window.BOOK_PAGES = [{"id":"ch1","section":"Part I · Immunobiology와 innate immunity","title":"1장 · Immunology의 기본 개념","sub":"Immunology의 기본 개념","file":"ch1.html","sections":[{"level":2,"title":"이 번역본에 대하여","id":"이-번역본에-대하여"},{"level":2,"title":"1장 한국어 요약","id":"1장-한국어-요약"},{"level":4,"title":"학문의 출발","id":"학문의-출발"},{"level":4,"title":"두 가지 immunity","id":"두-가지-immunity"},{"level":4,"title":"숙주의 세 가지 전략","id":"숙주의-세-가지-전략"},{"level":4,"title":"Innate immunity의 작동 순서","id":"innate-immunity의-작동-순서"},{"level":4,"title":"Adaptive immunity의 구성","id":"adaptive-immunity의-구성"},{"level":2,"title":"Immunobiology와 innate immunity — 입문","id":"immunobiology와-innate-immunity-입문"},{"level":2,"title":"Immunology의 기본 개념","id":"immunology의-기본-개념"},{"level":2,"title":"척추동물 immune cell의 기원","id":"척추동물-immune-cell의-기원"},{"level":2,"title":"Innate immunity의 원리","id":"innate-immunity의-원리"},{"level":2,"title":"Commensal organism은 숙주에 거의 손상을 주지 않는 반면, pathogen은 다양한 기전으로 숙주 조직을 손상시킨다.","id":"commensal-organism은-숙주에-거의-손상을-주지-않는-반면-pathogen은-다양한-기전으로-숙주-조직을-손상시킨다"},{"level":2,"title":"해부학적 및 화학적 장벽이 pathogen에 대한 1차 방어이다.","id":"해부학적-및-화학적-장벽이-pathogen에-대한-1차-방어이다"},{"level":2,"title":"Immune system은 pathogen의 존재 또는 조직 손상을 알리는 inflammatory inducer에 의해 활성화된다.","id":"immune-system은-pathogen의-존재-또는-조직-손상을-알리는-inflammatory-inducer에-의해-활성화된다"},{"level":2,"title":"Myeloid lineage가 innate immune system의 세포 대부분을 구성한다.","id":"myeloid-lineage가-innate-immune-system의-세포-대부분을-구성한다"},{"level":2,"title":"Sensor cell은 self와 nonself를 1차적으로 구별하는 pattern recognition receptor를 발현한다.","id":"sensor-cell은-self와-nonself를-1차적으로-구별하는-pattern-recognition-receptor를-발현한다"},{"level":2,"title":"Sensor cell은 chemokine 및 cytokine과 같은 mediator를 생산하여 염증 반응을 유도한다.","id":"sensor-cell은-chemokine-및-cytokine과-같은-mediator를-생산하여-염증-반응을-유도한다"},{"level":2,"title":"Innate lymphocyte와 natural killer cell은 adaptive immune system의 lymphoid 계열과 유사성을 공유하는 effector cell이다.","id":"innate-lymphocyte와-natural-killer-cell은-adaptive-immune-system의-lymphoid-계열과-유사성을-공유하는-effector-cell이다"},{"level":2,"title":"Innate immunity 요약","id":"innate-immunity-요약"},{"level":2,"title":"Adaptive immunity의 원리","id":"adaptive-immunity의-원리"},{"level":2,"title":"Antigen과 antigen receptor의 상호작용은 lymphocyte가 effector 활성과 memory 활성을 획득하도록 유도한다.","id":"antigen과-antigen-receptor의-상호작용은-lymphocyte가-effector-활성과-memory-활성을-획득하도록-유도한다"},{"level":2,"title":"Antibody와 T-cell receptor는 서로 다른 기능을 담당하는 constant region과 variable region으로 구성된다.","id":"antibody와-t-cell-receptor는-서로-다른-기능을-담당하는-constant-region과-variable-region으로-구성된다"}]},{"id":"ch2","section":"Part I · Immunobiology와 innate immunity","title":"2장 · Innate Immunity: 1차 방어선","sub":"Innate Immunity: 1차 방어선","file":"ch2.html","sections":[{"level":2,"title":"이 번역본에 대하여","id":"이-번역본에-대하여"},{"level":2,"title":"2장 한국어 요약","id":"2장-한국어-요약"},{"level":4,"title":"1부 — 해부학적 장벽과 초기 화학적 방어 (2-1~2-4절)","id":"1부-해부학적-장벽과-초기-화학적-방어-2-1-2-4절"},{"level":4,"title":"2부 — Complement system (2-5~2-17절, 이 장의 핵심)","id":"2부-complement-system-2-5-2-17절-이-장의-핵심"},{"level":2,"title":"Innate Immunity: 1차 방어선","id":"innate-immunity-1차-방어선"},{"level":2,"title":"감염성 질환은 숙주 안에서 증식하는 다양한 생물학적 병원체에 의해 발생한다.","id":"감염성-질환은-숙주-안에서-증식하는-다양한-생물학적-병원체에-의해-발생한다"},{"level":2,"title":"신체의 상피 표면은 감염에 대한 1차 장벽을 제공한다.","id":"신체의-상피-표면은-감염에-대한-1차-장벽을-제공한다"},{"level":2,"title":"감염원은 감염 병소를 성립시키기 위해 숙주의 innate defense를 극복해야 한다.","id":"감염원은-감염-병소를-성립시키기-위해-숙주의-innate-defense를-극복해야-한다"},{"level":2,"title":"상피세포와 phagocyte는 여러 종류의 antimicrobial protein을 생산한다.","id":"상피세포와-phagocyte는-여러-종류의-antimicrobial-protein을-생산한다"},{"level":2,"title":"1부 요약 — 해부학적 장벽과 초기 화학적 방어","id":"1부-요약-해부학적-장벽과-초기-화학적-방어"},{"level":2,"title":"Complement system과 innate immunity","id":"complement-system과-innate-immunity"},{"level":2,"title":"Complement system은 미생물 표면의 특징을 인식하고, C3b로 덮어 파괴 대상으로 표시한다.","id":"complement-system은-미생물-표면의-특징을-인식하고-c3b로-덮어-파괴-대상으로-표시한다"},{"level":2,"title":"Lectin pathway는 미생물 표면을 인식하는 soluble receptor를 이용해 complement cascade를 활성화한다.","id":"lectin-pathway는-미생물-표면을-인식하는-soluble-receptor를-이용해-complement-cascade를-활성화한다"},{"level":2,"title":"Classical pathway는 C1 complex의 활성화로 개시되며 lectin pathway와 상동이다.","id":"classical-pathway는-c1-complex의-활성화로-개시되며-lectin-pathway와-상동이다"},{"level":2,"title":"Complement activation은 대체로 그것이 시작된 표면에 국한된다.","id":"complement-activation은-대체로-그것이-시작된-표면에-국한된다"},{"level":2,"title":"Alternative pathway는 pathogen이 있을 때 properdin에 의해 가속되는, C3b 형성을 위한 증폭 고리이다.","id":"alternative-pathway는-pathogen이-있을-때-properdin에-의해-가속되는-c3b-형성을-위한-증폭-고리이다"},{"level":2,"title":"C3 convertase의 형성과 안정성을 조절하는 막 단백질과 혈장 단백질이 complement activation의 정도를 결정한다.","id":"c3-convertase의-형성과-안정성을-조절하는-막-단백질과-혈장-단백질이-complement-activation의-정도를-결정한다"},{"level":2,"title":"Complement는 다세포생물 진화의 이른 시기에 발달하였다.","id":"complement는-다세포생물-진화의-이른-시기에-발달하였다"},{"level":2,"title":"표면에 결합한 C3 convertase는 pathogen 표면에 다수의 C3b 조각을 침착시키고 C5 convertase 활성을 생성한다.","id":"표면에-결합한-c3-convertase는-pathogen-표면에-다수의-c3b-조각을-침착시키고-c5-convertase-활성을-생성한다"},{"level":2,"title":"Phagocyte에 의한 complement-tagged pathogen의 섭취는 결합한 complement 단백질에 대한 receptor가 매개한다.","id":"phagocyte에-의한-complement-tagged-pathogen의-섭취는-결합한-complement-단백질에-대한-receptor가-매개한다"},{"level":2,"title":"일부 complement 단백질의 작은 조각은 국소 염증 반응을 개시한다.","id":"일부-complement-단백질의-작은-조각은-국소-염증-반응을-개시한다"},{"level":2,"title":"말단 complement 단백질은 중합하여 일부 pathogen을 죽일 수 있는 막의 구멍을 형성한다.","id":"말단-complement-단백질은-중합하여-일부-pathogen을-죽일-수-있는-막의-구멍을-형성한다"},{"level":2,"title":"Complement 조절 단백질은 complement activation의 세 경로 모두를 조절하며 숙주를 그 파괴적 효과로부터 보호한다.","id":"complement-조절-단백질은-complement-activation의-세-경로-모두를-조절하며-숙주를-그-파괴적-효과로부터-보호한다"},{"level":2,"title":"Pathogen은 complement activation을 억제할 수 있는 여러 종류의 단백질을 생산한다.","id":"pathogen은-complement-activation을-억제할-수-있는-여러-종류의-단백질을-생산한다"},{"level":2,"title":"제2장 요약","id":"제2장-요약"}]},{"id":"ch2-exercises","section":"Part I · Innate Immunity: 1차 방어선","title":"2장 연습문제 · Innate Immunity: 1차 방어선","sub":"Innate Immunity: 1차 방어선","file":"ch2-exercises.html","sections":[]},{"id":"ch3","section":"Part I · Immunobiology와 innate immunity","title":"3장 · Innate Immunity의 유도 반응","sub":"Innate Immunity의 유도 반응","file":"ch3.html","sections":[{"level":2,"title":"이 번역본에 대하여","id":"이-번역본에-대하여"},{"level":2,"title":"3장 한국어 요약","id":"3장-한국어-요약"},{"level":4,"title":"1부 — Pattern recognition과 신호 전달 (3-1~3-14절)","id":"1부-pattern-recognition과-신호-전달-3-1-3-14절"},{"level":4,"title":"2부 — Cytokine·염증·NK cell (3-15~3-25절)","id":"2부-cytokine-염증-nk-cell-3-15-3-25절"},{"level":2,"title":"Innate Immunity의 유도 반응","id":"innate-immunity의-유도-반응"},{"level":4,"title":"Innate immune system 세포에 의한 pattern recognition","id":"innate-immune-system-세포에-의한-pattern-recognition"},{"level":2,"title":"조직에 침입한 후, 많은 미생물이 phagocyte에 의해 인식되고 섭취되어 죽임을 당한다.","id":"조직에-침입한-후-많은-미생물이-phagocyte에-의해-인식되고-섭취되어-죽임을-당한다"},{"level":2,"title":"Phagocyte의 G-protein-coupled receptor는 미생물 인식을 세포내 살해 효율 증가와 연결한다.","id":"phagocyte의-g-protein-coupled-receptor는-미생물-인식을-세포내-살해-효율-증가와-연결한다"},{"level":2,"title":"Microbial recognition과 조직 손상은 염증 반응을 개시한다.","id":"microbial-recognition과-조직-손상은-염증-반응을-개시한다"},{"level":2,"title":"Toll-like receptor는 오래된 pathogen 인식 체계를 대표한다.","id":"toll-like-receptor는-오래된-pathogen-인식-체계를-대표한다"},{"level":2,"title":"Mammalian Toll-like receptor는 다양한 pathogen-associated molecular pattern에 의해 활성화된다.","id":"mammalian-toll-like-receptor는-다양한-pathogen-associated-molecular-pattern에-의해-활성화된다"},{"level":2,"title":"TLR-4는 host accessory protein인 MD-2, CD14와 함께 세균 lipopolysaccharide를 인식한다.","id":"tlr-4는-host-accessory-protein인-md-2-cd14와-함께-세균-lipopolysaccharide를-인식한다"},{"level":2,"title":"TLR은 NFκB, AP-1, IRF transcription factor를 활성화하여 inflammatory cytokine과 type I interferon의 발현을 유도한다.","id":"tlr은-nfκb-ap-1-irf-transcription-factor를-활성화하여-inflammatory-cytokine과-type-i-interferon의-발현을-유도한다"},{"level":2,"title":"NOD-like receptor는 세균 감염과 세포 손상의 세포내 감지기다.","id":"nod-like-receptor는-세균-감염과-세포-손상의-세포내-감지기다"},{"level":2,"title":"NLRP 단백질은 inflammasome을 통해 감염이나 세포 손상에 반응하여 세포 죽음과 염증을 유도한다.","id":"nlrp-단백질은-inflammasome을-통해-감염이나-세포-손상에-반응하여-세포-죽음과-염증을-유도한다"},{"level":2,"title":"RIG-I-like receptor는 세포질 바이러스 RNA를 감지하고 MAVS를 활성화하여 type I interferon 생산과 pro-inflammatory cytokine을 유도한다.","id":"rig-i-like-receptor는-세포질-바이러스-rna를-감지하고-mavs를-활성화하여-type-i-interferon-생산과-pro-inflammatory-cytokine을-유도한다"},{"level":2,"title":"세포질 DNA 감지기는 STING을 통해 신호하여 type I interferon 생산을 유도한다.","id":"세포질-dna-감지기는-sting을-통해-신호하여-type-i-interferon-생산을-유도한다"},{"level":2,"title":"Macrophage와 dendritic cell에서 innate sensor의 활성화는 immune response에 광범위한 영향을 미치는 유전자 발현 변화를 촉발한다.","id":"macrophage와-dendritic-cell에서-innate-sensor의-활성화는-immune-response에-광범위한-영향을-미치는-유전자-발현-변화를-촉발한다"},{"level":2,"title":"Drosophila의 Toll 신호는 별개의 pathogen-recognition 분자 집합의 하류에 있다.","id":"drosophila의-toll-신호는-별개의-pathogen-recognition-분자-집합의-하류에-있다"},{"level":2,"title":"TLR과 NOD 유전자는 invertebrate와 일부 원시 chordate 모두에서 광범위한 다양화를 겪어 왔다.","id":"tlr과-nod-유전자는-invertebrate와-일부-원시-chordate-모두에서-광범위한-다양화를-겪어-왔다"},{"level":2,"title":"1부 요약 — Pattern recognition과 신호 전달","id":"1부-요약-pattern-recognition과-신호-전달"},{"level":2,"title":"감염에 대한 induced innate response","id":"감염에-대한-induced-innate-response"},{"level":2,"title":"Cytokine과 그 receptor는 구조적으로 관련된 단백질의 서로 다른 family로 나뉜다.","id":"cytokine과-그-receptor는-구조적으로-관련된-단백질의-서로-다른-family로-나뉜다"},{"level":2,"title":"Hematopoietin family의 cytokine receptor는 JAK family의 tyrosine kinase와 결합되어 있으며, 이는 STAT transcription factor를 활성화한다.","id":"hematopoietin-family의-cytokine-receptor는-jak-family의-tyrosine-kinase와-결합되어-있으며-이는-stat-transcription-factor를-활성화한다"},{"level":2,"title":"Macrophage와 dendritic cell이 방출하는 chemokine은 effector cell을 감염 부위로 동원한다.","id":"macrophage와-dendritic-cell이-방출하는-chemokine은-effector-cell을-감염-부위로-동원한다"},{"level":2,"title":"Cell-adhesion molecule은 염증 반응 중 leukocyte와 endothelial cell 간 상호작용을 제어한다.","id":"cell-adhesion-molecule은-염증-반응-중-leukocyte와-endothelial-cell-간-상호작용을-제어한다"},{"level":2,"title":"Neutrophil은 염증이 있는 조직으로 들어가기 위해 혈관벽을 통과하는 첫 번째 물결의 세포를 이룬다.","id":"neutrophil은-염증이-있는-조직으로-들어가기-위해-혈관벽을-통과하는-첫-번째-물결의-세포를-이룬다"},{"level":2,"title":"TNF-α는 감염의 국소적 억제를 촉발하지만 전신으로 방출되면 shock를 유도하는 중요한 cytokine이다.","id":"tnf-α는-감염의-국소적-억제를-촉발하지만-전신으로-방출되면-shock를-유도하는-중요한-cytokine이다"},{"level":2,"title":"Macrophage와 dendritic cell이 만드는 cytokine은 acute-phase response라 불리는 전신 반응을 유도한다.","id":"macrophage와-dendritic-cell이-만드는-cytokine은-acute-phase-response라-불리는-전신-반응을-유도한다"},{"level":2,"title":"바이러스 감염에 의해 유도되는 interferon은 host defense에 여러 방식으로 기여한다.","id":"바이러스-감염에-의해-유도되는-interferon은-host-defense에-여러-방식으로-기여한다"},{"level":2,"title":"여러 종류의 innate lymphoid cell이 감염 초기에 보호 작용을 제공한다.","id":"여러-종류의-innate-lymphoid-cell이-감염-초기에-보호-작용을-제공한다"},{"level":2,"title":"NK cell은 type I interferon과 macrophage 유래 cytokine에 의해 활성화된다.","id":"nk-cell은-type-i-interferon과-macrophage-유래-cytokine에-의해-활성화된다"},{"level":2,"title":"NK cell은 건강한 세포와 감염된 세포를 구별하기 위해 활성화 receptor와 억제 receptor를 발현한다.","id":"nk-cell은-건강한-세포와-감염된-세포를-구별하기-위해-활성화-receptor와-억제-receptor를-발현한다"},{"level":2,"title":"NK-cell receptor는 KIR, KLR, NCR을 포함한 여러 구조적 family에 속한다.","id":"nk-cell-receptor는-kir-klr-ncr을-포함한-여러-구조적-family에-속한다"},{"level":2,"title":"NK cell은 감염된 세포나 종양 세포에서 유도되는 ligand를 인식하는 활성화 receptor를 발현한다.","id":"nk-cell은-감염된-세포나-종양-세포에서-유도되는-ligand를-인식하는-활성화-receptor를-발현한다"},{"level":2,"title":"2부 요약 — Cytokine·염증·NK cell","id":"2부-요약-cytokine-염증-nk-cell"},{"level":2,"title":"제3장 요약","id":"제3장-요약"}]},{"id":"ch3-exercises","section":"Part I · Innate Immunity의 유도 반응","title":"3장 연습문제 · Innate Immunity의 유도 반응","sub":"Innate Immunity의 유도 반응","file":"ch3-exercises.html","sections":[]},{"id":"ch4","section":"Part II · Antigen의 인식","title":"4장 · B-cell 및 T-cell Receptor에 의한 Antigen 인식","sub":"B-cell 및 T-cell Receptor에 의한 Antigen 인식","file":"ch4.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"4장 한국어 요약","id":"4장-한국어-요약"},{"level":4,"title":"Antibody의 구조","id":"antibody의-구조"},{"level":4,"title":"Antigen과의 결합","id":"antigen과의-결합"},{"level":4,"title":"T-cell Receptor와 MHC","id":"t-cell-receptor와-mhc"},{"level":2,"title":"B-cell 및 T-cell Receptor에 의한 Antigen 인식","id":"b-cell-및-t-cell-receptor에-의한-antigen-인식"},{"level":2,"title":"전형적인 antibody 분자의 구조","id":"전형적인-antibody-분자의-구조"},{"level":2,"title":"IgG antibody는 네 개의 polypeptide chain으로 구성된다.","id":"igg-antibody는-네-개의-polypeptide-chain으로-구성된다"},{"level":2,"title":"Immunoglobulin heavy chain과 light chain은 constant region과 variable region으로 구성된다.","id":"immunoglobulin-heavy-chain과-light-chain은-constant-region과-variable-region으로-구성된다"},{"level":2,"title":"Immunoglobulin 분자의 domain들은 서로 유사한 구조를 지닌다.","id":"immunoglobulin-분자의-domain들은-서로-유사한-구조를-지닌다"},{"level":2,"title":"Antibody 분자는 기능적으로 구별되는 조각들로 쉽게 절단될 수 있다.","id":"antibody-분자는-기능적으로-구별되는-조각들로-쉽게-절단될-수-있다"},{"level":2,"title":"Immunoglobulin 분자의 hinge region은 여러 antigen과 결합할 때 유연성을 제공한다.","id":"immunoglobulin-분자의-hinge-region은-여러-antigen과-결합할-때-유연성을-제공한다"},{"level":2,"title":"전형적인 antibody 분자의 구조 — 절 요약","id":"전형적인-antibody-분자의-구조-절-요약"},{"level":2,"title":"4-6절 (누락)","id":"4-6절-누락"},{"level":2,"title":"Antibody는 antigen의 크기와 모양에 상보적인 CDR 내 접촉을 통해 antigen과 결합한다.","id":"antibody는-antigen의-크기와-모양에-상보적인-cdr-내-접촉을-통해-antigen과-결합한다"},{"level":2,"title":"Antibody는 다양한 비공유 결합력을 이용해 antigen 표면의 conformational 형태에 결합한다.","id":"antibody는-다양한-비공유-결합력을-이용해-antigen-표면의-conformational-형태에-결합한다"},{"level":2,"title":"온전한 antigen과의 antibody 상호작용은 steric 제약의 영향을 받는다.","id":"온전한-antigen과의-antibody-상호작용은-steric-제약의-영향을-받는다"},{"level":2,"title":"일부 종은 대체 구조를 지닌 antibody를 만들어낸다.","id":"일부-종은-대체-구조를-지닌-antibody를-만들어낸다"},{"level":2,"title":"특정 antigen과 antibody 분자의 상호작용 — 절 요약","id":"특정-antigen과-antibody-분자의-상호작용-절-요약"},{"level":2,"title":"T cell에 의한 antigen 인식","id":"t-cell에-의한-antigen-인식"},{"level":2,"title":"4-11 TCRα:β heterodimer는 immunoglobulin의 Fab fragment와 매우 유사하다.","id":"4-11-tcrα-β-heterodimer는-immunoglobulin의-fab-fragment와-매우-유사하다"},{"level":2,"title":"T-cell receptor는 MHC molecule에 결합된 외래 peptide 복합체 형태로 antigen을 인식한다.","id":"t-cell-receptor는-mhc-molecule에-결합된-외래-peptide-복합체-형태로-antigen을-인식한다"},{"level":2,"title":"MHC molecule에는 subunit 구성은 다르지만 3차원 구조는 유사한 두 가지 class가 있다.","id":"mhc-molecule에는-subunit-구성은-다르지만-3차원-구조는-유사한-두-가지-class가-있다"},{"level":2,"title":"Peptide는 MHC molecule에 안정적으로 결합하며, 세포 표면에서 MHC molecule을 안정화시키는 역할도 한다.","id":"peptide는-mhc-molecule에-안정적으로-결합하며-세포-표면에서-mhc-molecule을-안정화시키는-역할도-한다"},{"level":2,"title":"MHC class I molecule은 8~10개의 amino acid로 이루어진 짧은 peptide를 양쪽 끝에서 결합한다.","id":"mhc-class-i-molecule은-8-10개의-amino-acid로-이루어진-짧은-peptide를-양쪽-끝에서-결합한다"},{"level":2,"title":"MHC class II molecule에 결합하는 peptide의 길이는 제한되지 않는다.","id":"mhc-class-ii-molecule에-결합하는-peptide의-길이는-제한되지-않는다"},{"level":2,"title":"여러 peptide:MHC:T-cell receptor 복합체의 결정 구조는 T-cell receptor가 peptide:MHC 복합체 위에서 유사한 배향을 취한다는 것을 보여준다.","id":"여러-peptide-mhc-t-cell-receptor-복합체의-결정-구조는-t-cell-receptor가-peptide-mhc-복합체-위에서-유사한-배향을-취한다는-것을-보여준다"},{"level":2,"title":"T cell의 세포 표면 단백질인 CD4와 CD8은 MHC molecule과 직접 접촉하며, antigen에 대해 효과적인 반응을 일으키는 데 필요하다.","id":"t-cell의-세포-표면-단백질인-cd4와-cd8은-mhc-molecule과-직접-접촉하며-antigen에-대해-효과적인-반응을-일으키는-데-필요하다"},{"level":2,"title":"두 class의 MHC molecule은 세포에 따라 서로 다르게 발현된다.","id":"두-class의-mhc-molecule은-세포에-따라-서로-다르게-발현된다"},{"level":2,"title":"4-20 T cell의 뚜렷이 구별되는 subset은 γ chain과 δ chain으로 이루어진 대체 receptor를 지닌다.","id":"4-20-t-cell의-뚜렷이-구별되는-subset은-γ-chain과-δ-chain으로-이루어진-대체-receptor를-지닌다"},{"level":2,"title":"T cell에 의한 antigen 인식 — 절 요약","id":"t-cell에-의한-antigen-인식-절-요약"},{"level":2,"title":"제4장 요약","id":"제4장-요약"}]},{"id":"ch4-exercises","section":"Part II · Antigen의 인식","title":"4장 연습문제 · B-cell 및 T-cell Receptor에 의한 Antigen 인식","sub":"B-cell 및 T-cell Receptor에 의한 Antigen 인식","file":"ch4-exercises.html","sections":[]},{"id":"ch5","section":"Part II · Antigen의 인식","title":"5장 · Lymphocyte Antigen Receptor의 생성","sub":"Lymphocyte Antigen Receptor의 생성","file":"ch5.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"5장 한국어 요약","id":"5장-한국어-요약"},{"level":4,"title":"1부 — Immunoglobulin gene rearrangement (5-1~5-8절)","id":"1부-immunoglobulin-gene-rearrangement-5-1-5-8절"},{"level":4,"title":"2부 — T-cell receptor gene rearrangement (5-9~5-11절)","id":"2부-t-cell-receptor-gene-rearrangement-5-9-5-11절"},{"level":4,"title":"3부 — Immunoglobulin constant region의 구조적 변이 (5-12~5-16절)","id":"3부-immunoglobulin-constant-region의-구조적-변이-5-12-5-16절"},{"level":4,"title":"4부 — Adaptive immune response의 진화 (5-17~5-22절)","id":"4부-adaptive-immune-response의-진화-5-17-5-22절"},{"level":2,"title":"Lymphocyte Antigen Receptor의 생성","id":"lymphocyte-antigen-receptor의-생성"},{"level":2,"title":"1차 immunoglobulin gene rearrangement","id":"1차-immunoglobulin-gene-rearrangement"},{"level":2,"title":"Immunoglobulin 유전자는 antibody 생산 세포의 전구세포에서 재배열된다.","id":"immunoglobulin-유전자는-antibody-생산-세포의-전구세포에서-재배열된다"},{"level":2,"title":"Variable region을 암호화하는 완전한 유전자는 별개의 gene segment들의 somaticrecombination에 의해 생성된다.","id":"variable-region을-암호화하는-완전한-유전자는-별개의-gene-segment들의-somaticrecombination에-의해-생성된다"},{"level":2,"title":"V, D, J gene segment의 rearrangement는 인접한 flanking DNA 서열에 의해 유도된다.","id":"v-d-j-gene-segment의-rearrangement는-인접한-flanking-dna-서열에-의해-유도된다"},{"level":2,"title":"V, D, J gene segment를 재조합하는 반응에는 lymphocyte-특이적 효소와 보편적으로 존재하는 DNA 변형 효소가 모두 관여한다.","id":"v-d-j-gene-segment를-재조합하는-반응에는-lymphocyte-특이적-효소와-보편적으로-존재하는-dna-변형-효소가-모두-관여한다"},{"level":2,"title":"Immunoglobulin repertoire의 다양성은 네 가지 주요 과정에 의해 생성된다.","id":"immunoglobulin-repertoire의-다양성은-네-가지-주요-과정에-의해-생성된다"},{"level":2,"title":"여러 개의 유전된 gene segment가 서로 다른 조합으로 사용된다.","id":"여러-개의-유전된-gene-segment가-서로-다른-조합으로-사용된다"},{"level":2,"title":"요약","id":"요약"},{"level":2,"title":"T-cell receptor gene rearrangement","id":"t-cell-receptor-gene-rearrangement"},{"level":2,"title":"T-cell receptor gene segment는 immunoglobulin gene segment와 유사한 패턴으로배열되어 있으며 같은 효소에 의해 재배열된다.","id":"t-cell-receptor-gene-segment는-immunoglobulin-gene-segment와-유사한-패턴으로배열되어-있으며-같은-효소에-의해-재배열된다"},{"level":2,"title":"T-cell receptor는 세 번째 hypervariable region에 다양성을 집중시킨다.","id":"t-cell-receptor는-세-번째-hypervariable-region에-다양성을-집중시킨다"},{"level":2,"title":"γ:δ T-cell receptor 역시 gene rearrangement에 의해 생성된다.","id":"γ-δ-t-cell-receptor-역시-gene-rearrangement에-의해-생성된다"},{"level":2,"title":"요약","id":"요약-2"},{"level":2,"title":"Immunoglobulin constant region의 구조적 변이","id":"immunoglobulin-constant-region의-구조적-변이"},{"level":2,"title":"서로 다른 부류의 immunoglobulin은 heavy-chain constant region의 구조에 의해 구별된다.","id":"서로-다른-부류의-immunoglobulin은-heavy-chain-constant-region의-구조에-의해-구별된다"},{"level":2,"title":"Constant region이 antibody에 기능적 특수화를 부여한다.","id":"constant-region이-antibody에-기능적-특수화를-부여한다"},{"level":2,"title":"IgM과 IgD는 같은 pre-mRNA 전사체에서 유래하며 둘 다 성숙한 B cell 표면에 발현된다.","id":"igm과-igd는-같은-pre-mrna-전사체에서-유래하며-둘-다-성숙한-b-cell-표면에-발현된다"},{"level":2,"title":"막관통형과 분비형 immunoglobulin은 대체 heavy-chain mRNA 전사체로부터 생성된다.","id":"막관통형과-분비형-immunoglobulin은-대체-heavy-chain-mrna-전사체로부터-생성된다"},{"level":2,"title":"IgM과 IgA는 J chain과 상호작용하여 중합체를 형성할 수 있다.","id":"igm과-iga는-j-chain과-상호작용하여-중합체를-형성할-수-있다"},{"level":2,"title":"요약","id":"요약-3"},{"level":2,"title":"Adaptive immune response의 진화","id":"adaptive-immune-response의-진화"},{"level":2,"title":"일부 무척추동물은 immunoglobulin 유사 유전자 repertoire에서 광범위한 다양성을 생성한다.","id":"일부-무척추동물은-immunoglobulin-유사-유전자-repertoire에서-광범위한-다양성을-생성한다"},{"level":2,"title":"Agnathan은 LRR domain으로 이루어진 receptor를 다양화하기 위해 somaticgene rearrangement를 이용하는 adaptive immune system을 갖고 있다.","id":"agnathan은-lrr-domain으로-이루어진-receptor를-다양화하기-위해-somaticgene-rearrangement를-이용하는-adaptive-immune-system을-갖고-있다"},{"level":2,"title":"Immunoglobulin 유사 유전자의 다양화된 repertoire에 기반한 RAG-의존성adaptive immunity는 연골어류에서 갑작스럽게 출현했다.","id":"immunoglobulin-유사-유전자의-다양화된-repertoire에-기반한-rag-의존성adaptive-immunity는-연골어류에서-갑작스럽게-출현했다"},{"level":2,"title":"종에 따라 immunoglobulin 다양성을 생성하는방식이 다르다.","id":"종에-따라-immunoglobulin-다양성을-생성하는방식이-다르다"},{"level":2,"title":"α:β와 γ:δ T-cell receptor 모두 연골어류에 존재한다.","id":"α-β와-γ-δ-t-cell-receptor-모두-연골어류에-존재한다"},{"level":2,"title":"MHC class I과 class II 분자도 연골어류에서 처음 발견된다.","id":"mhc-class-i과-class-ii-분자도-연골어류에서-처음-발견된다"},{"level":2,"title":"요약","id":"요약-4"},{"level":2,"title":"제5장 요약","id":"제5장-요약"}]},{"id":"ch5-exercises","section":"Part II · Antigen의 인식","title":"5장 연습문제 · Lymphocyte Antigen Receptor의 생성","sub":"Lymphocyte Antigen Receptor의 생성","file":"ch5-exercises.html","sections":[]},{"id":"ch6","section":"Part II · Antigen의 인식","title":"6장 · T Lymphocyte에 대한 Antigen Presentation","sub":"T Lymphocyte에 대한 Antigen Presentation","file":"ch6.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"6장 한국어 요약","id":"6장-한국어-요약"},{"level":4,"title":"α:β T-cell receptor ligand의 생성","id":"α-β-t-cell-receptor-ligand의-생성"},{"level":4,"title":"MHC와 그 기능","id":"mhc와-그-기능"},{"level":4,"title":"Unconventional T-cell subset의 ligand","id":"unconventional-t-cell-subset의-ligand"},{"level":2,"title":"T Lymphocyte에 대한 Antigen Presentation","id":"t-lymphocyte에-대한-antigen-presentation"},{"level":2,"title":"α:β T-cell receptor ligand의 생성","id":"α-β-t-cell-receptor-ligand의-생성-2"},{"level":2,"title":"Antigen presentation은 armed effector T cell을 만들어내는 과정과, pathogen에 감염된 세포를 공격하도록 이들의 effector function을 촉발하는 과정 모두에 관여한다.","id":"antigen-presentation은-armed-effector-t-cell을-만들어내는-과정과-pathogen에-감염된-세포를-공격하도록-이들의-effector-function을-촉발하는-과정-모두에-관여한다"},{"level":2,"title":"Cytosol에서 ubiquitin화된 단백질로부터 proteasome이 peptide를 생성한다.","id":"cytosol에서-ubiquitin화된-단백질로부터-proteasome이-peptide를-생성한다"},{"level":2,"title":"Cytosol 유래 peptide는 TAP에 의해 endoplasmic reticulum으로 수송되어 MHC class I molecule과 결합하기 전에 추가로 처리된다.","id":"cytosol-유래-peptide는-tap에-의해-endoplasmic-reticulum으로-수송되어-mhc-class-i-molecule과-결합하기-전에-추가로-처리된다"},{"level":2,"title":"새로 합성된 MHC class I molecule은 peptide와 결합할 때까지 endoplasmic reticulum에 머물러 있는다.","id":"새로-합성된-mhc-class-i-molecule은-peptide와-결합할-때까지-endoplasmic-reticulum에-머물러-있는다"},{"level":2,"title":"Dendritic cell은 cross-presentation을 이용해 외인성 단백질을 MHC class I molecule에 제시함으로써 CD8 T cell을 prime한다.","id":"dendritic-cell은-cross-presentation을-이용해-외인성-단백질을-mhc-class-i-molecule에-제시함으로써-cd8-t-cell을-prime한다"},{"level":2,"title":"Peptide:MHC class II complex는 endocytosis, phagocytosis, autophagy를 통해 얻은 단백질로부터 산성화된 endocytic vesicle에서 생성된다.","id":"peptide-mhc-class-ii-complex는-endocytosis-phagocytosis-autophagy를-통해-얻은-단백질로부터-산성화된-endocytic-vesicle에서-생성된다"},{"level":2,"title":"Invariant chain은 새로 합성된 MHC class II molecule을 산성화된 세포내 vesicle로 이끈다.","id":"invariant-chain은-새로-합성된-mhc-class-ii-molecule을-산성화된-세포내-vesicle로-이끈다"},{"level":2,"title":"MHC class II와 유사한 분자인 HLA-DM과 HLA-DO는 CLIP과 다른 peptide 사이의 교환을 조절한다.","id":"mhc-class-ii와-유사한-분자인-hla-dm과-hla-do는-clip과-다른-peptide-사이의-교환을-조절한다"},{"level":2,"title":"Dendritic cell이 활성화된 후에는 MARCH-1 E3 ligase의 발현 감소를 통해 antigen processing이 중단된다.","id":"dendritic-cell이-활성화된-후에는-march-1-e3-ligase의-발현-감소를-통해-antigen-processing이-중단된다"},{"level":2,"title":"α:β T-cell receptor ligand의 생성 — 절 요약","id":"α-β-t-cell-receptor-ligand의-생성-절-요약"},{"level":2,"title":"Major histocompatibility complex와 그 기능","id":"major-histocompatibility-complex와-그-기능"},{"level":2,"title":"Antigen processing과 presentation에 관여하는 많은 단백질이 MHC 내 유전자에 의해 암호화된다.","id":"antigen-processing과-presentation에-관여하는-많은-단백질이-mhc-내-유전자에-의해-암호화된다"},{"level":2,"title":"MHC class I 및 class II 유전자의 단백질 산물은 고도로 polymorphic하다.","id":"mhc-class-i-및-class-ii-유전자의-단백질-산물은-고도로-polymorphic하다"},{"level":2,"title":"MHC polymorphism은 peptide 결합과 T-cell receptor·MHC molecule 사이의 접촉 모두에 영향을 미쳐 T cell의 antigen recognition에 영향을 준다.","id":"mhc-polymorphism은-peptide-결합과-t-cell-receptor-mhc-molecule-사이의-접촉-모두에-영향을-미쳐-t-cell의-antigen-recognition에-영향을-준다"},{"level":2,"title":"Nonself MHC molecule을 인식하는 alloreactive T cell은 매우 풍부하다.","id":"nonself-mhc-molecule을-인식하는-alloreactive-t-cell은-매우-풍부하다"},{"level":2,"title":"많은 T cell이 superantigen에 반응한다.","id":"많은-t-cell이-superantigen에-반응한다"},{"level":2,"title":"MHC polymorphism은 immune system이 반응할 수 있는 antigen의 범위를 넓혀준다.","id":"mhc-polymorphism은-immune-system이-반응할-수-있는-antigen의-범위를-넓혀준다"},{"level":2,"title":"Major histocompatibility complex와 그 기능 — 절 요약","id":"major-histocompatibility-complex와-그-기능-절-요약"},{"level":2,"title":"Unconventional T-cell subset을 위한 ligand의 생성","id":"unconventional-t-cell-subset을-위한-ligand의-생성"},{"level":2,"title":"Immunity에서 특화된 기능을 지닌 다양한 유전자 또한 MHC 내에 암호화되어 있다.","id":"immunity에서-특화된-기능을-지닌-다양한-유전자-또한-mhc-내에-암호화되어-있다"},{"level":2,"title":"특화된 MHC class I molecule은 NK cell과 unconventional T-cell subset의 활성화 및 억제를 위한 ligand로 작용한다.","id":"특화된-mhc-class-i-molecule은-nk-cell과-unconventional-t-cell-subset의-활성화-및-억제를-위한-ligand로-작용한다"},{"level":2,"title":"MHC class I 유사 molecule인 CD1 family의 구성원들은 invariant NKT cell에 microbial lipid를 제시한다.","id":"mhc-class-i-유사-molecule인-cd1-family의-구성원들은-invariant-nkt-cell에-microbial-lipid를-제시한다"},{"level":2,"title":"Nonclassical MHC class I molecule인 MR1은 MAIT cell에 microbial folate metabolite를 제시한다.","id":"nonclassical-mhc-class-i-molecule인-mr1은-mait-cell에-microbial-folate-metabolite를-제시한다"},{"level":2,"title":"γ:δ T cell은 다양한 여러 ligand를 인식할 수 있다.","id":"γ-δ-t-cell은-다양한-여러-ligand를-인식할-수-있다"},{"level":2,"title":"Unconventional T-cell subset의 ligand의 생성 — 절 요약","id":"unconventional-t-cell-subset의-ligand의-생성-절-요약"},{"level":2,"title":"제6장 요약","id":"제6장-요약"}]},{"id":"ch6-exercises","section":"Part II · Antigen의 인식","title":"6장 연습문제 · T Lymphocyte에 대한 Antigen Presentation","sub":"T Lymphocyte에 대한 Antigen Presentation","file":"ch6-exercises.html","sections":[]},{"id":"ch7","section":"Part II · Antigen의 인식","title":"7장 · Lymphocyte Receptor Signaling","sub":"Lymphocyte Receptor Signaling","file":"ch7.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"7장 한국어 요약","id":"7장-한국어-요약"},{"level":4,"title":"Signal transduction의 일반 원리","id":"signal-transduction의-일반-원리"},{"level":4,"title":"Antigen receptor signaling과 lymphocyte activation","id":"antigen-receptor-signaling과-lymphocyte-activation"},{"level":4,"title":"Co-stimulatory·inhibitory receptor","id":"co-stimulatory-inhibitory-receptor"},{"level":2,"title":"Lymphocyte Receptor Signaling","id":"lymphocyte-receptor-signaling"},{"level":2,"title":"Signal transduction의 일반 원리와 전파.","id":"signal-transduction의-일반-원리와-전파"},{"level":2,"title":"Transmembrane receptor는 세포외 신호를 세포내 생화학적 사건으로 전환한다.","id":"transmembrane-receptor는-세포외-신호를-세포내-생화학적-사건으로-전환한다"},{"level":2,"title":"세포내 신호 전파는 거대한 multiprotein signaling complex에 의해 매개된다.","id":"세포내-신호-전파는-거대한-multiprotein-signaling-complex에-의해-매개된다"},{"level":2,"title":"작은 G protein은 여러 signaling pathway에서 분자 스위치로 작용한다.","id":"작은-g-protein은-여러-signaling-pathway에서-분자-스위치로-작용한다"},{"level":2,"title":"Signaling protein은 다양한 기전에 의해 막으로 모집된다.","id":"signaling-protein은-다양한-기전에-의해-막으로-모집된다"},{"level":2,"title":"단백질의 번역 후 변형은 signaling 반응을 활성화할 수도, 억제할 수도 있다.","id":"단백질의-번역-후-변형은-signaling-반응을-활성화할-수도-억제할-수도-있다"},{"level":2,"title":"일부 receptor의 활성화는 작은 분자 second messenger를 생성한다.","id":"일부-receptor의-활성화는-작은-분자-second-messenger를-생성한다"},{"level":2,"title":"Signal transduction의 일반 원리와 전파 — 절 요약","id":"signal-transduction의-일반-원리와-전파-절-요약"},{"level":2,"title":"Antigen receptor signaling과 lymphocyte activation.","id":"antigen-receptor-signaling과-lymphocyte-activation-2"},{"level":2,"title":"Antigen receptor는 가변적인 antigen-binding chain이 receptor의 signaling 기능을 수행하는 불변 chain과 결합하여 이루어진다.","id":"antigen-receptor는-가변적인-antigen-binding-chain이-receptor의-signaling-기능을-수행하는-불변-chain과-결합하여-이루어진다"},{"level":2,"title":"T-cell receptor와 그 co-receptor에 의한 antigen 인식은 원형질막을 가로질러 신호를 전달하여 signaling을 개시한다.","id":"t-cell-receptor와-그-co-receptor에-의한-antigen-인식은-원형질막을-가로질러-신호를-전달하여-signaling을-개시한다"},{"level":2,"title":"T-cell receptor와 그 co-receptor에 의한 antigen 인식은 Src-family kinase에 의한 ITAM의 phosphorylation으로 이어져 signaling cascade의 첫 세포내 신호를 생성한다.","id":"t-cell-receptor와-그-co-receptor에-의한-antigen-인식은-src-family-kinase에-의한-itam의-phosphorylation으로-이어져-signaling-cascade의-첫-세포내-신호를-생성한다"},{"level":2,"title":"Phosphorylation된 ITAM은 tyrosine kinase ZAP-70을 모집하여 활성화한다.","id":"phosphorylation된-itam은-tyrosine-kinase-zap-70을-모집하여-활성화한다"},{"level":2,"title":"ITAM은 세포 활성화 신호를 보내는 leukocyte의 다른 receptor에서도 발견된다.","id":"itam은-세포-활성화-신호를-보내는-leukocyte의-다른-receptor에서도-발견된다"},{"level":2,"title":"활성화된 ZAP-70은 scaffold protein을 phosphorylate하고 PI 3-kinase 활성화를 촉진한다.","id":"활성화된-zap-70은-scaffold-protein을-phosphorylate하고-pi-3-kinase-활성화를-촉진한다"},{"level":2,"title":"활성화된 PLC-γ는 second messenger인 diacylglycerol과 inositol trisphosphate를 생성하여 transcription factor 활성화로 이어진다.","id":"활성화된-plc-γ는-second-messenger인-diacylglycerol과-inositol-trisphosphate를-생성하여-transcription-factor-활성화로-이어진다"},{"level":2,"title":"Ca2+ 유입은 transcription factor NFAT를 활성화한다.","id":"ca2-유입은-transcription-factor-nfat를-활성화한다"},{"level":2,"title":"Ras 활성화는 mitogen-activated protein kinase(MAPK) relay를 자극하여 transcription factor AP-1의 발현을 유도한다.","id":"ras-활성화는-mitogen-activated-protein-kinase-mapk-relay를-자극하여-transcription-factor-ap-1의-발현을-유도한다"},{"level":2,"title":"Protein kinase C는 transcription factor NFκB와 AP-1을 활성화한다.","id":"protein-kinase-c는-transcription-factor-nfκb와-ap-1을-활성화한다"},{"level":2,"title":"PI 3-kinase 활성화는 serine/threonine kinase Akt를 통해 세포 대사 pathway를 상향 조절한다.","id":"pi-3-kinase-활성화는-serine-threonine-kinase-akt를-통해-세포-대사-pathway를-상향-조절한다"},{"level":2,"title":"T-cell receptor signaling은 integrin 매개 세포 부착을 증진시킨다.","id":"t-cell-receptor-signaling은-integrin-매개-세포-부착을-증진시킨다"},{"level":2,"title":"T-cell receptor signaling은 작은 GTPase Cdc42를 활성화하여 세포골격 재조직을 유도한다.","id":"t-cell-receptor-signaling은-작은-gtpase-cdc42를-활성화하여-세포골격-재조직을-유도한다"},{"level":2,"title":"B-cell receptor signaling의 논리는 T-cell receptor signaling과 유사하지만, 일부 signaling 구성요소는 B cell에 특이적이다.","id":"b-cell-receptor-signaling의-논리는-t-cell-receptor-signaling과-유사하지만-일부-signaling-구성요소는-b-cell에-특이적이다"},{"level":2,"title":"Antigen receptor signaling과 lymphocyte activation — 절 요약","id":"antigen-receptor-signaling과-lymphocyte-activation-절-요약"},{"level":2,"title":"Co-stimulatory 및 inhibitory receptor가 T lymphocyte와 B lymphocyte에서 antigen receptor signaling을 조절한다.","id":"co-stimulatory-및-inhibitory-receptor가-t-lymphocyte와-b-lymphocyte에서-antigen-receptor-signaling을-조절한다"},{"level":2,"title":"Cell-surface protein CD28은 naive T-cell activation에 필요한 co-stimulatory signaling receptor이다.","id":"cell-surface-protein-cd28은-naive-t-cell-activation에-필요한-co-stimulatory-signaling-receptor이다"},{"level":2,"title":"Transcription factor 활성화에 중요한 PLC-γ의 최대 활성화에는 CD28에 의해 유도되는 co-stimulatory 신호가 필요하다.","id":"transcription-factor-활성화에-중요한-plc-γ의-최대-활성화에는-cd28에-의해-유도되는-co-stimulatory-신호가-필요하다"},{"level":2,"title":"TNF receptor superfamily 구성원은 T-cell 및 B-cell activation을 증강시킨다.","id":"tnf-receptor-superfamily-구성원은-t-cell-및-b-cell-activation을-증강시킨다"},{"level":2,"title":"Lymphocyte 상의 inhibitory receptor는 co-stimulatory signaling pathway를 방해하여 immune response를 하향 조절한다.","id":"lymphocyte-상의-inhibitory-receptor는-co-stimulatory-signaling-pathway를-방해하여-immune-response를-하향-조절한다"},{"level":2,"title":"Lymphocyte 상의 inhibitory receptor는 protein 또는 lipid phosphatase를 모집하여 immune response를 하향 조절한다.","id":"lymphocyte-상의-inhibitory-receptor는-protein-또는-lipid-phosphatase를-모집하여-immune-response를-하향-조절한다"},{"level":2,"title":"Co-stimulatory 및 inhibitory receptor — 절 요약","id":"co-stimulatory-및-inhibitory-receptor-절-요약"},{"level":2,"title":"제7장 요약","id":"제7장-요약"}]},{"id":"ch7-exercises","section":"Part II · Antigen의 인식","title":"7장 연습문제 · Lymphocyte Receptor Signaling","sub":"Lymphocyte Receptor Signaling","file":"ch7-exercises.html","sections":[]},{"id":"ch8","section":"Part III · 성숙한 lymphocyte receptor repertoire의 형성","title":"8장 · The Development of B and T Lymphocytes","sub":"The Development of B and T Lymphocytes","file":"ch8.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"8장 한국어 요약","id":"8장-한국어-요약"},{"level":4,"title":"1부 — B lymphocyte의 발생 (8-1~8-9절)","id":"1부-b-lymphocyte의-발생-8-1-8-9절"},{"level":4,"title":"2부 — T lymphocyte의 발생 (8-10~8-18절)","id":"2부-t-lymphocyte의-발생-8-10-8-18절"},{"level":4,"title":"3부 — Positive selection과 negative selection (8-19~8-28절)","id":"3부-positive-selection과-negative-selection-8-19-8-28절"},{"level":2,"title":"B Lymphocyte와 T Lymphocyte의 발생","id":"b-lymphocyte와-t-lymphocyte의-발생"},{"level":2,"title":"B lymphocyte의 발생","id":"b-lymphocyte의-발생"},{"level":2,"title":"Lymphocyte는 bone marrow의 hematopoietic stem cell에서 유래한다.","id":"lymphocyte는-bone-marrow의-hematopoietic-stem-cell에서-유래한다"},{"level":2,"title":"B-cell 발생은 heavy-chain locus의 rearrangement로 시작된다.","id":"b-cell-발생은-heavy-chain-locus의-rearrangement로-시작된다"},{"level":2,"title":"Pre-B-cell receptor는 완전한 heavy chain의 성공적인 생산을 검증하고 pro-B cell에서 pre-B cell 단계로의 전환을 알리는 신호를 보낸다.","id":"pre-b-cell-receptor는-완전한-heavy-chain의-성공적인-생산을-검증하고-pro-b-cell에서-pre-b-cell-단계로의-전환을-알리는-신호를-보낸다"},{"level":2,"title":"Pre-B-cell receptor 신호전달은 추가적인 heavy-chain locus rearrangement를 억제하고 allelic exclusion을 강제한다.","id":"pre-b-cell-receptor-신호전달은-추가적인-heavy-chain-locus-rearrangement를-억제하고-allelic-exclusion을-강제한다"},{"level":2,"title":"Pre-B cell은 light-chain locus를 rearrangement하여 세포 표면 immunoglobulin을 발현한다.","id":"pre-b-cell은-light-chain-locus를-rearrangement하여-세포-표면-immunoglobulin을-발현한다"},{"level":2,"title":"Immature B cell은 bone marrow를 떠나기 전에 autoreactivity에 대해 검증받는다.","id":"immature-b-cell은-bone-marrow를-떠나기-전에-autoreactivity에-대해-검증받는다"},{"level":2,"title":"말초에서 처음으로 충분한 양의 self antigen을 만나는 lymphocyte는 제거되거나 불활성화된다.","id":"말초에서-처음으로-충분한-양의-self-antigen을-만나는-lymphocyte는-제거되거나-불활성화된다"},{"level":2,"title":"Spleen에 도착한 immature B cell은 빠르게 교체되며, 성숙과 장기 생존을 위해 cytokine과 B-cell receptor를 통한 positive 신호가 필요하다.","id":"spleen에-도착한-immature-b-cell은-빠르게-교체되며-성숙과-장기-생존을-위해-cytokine과-b-cell-receptor를-통한-positive-신호가-필요하다"},{"level":2,"title":"B-1 B cell은 발생 초기에 나타나는 innate lymphocyte subset이다.","id":"b-1-b-cell은-발생-초기에-나타나는-innate-lymphocyte-subset이다"},{"level":2,"title":"요약","id":"요약"},{"level":2,"title":"T lymphocyte의 발생","id":"t-lymphocyte의-발생"},{"level":2,"title":"Thymus의 구조와 T-cell 발생 개관","id":"thymus의-구조와-t-cell-발생-개관"},{"level":2,"title":"T-cell lineage로의 commitment는 Notch 신호전달에 이어 thymus에서 일어난다.","id":"t-cell-lineage로의-commitment는-notch-신호전달에-이어-thymus에서-일어난다"},{"level":2,"title":"T-cell precursor는 thymus에서 광범위하게 증식하지만 대부분 그곳에서 죽는다.","id":"t-cell-precursor는-thymus에서-광범위하게-증식하지만-대부분-그곳에서-죽는다"},{"level":2,"title":"Thymocyte 발생의 연속적인 단계는 세포 표면 분자의 변화로 나타난다.","id":"thymocyte-발생의-연속적인-단계는-세포-표면-분자의-변화로-나타난다"},{"level":2,"title":"서로 다른 발생 단계의 thymocyte는 thymus의 서로 다른 부위에서 발견된다.","id":"서로-다른-발생-단계의-thymocyte는-thymus의-서로-다른-부위에서-발견된다"},{"level":2,"title":"α:β 또는 γ:δ receptor를 지닌 T cell은 공통 progenitor로부터 발생한다.","id":"α-β-또는-γ-δ-receptor를-지닌-t-cell은-공통-progenitor로부터-발생한다"},{"level":2,"title":"γ:δ T-cell receptor를 발현하는 T cell은 발생 과정에서 두 개의 뚜렷한 단계로 나타난다.","id":"γ-δ-t-cell-receptor를-발현하는-t-cell은-발생-과정에서-두-개의-뚜렷한-단계로-나타난다"},{"level":2,"title":"Rearrangement된 β chain의 성공적인 합성은 세포 증식을 촉발하고 추가적인 β-chain 유전자 rearrangement를 차단하는 pre-T-cell receptor의 생산을 가능하게 한다.","id":"rearrangement된-β-chain의-성공적인-합성은-세포-증식을-촉발하고-추가적인-β-chain-유전자-rearrangement를-차단하는-pre-t-cell-receptor의-생산을-가능하게-한다"},{"level":2,"title":"T-cell α-chain 유전자는 positive selection 또는 세포 죽음이 개입할 때까지 연속적인 rearrangement를 거친다.","id":"t-cell-α-chain-유전자는-positive-selection-또는-세포-죽음이-개입할-때까지-연속적인-rearrangement를-거친다"},{"level":2,"title":"요약","id":"요약-2"},{"level":2,"title":"T cell의 positive selection과 negative selection","id":"t-cell의-positive-selection과-negative-selection"},{"level":2,"title":"Self peptide:self MHC complex와 상호작용하는 receptor를 지닌 thymocyte만이 생존하여 성숙할 수 있다.","id":"self-peptide-self-mhc-complex와-상호작용하는-receptor를-지닌-thymocyte만이-생존하여-성숙할-수-있다"},{"level":2,"title":"Positive selection은 MHC molecule에 대한 내재적 특이성을 지닌 T-cell receptor repertoire에 작용한다.","id":"positive-selection은-mhc-molecule에-대한-내재적-특이성을-지닌-t-cell-receptor-repertoire에-작용한다"},{"level":2,"title":"Positive selection은 CD4 또는 CD8의 발현을 T-cell receptor의 특이성 및 T cell의 잠재적 effector 기능과 조율한다.","id":"positive-selection은-cd4-또는-cd8의-발현을-t-cell-receptor의-특이성-및-t-cell의-잠재적-effector-기능과-조율한다"},{"level":2,"title":"Thymic cortical epithelial cell은 발생 중인 thymocyte의 positive selection을 매개한다.","id":"thymic-cortical-epithelial-cell은-발생-중인-thymocyte의-positive-selection을-매개한다"},{"level":2,"title":"어디에나 존재하는(ubiquitous) self antigen에 강하게 반응하는 T cell은 thymus에서 제거된다.","id":"어디에나-존재하는-ubiquitous-self-antigen에-강하게-반응하는-t-cell은-thymus에서-제거된다"},{"level":2,"title":"Negative selection은 bone marrow 유래 antigen-presenting cell에 의해 가장 효율적으로 일어난다.","id":"negative-selection은-bone-marrow-유래-antigen-presenting-cell에-의해-가장-효율적으로-일어난다"},{"level":2,"title":"Negative selection과 positive selection을 위한 신호의 특이성 및/또는 세기는 서로 달라야 한다.","id":"negative-selection과-positive-selection을-위한-신호의-특이성-및-또는-세기는-서로-달라야-한다"},{"level":2,"title":"iNKT cell·Treg cell의 agonist selection (표제 소실)","id":"inkt-cell-treg-cell의-agonist-selection-표제-소실"},{"level":2,"title":"T-cell 성숙의 마지막 단계는 thymic medulla에서 일어난다.","id":"t-cell-성숙의-마지막-단계는-thymic-medulla에서-일어난다"},{"level":2,"title":"말초에서 처음으로 충분한 양의 self antigen을 만나는 T cell은 제거되거나 불활성화된다.","id":"말초에서-처음으로-충분한-양의-self-antigen을-만나는-t-cell은-제거되거나-불활성화된다"},{"level":2,"title":"요약","id":"요약-3"},{"level":2,"title":"제8장 요약","id":"제8장-요약"}]},{"id":"ch8-exercises","section":"Part III · 성숙한 lymphocyte receptor repertoire의 형성","title":"8장 연습문제 · The Development of B and T Lymphocytes","sub":"The Development of B and T Lymphocytes","file":"ch8-exercises.html","sections":[]},{"id":"ch9","section":"Part IV · adaptive immune response","title":"9장 · T-cell-Mediated Immunity","sub":"T-cell-Mediated Immunity","file":"ch9.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"9장 한국어 요약","id":"9장-한국어-요약"},{"level":4,"title":"Secondary lymphoid organ의 발생과 기능","id":"secondary-lymphoid-organ의-발생과-기능"},{"level":4,"title":"Naive T cell의 priming","id":"naive-t-cell의-priming"},{"level":4,"title":"Effector T cell과 cytotoxicity","id":"effector-t-cell과-cytotoxicity"},{"level":2,"title":"T cell 매개 면역","id":"t-cell-매개-면역"},{"level":2,"title":"Adaptive immune response가 개시되는 장소인 secondary lymphoid organ의 발생과 기능","id":"adaptive-immune-response가-개시되는-장소인-secondary-lymphoid-organ의-발생과-기능"},{"level":2,"title":"T lymphocyte와 B lymphocyte는 secondary lymphoid tissue 내의 서로 다른 위치에 존재한다.","id":"t-lymphocyte와-b-lymphocyte는-secondary-lymphoid-tissue-내의-서로-다른-위치에-존재한다"},{"level":2,"title":"Secondary lymphoid tissue의 발생은 lymphoid tissue inducer cell과 tumor necrosis factor family 단백질에 의해 조절된다.","id":"secondary-lymphoid-tissue의-발생은-lymphoid-tissue-inducer-cell과-tumor-necrosis-factor-family-단백질에-의해-조절된다"},{"level":2,"title":"T cell과 B cell은 chemokine의 작용에 의해 secondary lymphoid tissue의 서로 다른 영역으로 나뉜다.","id":"t-cell과-b-cell은-chemokine의-작용에-의해-secondary-lymphoid-tissue의-서로-다른-영역으로-나뉜다"},{"level":2,"title":"Naive T cell은 secondary lymphoid tissue를 통과하며 dendritic cell 위의 peptide:MHC complex를 살핀다.","id":"naive-t-cell은-secondary-lymphoid-tissue를-통과하며-dendritic-cell-위의-peptide-mhc-complex를-살핀다"},{"level":2,"title":"Lymphoid tissue로의 lymphocyte 진입은 chemokine과 adhesion molecule에 의존한다.","id":"lymphoid-tissue로의-lymphocyte-진입은-chemokine과-adhesion-molecule에-의존한다"},{"level":2,"title":"Chemokine에 의한 integrin의 활성화가 naive T cell의 lymph node 진입을 담당한다.","id":"chemokine에-의한-integrin의-활성화가-naive-t-cell의-lymph-node-진입을-담당한다"},{"level":2,"title":"Lymph node에서 T cell이 빠져나가는 것은 chemotactic lipid에 의해 조절된다.","id":"lymph-node에서-t-cell이-빠져나가는-것은-chemotactic-lipid에-의해-조절된다"},{"level":2,"title":"T-cell response는 활성화된 dendritic cell에 의해 secondary lymphoid organ에서 개시된다.","id":"t-cell-response는-활성화된-dendritic-cell에-의해-secondary-lymphoid-organ에서-개시된다"},{"level":2,"title":"Dendritic cell은 매우 다양한 pathogen에서 유래한 antigen을 처리한다.","id":"dendritic-cell은-매우-다양한-pathogen에서-유래한-antigen을-처리한다"},{"level":2,"title":"조직에 상주하는 dendritic cell에서 미생물에 의해 유도된 TLR 신호전달은 이들의 lymphoid organ으로의 이동을 유도하고 antigen 처리를 강화한다.","id":"조직에-상주하는-dendritic-cell에서-미생물에-의해-유도된-tlr-신호전달은-이들의-lymphoid-organ으로의-이동을-유도하고-antigen-처리를-강화한다"},{"level":2,"title":"Plasmacytoid dendritic cell은 type I interferon을 다량 생산하며 conventional dendritic cell의 antigen 제시를 돕는 helper cell로 작용할 수 있다.","id":"plasmacytoid-dendritic-cell은-type-i-interferon을-다량-생산하며-conventional-dendritic-cell의-antigen-제시를-돕는-helper-cell로-작용할-수-있다"},{"level":2,"title":"Macrophage는 pathogen에 의해 유도되어 naive T cell에게 외래 antigen을 제시할 수 있는 청소 세포이다.","id":"macrophage는-pathogen에-의해-유도되어-naive-t-cell에게-외래-antigen을-제시할-수-있는-청소-세포이다"},{"level":2,"title":"B cell은 자신의 표면 immunoglobulin에 결합하는 antigen을 제시하는 데 매우 효율적이다.","id":"b-cell은-자신의-표면-immunoglobulin에-결합하는-antigen을-제시하는-데-매우-효율적이다"},{"level":2,"title":"요약","id":"요약"},{"level":2,"title":"Pathogen에 의해 활성화된 dendritic cell에 의한 naive T cell의 priming","id":"pathogen에-의해-활성화된-dendritic-cell에-의한-naive-t-cell의-priming"},{"level":2,"title":"Cell-adhesion molecule이 naive T cell과 antigen-presenting cell의 초기 상호작용을 매개한다.","id":"cell-adhesion-molecule이-naive-t-cell과-antigen-presenting-cell의-초기-상호작용을-매개한다"},{"level":2,"title":"Antigen-presenting cell은 naive T cell의 clonal expansion과 분화를 위해 여러 가지 신호를 전달한다.","id":"antigen-presenting-cell은-naive-t-cell의-clonal-expansion과-분화를-위해-여러-가지-신호를-전달한다"},{"level":2,"title":"활성화된 T cell에 대한 CD28 의존적 co-stimulation은 interleukin-2와 고친화성 IL-2 receptor의 발현을 유도한다.","id":"활성화된-t-cell에-대한-cd28-의존적-co-stimulation은-interleukin-2와-고친화성-il-2-receptor의-발현을-유도한다"},{"level":2,"title":"T-cell 활성화에는 추가적인 co-stimulatory 경로가 관여한다.","id":"t-cell-활성화에는-추가적인-co-stimulatory-경로가-관여한다"},{"level":2,"title":"증식하는 T cell은 작용하는 데 co-stimulation을 필요로 하지 않는 effector T cell로 분화한다.","id":"증식하는-t-cell은-작용하는-데-co-stimulation을-필요로-하지-않는-effector-t-cell로-분화한다"},{"level":2,"title":"CD8 T cell은 여러 가지 방식으로 활성화되어 cytotoxic effector cell이 될 수 있다.","id":"cd8-t-cell은-여러-가지-방식으로-활성화되어-cytotoxic-effector-cell이-될-수-있다"},{"level":2,"title":"CD4 T cell은 기능이 서로 다른 여러 effector cell subset으로 분화한다.","id":"cd4-t-cell은-기능이-서로-다른-여러-effector-cell-subset으로-분화한다"},{"level":2,"title":"Cytokine은 naive CD4 T cell이 서로 다른 effector 경로를 따라 분화하도록 유도한다.","id":"cytokine은-naive-cd4-t-cell이-서로-다른-effector-경로를-따라-분화하도록-유도한다"},{"level":2,"title":"CD4 T-cell subset은 자신이 생산하는 cytokine을 통해 서로의 분화를 교차 조절할 수 있다.","id":"cd4-t-cell-subset은-자신이-생산하는-cytokine을-통해-서로의-분화를-교차-조절할-수-있다"},{"level":2,"title":"Regulatory CD4 T cell은 adaptive immune response의 조절에 관여한다.","id":"regulatory-cd4-t-cell은-adaptive-immune-response의-조절에-관여한다"},{"level":2,"title":"요약","id":"요약-2"},{"level":2,"title":"Effector T cell과 그 cytokine의 일반적 성질","id":"effector-t-cell과-그-cytokine의-일반적-성질"},{"level":2,"title":"Effector T cell과 target cell의 상호작용은 antigen 비특이적인 cell-adhesion molecule에 의해 시작된다.","id":"effector-t-cell과-target-cell의-상호작용은-antigen-비특이적인-cell-adhesion-molecule에-의해-시작된다"},{"level":2,"title":"Effector T cell과 그 target 사이에는 신호전달을 조절하고 effector 분자의 방출을 유도하는 immunological synapse가 형성된다.","id":"effector-t-cell과-그-target-사이에는-신호전달을-조절하고-effector-분자의-방출을-유도하는-immunological-synapse가-형성된다"},{"level":2,"title":"T cell의 effector function은 이들이 생산하는 effector 분자의 조합에 의해 결정된다.","id":"t-cell의-effector-function은-이들이-생산하는-effector-분자의-조합에-의해-결정된다"},{"level":2,"title":"Cytokine은 국소적으로 작용할 수도 있고 멀리 떨어진 곳에 작용할 수도 있다.","id":"cytokine은-국소적으로-작용할-수도-있고-멀리-떨어진-곳에-작용할-수도-있다"},{"level":2,"title":"T cell은 여러 TNF-family cytokine을 대개 세포 표면에 결합된 삼량체 단백질로 발현한다.","id":"t-cell은-여러-tnf-family-cytokine을-대개-세포-표면에-결합된-삼량체-단백질로-발현한다"},{"level":2,"title":"요약","id":"요약-3"},{"level":2,"title":"T cell 매개 cytotoxicity","id":"t-cell-매개-cytotoxicity"},{"level":2,"title":"Cytotoxic T cell은 apoptosis의 extrinsic 경로와 intrinsic 경로를 통해 target cell이 programmed cell death를 겪도록 유도한다.","id":"cytotoxic-t-cell은-apoptosis의-extrinsic-경로와-intrinsic-경로를-통해-target-cell이-programmed-cell-death를-겪도록-유도한다"},{"level":2,"title":"Apoptosis의 intrinsic 경로는 mitochondria에서 cytochrome c가 방출됨으로써 매개된다.","id":"apoptosis의-intrinsic-경로는-mitochondria에서-cytochrome-c가-방출됨으로써-매개된다"},{"level":2,"title":"Apoptosis를 촉발하는 cytotoxic effector 단백질은 CD8 cytotoxic T cell의 granule에 들어 있다.","id":"apoptosis를-촉발하는-cytotoxic-effector-단백질은-cd8-cytotoxic-t-cell의-granule에-들어-있다"},{"level":2,"title":"Cytotoxic T cell은 특정 antigen을 발현하는 target을 선택적으로 연속해서 죽인다.","id":"cytotoxic-t-cell은-특정-antigen을-발현하는-target을-선택적으로-연속해서-죽인다"},{"level":2,"title":"Cytotoxic T cell은 cytokine을 방출함으로써도 작용한다.","id":"cytotoxic-t-cell은-cytokine을-방출함으로써도-작용한다"},{"level":2,"title":"요약","id":"요약-4"},{"level":2,"title":"제9장 요약","id":"제9장-요약"}]},{"id":"ch9-exercises","section":"Part IV · adaptive immune response","title":"9장 연습문제 · T-cell-Mediated Immunity","sub":"T-cell-Mediated Immunity","file":"ch9-exercises.html","sections":[]},{"id":"ch10","section":"Part IV · Adaptive immune response","title":"10장 · The Humoral Immune Response","sub":"The Humoral Immune Response","file":"ch10.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"10장 한국어 요약","id":"10장-한국어-요약"},{"level":4,"title":"10장 한눈에 보기 — The Humoral Immune Response","id":"10장-한눈에-보기-the-humoral-immune-response"},{"level":4,"title":"Antigen과 helper T cell에 의한 B-cell 활성화","id":"antigen과-helper-t-cell에-의한-b-cell-활성화"},{"level":4,"title":"Immunoglobulin class의 분포와 기능","id":"immunoglobulin-class의-분포와-기능"},{"level":4,"title":"Fc receptor를 통한 pathogen 파괴","id":"fc-receptor를-통한-pathogen-파괴"},{"level":2,"title":"Antigen과 helper T cell에 의한 B-cell 활성화","id":"antigen과-helper-t-cell에-의한-b-cell-활성화-2"},{"level":2,"title":"Antigen에 의한 B cell의 활성화에는 B-cell receptor 신호와 TFH cell 또는 microbial antigen의 신호가 함께 관여한다.","id":"antigen에-의한-b-cell의-활성화에는-b-cell-receptor-신호와-tfh-cell-또는-microbial-antigen의-신호가-함께-관여한다"},{"level":2,"title":"T cell과 B cell에 의한 antigen의 linked recognition은 강력한 antibody response를 촉진한다.","id":"t-cell과-b-cell에-의한-antigen의-linked-recognition은-강력한-antibody-response를-촉진한다"},{"level":2,"title":"자신의 antigen을 만난 B cell은 2차 lymphoid tissue에서 B-cell 영역과 T-cell 영역의 경계로 이동한다.","id":"자신의-antigen을-만난-b-cell은-2차-lymphoid-tissue에서-b-cell-영역과-t-cell-영역의-경계로-이동한다"},{"level":2,"title":"T cell은 B cell을 활성화하는 표면 molecule과 cytokine을 발현하고, B cell은 다시 TFH-cell 발생을 촉진한다.","id":"t-cell은-b-cell을-활성화하는-표면-molecule과-cytokine을-발현하고-b-cell은-다시-tfh-cell-발생을-촉진한다"},{"level":2,"title":"활성화된 B cell은 antibody를 분비하는 plasmablast와 plasma cell로 분화한다.","id":"활성화된-b-cell은-antibody를-분비하는-plasmablast와-plasma-cell로-분화한다"},{"level":2,"title":"Primary B-cell 면역반응의 두 번째 단계는 활성화된 B cell이 follicle로 이동해 증식하며 germinal center를 형성할 때 일어난다.","id":"primary-b-cell-면역반응의-두-번째-단계는-활성화된-b-cell이-follicle로-이동해-증식하며-germinal-center를-형성할-때-일어난다"},{"level":2,"title":"Germinal center B cell은 V-region somatic hypermutation을 거치고, affinity를 높이는 돌연변이를 가진 세포가 선택된다.","id":"germinal-center-b-cell은-v-region-somatic-hypermutation을-거치고-affinity를-높이는-돌연변이를-가진-세포가-선택된다"},{"level":2,"title":"Germinal center B cell의 positive selection에는 TFH cell과의 접촉과 CD40 신호전달이 관여한다.","id":"germinal-center-b-cell의-positive-selection에는-tfh-cell과의-접촉과-cd40-신호전달이-관여한다"},{"level":2,"title":"Activation-induced cytidine deaminase(AID)는 B cell에서 전사되는 유전자에 돌연변이를 도입한다.","id":"activation-induced-cytidine-deaminase-aid-는-b-cell에서-전사되는-유전자에-돌연변이를-도입한다"},{"level":2,"title":"AID의 개시 이후 mismatch repair와 base-excision repair pathway가 somatic hypermutation에 기여한다.","id":"aid의-개시-이후-mismatch-repair와-base-excision-repair-pathway가-somatic-hypermutation에-기여한다"},{"level":2,"title":"AID는 class switching을 개시하여, 면역반응 과정에서 동일하게 조립된 VH exon이 서로 다른 CH 유전자와 결합할 수 있게 한다.","id":"aid는-class-switching을-개시하여-면역반응-과정에서-동일하게-조립된-vh-exon이-서로-다른-ch-유전자와-결합할-수-있게-한다"},{"level":2,"title":"TFH cell이 만드는 cytokine이 T-dependent antibody response에서 class switching의 isotype 선택을 결정한다.","id":"tfh-cell이-만드는-cytokine이-t-dependent-antibody-response에서-class-switching의-isotype-선택을-결정한다"},{"level":2,"title":"Germinal center reaction에서 살아남은 B cell은 결국 plasma cell 또는 memory cell로 분화한다.","id":"germinal-center-reaction에서-살아남은-b-cell은-결국-plasma-cell-또는-memory-cell로-분화한다"},{"level":2,"title":"어떤 antigen은 B-cell response를 유도하는 데 T-cell help가 필요하지 않다.","id":"어떤-antigen은-b-cell-response를-유도하는-데-t-cell-help가-필요하지-않다"},{"level":2,"title":"요약","id":"요약"},{"level":2,"title":"Immunoglobulin class의 분포와 기능","id":"immunoglobulin-class의-분포와-기능-2"},{"level":2,"title":"서로 다른 class의 antibody는 서로 다른 장소에서 작용하며 서로 다른 effector function을 지닌다.","id":"서로-다른-class의-antibody는-서로-다른-장소에서-작용하며-서로-다른-effector-function을-지닌다"},{"level":2,"title":"Polymeric immunoglobulin receptor는 IgA와 IgM의 Fc region에 결합해 이들을 상피 장벽 너머로 수송한다.","id":"polymeric-immunoglobulin-receptor는-iga와-igm의-fc-region에-결합해-이들을-상피-장벽-너머로-수송한다"},{"level":2,"title":"Neonatal Fc receptor는 IgG를 태반 너머로 운반하고 IgG가 몸 밖으로 배출되는 것을 막는다.","id":"neonatal-fc-receptor는-igg를-태반-너머로-운반하고-igg가-몸-밖으로-배출되는-것을-막는다"},{"level":2,"title":"고친화도 IgG와 IgA antibody는 독소를 neutralize하고 바이러스·세균의 감염력을 차단할 수 있다.","id":"고친화도-igg와-iga-antibody는-독소를-neutralize하고-바이러스-세균의-감염력을-차단할-수-있다"},{"level":2,"title":"Antibody:antigen complex는 C1q에 결합해 complement의 classical pathway를 활성화한다.","id":"antibody-antigen-complex는-c1q에-결합해-complement의-classical-pathway를-활성화한다"},{"level":2,"title":"Complement receptor와 Fc receptor는 모두 순환에서 면역복합체를 제거하는 데 기여한다.","id":"complement-receptor와-fc-receptor는-모두-순환에서-면역복합체를-제거하는-데-기여한다"},{"level":2,"title":"요약","id":"요약-2"},{"level":2,"title":"Fc receptor를 통한 antibody-coated pathogen의 파괴","id":"fc-receptor를-통한-antibody-coated-pathogen의-파괴"},{"level":2,"title":"보조 세포의 Fc receptor는 서로 다른 class의 immunoglobulin에 특이적인 신호전달 receptor이다.","id":"보조-세포의-fc-receptor는-서로-다른-class의-immunoglobulin에-특이적인-신호전달-receptor이다"},{"level":2,"title":"Phagocyte의 Fc receptor는 pathogen 표면에 결합한 antibody에 의해 활성화되어 pathogen을 삼키고 파괴하게 한다.","id":"phagocyte의-fc-receptor는-pathogen-표면에-결합한-antibody에-의해-활성화되어-pathogen을-삼키고-파괴하게-한다"},{"level":2,"title":"Fc receptor는 NK cell을 활성화하여 antibody로 덮인 표적을 파괴하게 한다.","id":"fc-receptor는-nk-cell을-활성화하여-antibody로-덮인-표적을-파괴하게-한다"},{"level":2,"title":"Mast cell과 basophil은 고친화도 Fcε receptor를 통해 IgE antibody에 결합한다.","id":"mast-cell과-basophil은-고친화도-fcε-receptor를-통해-ige-antibody에-결합한다"},{"level":2,"title":"IgE 매개 보조 세포 활성화는 기생충 감염에 대한 저항에서 중요한 역할을 한다.","id":"ige-매개-보조-세포-활성화는-기생충-감염에-대한-저항에서-중요한-역할을-한다"},{"level":2,"title":"요약","id":"요약-3"},{"level":2,"title":"제10장 요약","id":"제10장-요약"}]},{"id":"ch10-exercises","section":"Part IV · Adaptive immune response","title":"10장 연습문제 · The Humoral Immune Response","sub":"The Humoral Immune Response","file":"ch10-exercises.html","sections":[]},{"id":"ch11","section":"Part IV · 적응 면역 반응","title":"11장 · Integrated Dynamics of Innate and Adaptive Immunity","sub":"Integrated Dynamics of Innate and Adaptive Immunity","file":"ch11.html","sections":[{"level":2,"title":"이 리더에 대하여","id":"이-리더에-대하여"},{"level":2,"title":"11장 한국어 요약","id":"11장-한국어-요약"},{"level":4,"title":"1부 — 특정 유형의 pathogen에 대한 통합 (11-1~11-2절)","id":"1부-특정-유형의-pathogen에-대한-통합-11-1-11-2절"},{"level":4,"title":"2부 — Effector T cell의 innate 기능 증강 (11-3~11-16절)","id":"2부-effector-t-cell의-innate-기능-증강-11-3-11-16절"},{"level":4,"title":"3부 — Immunological memory (11-17~11-24절)","id":"3부-immunological-memory-11-17-11-24절"},{"level":2,"title":"Innate immunity와 Adaptive immunity의 통합적 동역학","id":"innate-immunity와-adaptive-immunity의-통합적-동역학"},{"level":2,"title":"특정 유형의 pathogen에 대한 innate immunity와 adaptive immunity의 통합","id":"특정-유형의-pathogen에-대한-innate-immunity와-adaptive-immunity의-통합"},{"level":2,"title":"Infection의 경과는 몇 가지 뚜렷한 시기로 나눌 수 있다.","id":"infection의-경과는-몇-가지-뚜렷한-시기로-나눌-수-있다"},{"level":2,"title":"Infection을 제거하기 위해 동원되는 effector mechanism은 infectious agent에 따라 달라진다.","id":"infection을-제거하기-위해-동원되는-effector-mechanism은-infectious-agent에-따라-달라진다"},{"level":2,"title":"1부 요약","id":"1부-요약"},{"level":2,"title":"Effector T cell은 innate immune cell의 effector 기능을 증강시킨다","id":"effector-t-cell은-innate-immune-cell의-effector-기능을-증강시킨다"},{"level":2,"title":"Effector T cell은 adhesion molecule과 chemokine receptor 발현의 변화에 의해 특정 조직과 감염 부위로 유도된다.","id":"effector-t-cell은-adhesion-molecule과-chemokine-receptor-발현의-변화에-의해-특정-조직과-감염-부위로-유도된다"},{"level":2,"title":"Adaptive immunity가 진행됨에 따라 pathogen 특이적 effector T cell이 감염 부위에 농축된다.","id":"adaptive-immunity가-진행됨에-따라-pathogen-특이적-effector-t-cell이-감염-부위에-농축된다"},{"level":2,"title":"TH1 cell은 macrophage의 classical activation을 통해 intracellular pathogen에 대한 숙주 반응을 조율하고 증폭한다.","id":"th1-cell은-macrophage의-classical-activation을-통해-intracellular-pathogen에-대한-숙주-반응을-조율하고-증폭한다"},{"level":2,"title":"TH1 cell에 의한 macrophage 활성화는 조직 손상을 피하기 위해 엄격하게 조절되어야 한다.","id":"th1-cell에-의한-macrophage-활성화는-조직-손상을-피하기-위해-엄격하게-조절되어야-한다"},{"level":2,"title":"TH1 cell에 의한 macrophage의 만성적 활성화는 제거되지 않는 intracellular pathogen을 가두는 granuloma의 형성을 매개한다.","id":"th1-cell에-의한-macrophage의-만성적-활성화는-제거되지-않는-intracellular-pathogen을-가두는-granuloma의-형성을-매개한다"},{"level":2,"title":"Type 1 immunity의 결함은 intracellular pathogen 제거에서 이 면역이 하는 중요한 역할을 드러낸다.","id":"type-1-immunity의-결함은-intracellular-pathogen-제거에서-이-면역이-하는-중요한-역할을-드러낸다"},{"level":2,"title":"TH2 cell은 장내 helminth를 배출하고 조직 손상을 복구하기 위해 type 2 반응을 조율한다.","id":"th2-cell은-장내-helminth를-배출하고-조직-손상을-복구하기-위해-type-2-반응을-조율한다"},{"level":2,"title":"TH17 cell은 extracellular bacteria와 fungi의 제거를 높이기 위해 type 3 반응을 조율한다.","id":"th17-cell은-extracellular-bacteria와-fungi의-제거를-높이기-위해-type-3-반응을-조율한다"},{"level":2,"title":"분화를 마친 effector T cell은 effector 기능을 수행하는 동안에도 계속 신호에 반응한다.","id":"분화를-마친-effector-t-cell은-effector-기능을-수행하는-동안에도-계속-신호에-반응한다"},{"level":2,"title":"Effector T cell은 antigen 인식과 무관하게 활성화되어 cytokine을 방출할 수 있다.","id":"effector-t-cell은-antigen-인식과-무관하게-활성화되어-cytokine을-방출할-수-있다"},{"level":2,"title":"Effector T cell은 항pathogen 반응 동안 적응을 가능하게 하는 가소성과 협동성을 보인다.","id":"effector-t-cell은-항pathogen-반응-동안-적응을-가능하게-하는-가소성과-협동성을-보인다"},{"level":2,"title":"세포 매개 immunity와 antibody 매개 immunity의 통합은 여러 종류의 pathogen에 대한 방어에 결정적이다.","id":"세포-매개-immunity와-antibody-매개-immunity의-통합은-여러-종류의-pathogen에-대한-방어에-결정적이다"},{"level":2,"title":"Pathogen에 대한 primary CD8 T-cell 반응은 CD4 T-cell 도움 없이도 일어날 수 있다.","id":"pathogen에-대한-primary-cd8-t-cell-반응은-cd4-t-cell-도움-없이도-일어날-수-있다"},{"level":2,"title":"Infection의 해소는 대부분의 effector cell의 죽음과 memory cell의 생성을 동반한다.","id":"infection의-해소는-대부분의-effector-cell의-죽음과-memory-cell의-생성을-동반한다"},{"level":2,"title":"2부 요약","id":"2부-요약"},{"level":2,"title":"Immunological memory","id":"immunological-memory"},{"level":2,"title":"Immunological memory는 감염이나 vaccination 후 오래 지속된다.","id":"immunological-memory는-감염이나-vaccination-후-오래-지속된다"},{"level":2,"title":"Memory B-cell 반응은 naive B cell의 반응보다 더 빠르고 antigen에 대한 affinity가 더 높다.","id":"memory-b-cell-반응은-naive-b-cell의-반응보다-더-빠르고-antigen에-대한-affinity가-더-높다"},{"level":2,"title":"Memory B cell은 secondary immune response 동안 germinal center에 다시 들어가 추가적인 somatic hypermutation과 affinity maturation을 겪을 수 있다.","id":"memory-b-cell은-secondary-immune-response-동안-germinal-center에-다시-들어가-추가적인-somatic-hypermutation과-affinity-maturation을-겪을-수-있다"},{"level":2,"title":"MHC tetramer는 naive T cell 시기의 빈도보다 높은 빈도로 지속되는 memory T cell을 식별한다.","id":"mhc-tetramer는-naive-t-cell-시기의-빈도보다-높은-빈도로-지속되는-memory-t-cell을-식별한다"},{"level":2,"title":"Memory T cell은 IL-7이나 IL-15에 대한 감수성을 유지하는 effector T cell에서 생겨난다.","id":"memory-t-cell은-il-7이나-il-15에-대한-감수성을-유지하는-effector-t-cell에서-생겨난다"},{"level":2,"title":"Memory T cell은 이질적이며 central memory, effector memory, tissue-resident subset을 포함한다.","id":"memory-t-cell은-이질적이며-central-memory-effector-memory-tissue-resident-subset을-포함한다"},{"level":2,"title":"CD8 T-cell memory에는 CD4 T-cell 도움이 필요하며 여기에는 CD40과 IL-2 signaling이 관여한다.","id":"cd8-t-cell-memory에는-cd4-t-cell-도움이-필요하며-여기에는-cd40과-il-2-signaling이-관여한다"},{"level":2,"title":"면역이 성립된 개체에서 secondary 반응과 그 이후 반응은 주로 memory lymphocyte에 의한 것이다.","id":"면역이-성립된-개체에서-secondary-반응과-그-이후-반응은-주로-memory-lymphocyte에-의한-것이다"},{"level":2,"title":"3부 요약","id":"3부-요약"},{"level":2,"title":"제11장 요약","id":"제11장-요약"}]},{"id":"ch11-exercises","section":"Part IV · 적응 면역 반응","title":"11장 연습문제 · Integrated Dynamics of Innate and Adaptive Immunity","sub":"Integrated Dynamics of Innate and Adaptive Immunity","file":"ch11-exercises.html","sections":[]},{"id":"ch12","section":"Part V · 건강과 질병에서의 immune system","title":"12장 · Mucosal Immune System","sub":"Mucosal Immune System","file":"ch12.html","sections":[{"level":2,"title":"점막에서 면역계가 풀어야 하는 문제","id":"점막에서-면역계가-풀어야-하는-문제"},{"level":4,"title":"동시에 만족시켜야 하는 세 가지 요구","id":"동시에-만족시켜야-하는-세-가지-요구"},{"level":2,"title":"점막 표면의 규모와, 그 규모가 만드는 제약","id":"점막-표면의-규모와-그-규모가-만드는-제약"},{"level":4,"title":"왜 «크다»는 사실이 중요한가","id":"왜-크다-는-사실이-중요한가"},{"level":4,"title":"감염의 관문으로서의 점막","id":"감염의-관문으로서의-점막"},{"level":2,"title":"GALT의 구조 — inductive site와 effector site의 분리","id":"galt의-구조-inductive-site와-effector-site의-분리"},{"level":4,"title":"Inductive site — 조직화된 림프조직","id":"inductive-site-조직화된-림프조직"},{"level":4,"title":"Effector site — 흩어져 있는 세포들","id":"effector-site-흩어져-있는-세포들"},{"level":4,"title":"다른 점막의 대응물","id":"다른-점막의-대응물"},{"level":2,"title":"항원은 어떻게 상피를 건너오는가 — M cell과 그 외의 경로","id":"항원은-어떻게-상피를-건너오는가-m-cell과-그-외의-경로"},{"level":4,"title":"M cell — 전용 수송 세포","id":"m-cell-전용-수송-세포"},{"level":4,"title":"M cell만이 유일한 통로는 아니다","id":"m-cell만이-유일한-통로는-아니다"},{"level":2,"title":"점막 effector 세포의 규모와 «이미 활성화되어 있음»","id":"점막-effector-세포의-규모와-이미-활성화되어-있음"},{"level":4,"title":"숫자로 보는 규모","id":"숫자로-보는-규모"},{"level":4,"title":"«natural» effector 세포들","id":"natural-effector-세포들"},{"level":2,"title":"장으로 돌아가는 길 — homing 각인과 common mucosal immune system","id":"장으로-돌아가는-길-homing-각인과-common-mucosal-immune-system"},{"level":4,"title":"장 homing의 분자적 조합","id":"장-homing의-분자적-조합"},{"level":4,"title":"각인을 만드는 것은 retinoic acid","id":"각인을-만드는-것은-retinoic-acid"},{"level":4,"title":"Common mucosal immune system — 개념과 그 한계","id":"common-mucosal-immune-system-개념과-그-한계"},{"level":2,"title":"장의 antigen-presenting cell — 서로 다른 일을 하는 두 계통","id":"장의-antigen-presenting-cell-서로-다른-일을-하는-두-계통"},{"level":4,"title":"두 계통의 분업","id":"두-계통의-분업"},{"level":4,"title":"장 macrophage의 «낮은 반응성»이라는 설계","id":"장-macrophage의-낮은-반응성-이라는-설계"},{"level":4,"title":"항원 획득 경로가 결과를 정한다","id":"항원-획득-경로가-결과를-정한다"},{"level":2,"title":"Secretory IgA — 점막 체액성 면역의 중심","id":"secretory-iga-점막-체액성-면역의-중심"},{"level":4,"title":"구조: 왜 dimer인가","id":"구조-왜-dimer인가"},{"level":4,"title":"수송: pIgR과 secretory component","id":"수송-pigr과-secretory-component"},{"level":4,"title":"기능: 죽이지 않고 막는다","id":"기능-죽이지-않고-막는다"},{"level":2,"title":"IgA는 어떻게 만들어지는가 — T-dependent와 T-independent 두 경로","id":"iga는-어떻게-만들어지는가-t-dependent와-t-independent-두-경로"},{"level":4,"title":"T-dependent 경로 — 고친화도, 특이적","id":"t-dependent-경로-고친화도-특이적"},{"level":4,"title":"T-independent 경로 — 저친화도, 광범위","id":"t-independent-경로-저친화도-광범위"},{"level":2,"title":"IgA deficiency — 가장 흔한 원발성 면역결핍이 대개 무증상인 이유","id":"iga-deficiency-가장-흔한-원발성-면역결핍이-대개-무증상인-이유"},{"level":4,"title":"왜 대개 괜찮은가 — IgM에 의한 보완","id":"왜-대개-괜찮은가-igm에-의한-보완"},{"level":4,"title":"그래도 문제가 생기는 경우","id":"그래도-문제가-생기는-경우"},{"level":4,"title":"수혈·수액 관련 주의점","id":"수혈-수액-관련-주의점"},{"level":2,"title":"Lamina propria의 T cell — 상시 대기 상태의 effector 집단","id":"lamina-propria의-t-cell-상시-대기-상태의-effector-집단"},{"level":4,"title":"정상 상태의 CD4 T cell 구성","id":"정상-상태의-cd4-t-cell-구성"},{"level":4,"title":"Treg와의 균형","id":"t-reg-와의-균형"},{"level":2,"title":"Intraepithelial lymphocyte — 상피 안에 상주하는 감시 세포","id":"intraepithelial-lymphocyte-상피-안에-상주하는-감시-세포"},{"level":4,"title":"두 계통: induced와 natural","id":"두-계통-induced와-natural"},{"level":4,"title":"어떻게 «이상»을 감지하는가","id":"어떻게-이상-을-감지하는가"},{"level":4,"title":"임상적 연결: celiac disease","id":"임상적-연결-celiac-disease"},{"level":2,"title":"상피세포는 방어의 참여자다 — 장벽, 감지, 그리고 침입 전략","id":"상피세포는-방어의-참여자다-장벽-감지-그리고-침입-전략"},{"level":4,"title":"물리·화학적 장벽의 층위","id":"물리-화학적-장벽의-층위"},{"level":4,"title":"감지: PRR의 위치가 중요하다","id":"감지-prr의-위치가-중요하다"},{"level":4,"title":"병원체의 침입 전략 두 가지","id":"병원체의-침입-전략-두-가지"},{"level":2,"title":"언제 adaptive 반응으로 넘어가는가, 그리고 그 반응은 무엇을 하는가","id":"언제-adaptive-반응으로-넘어가는가-그리고-그-반응은-무엇을-하는가"},{"level":4,"title":"기울기를 뒤집는 신호들","id":"기울기를-뒤집는-신호들"},{"level":4,"title":"어떤 effector가 어떤 병원체에 대응하는가","id":"어떤-effector가-어떤-병원체에-대응하는가"},{"level":4,"title":"효과기 반응 자체가 장기를 손상시킨다","id":"효과기-반응-자체가-장기를-손상시킨다"},{"level":2,"title":"Oral tolerance — 반응하지 않기 위해 능동적으로 하는 일","id":"oral-tolerance-반응하지-않기-위해-능동적으로-하는-일"},{"level":4,"title":"고전적 실험 설계","id":"고전적-실험-설계"},{"level":4,"title":"기전 — 용량에 따라 달라진다","id":"기전-용량에-따라-달라진다"},{"level":4,"title":"왜 임상적으로 중요한가","id":"왜-임상적으로-중요한가"},{"level":2,"title":"Microbiota — 조성, 분포, 그리고 «정상»의 정의","id":"microbiota-조성-분포-그리고-정상-의-정의"},{"level":4,"title":"부위에 따라 전혀 다르다","id":"부위에-따라-전혀-다르다"},{"level":4,"title":"«정상 세균총»이라는 것이 있는가","id":"정상-세균총-이라는-것이-있는가"},{"level":4,"title":"숙주가 얻는 것","id":"숙주가-얻는-것"},{"level":2,"title":"공존을 유지하는 장치들 — 격리와 봉쇄","id":"공존을-유지하는-장치들-격리와-봉쇄"},{"level":4,"title":"공간적 분리","id":"공간적-분리"},{"level":4,"title":"넘어온 것에 대한 봉쇄","id":"넘어온-것에-대한-봉쇄"},{"level":4,"title":"붕괴하면 어떻게 되는가 — Clostridium difficile","id":"붕괴하면-어떻게-되는가-clostridium-difficile"},{"level":2,"title":"Microbiota는 면역계를 «형성»한다 — 국소를 넘어 전신으로","id":"microbiota는-면역계를-형성-한다-국소를-넘어-전신으로"},{"level":4,"title":"Germ-free 동물에서 결핍되는 것","id":"germ-free-동물에서-결핍되는-것"},{"level":4,"title":"특정 세균이 특정 세포를 만든다","id":"특정-세균이-특정-세포를-만든다"},{"level":4,"title":"전신 효과","id":"전신-효과"},{"level":2,"title":"균형이 깨질 때 — commensal에 대한 반응과 inflammatory bowel disease","id":"균형이-깨질-때-commensal에-대한-반응과-inflammatory-bowel-disease"},{"level":4,"title":"실험적 증명","id":"실험적-증명"},{"level":4,"title":"사람의 inflammatory bowel disease","id":"사람의-inflammatory-bowel-disease"},{"level":4,"title":"치료가 이 기전을 어떻게 겨냥하는가","id":"치료가-이-기전을-어떻게-겨냥하는가"},{"level":2,"title":"이 장의 정리","id":"이-장의-정리"},{"level":4,"title":"구조","id":"구조"},{"level":4,"title":"세포와 귀환","id":"세포와-귀환"},{"level":4,"title":"Effector 분자","id":"effector-분자"},{"level":4,"title":"조절과 microbiota","id":"조절과-microbiota"}]},{"id":"ch12-exercises","section":"Part V · 건강과 질병에서의 immune system","title":"12장 연습문제 · Mucosal Immune System","sub":"Mucosal Immune System","file":"ch12-exercises.html","sections":[]},{"id":"ch13","section":"Part V · 건강과 질병에서의 immune system","title":"13장 · Failures of Host Defense Mechanisms","sub":"Failures of Host Defense Mechanisms","file":"ch13.html","sections":[{"level":2,"title":"방어가 실패하는 세 가지 방식","id":"방어가-실패하는-세-가지-방식"},{"level":4,"title":"왜 이 장이 면역학 전체의 «검증»인가","id":"왜-이-장이-면역학-전체의-검증-인가"},{"level":2,"title":"언제 면역결핍을 의심하고, 어떻게 분류하는가","id":"언제-면역결핍을-의심하고-어떻게-분류하는가"},{"level":4,"title":"감염 양상이 결손 부위를 가리킨다","id":"감염-양상이-결손-부위를-가리킨다"},{"level":4,"title":"생후 6개월이라는 시점","id":"생후-6개월이라는-시점"},{"level":4,"title":"분류의 틀","id":"분류의-틀"},{"level":2,"title":"SCID — T cell 발달이 막히면 전부가 무너진다","id":"scid-t-cell-발달이-막히면-전부가-무너진다"},{"level":4,"title":"흔한 원인들과 그 논리","id":"흔한-원인들과-그-논리"},{"level":2,"title":"신호전달과 thymus의 결손 — 세포는 있는데 작동하지 않는 경우","id":"신호전달과-thymus의-결손-세포는-있는데-작동하지-않는-경우"},{"level":4,"title":"T-cell receptor 신호전달 결손","id":"t-cell-receptor-신호전달-결손"},{"level":4,"title":"MHC 발현의 결손","id":"mhc-발현의-결손"},{"level":4,"title":"Thymus 자체의 결손 — DiGeorge syndrome","id":"thymus-자체의-결손-digeorge-syndrome"},{"level":2,"title":"B cell 발달의 결손 — 항체가 없다는 것의 의미","id":"b-cell-발달의-결손-항체가-없다는-것의-의미"},{"level":4,"title":"X-linked agammaglobulinemia(XLA, Bruton)","id":"x-linked-agammaglobulinemia-xla-bruton"},{"level":4,"title":"어떤 감염에 취약한가 — 그리고 그것이 말해 주는 것","id":"어떤-감염에-취약한가-그리고-그것이-말해-주는-것"},{"level":2,"title":"활성화와 분화의 결손 — hyper-IgM과 CVID","id":"활성화와-분화의-결손-hyper-igm과-cvid"},{"level":4,"title":"Hyper-IgM syndrome — 이름이 병태생리를 설명한다","id":"hyper-igm-syndrome-이름이-병태생리를-설명한다"},{"level":4,"title":"Common variable immunodeficiency(CVID)","id":"common-variable-immunodeficiency-cvid"},{"level":2,"title":"병원체별 방어 경로 — 아주 좁은 취약성이 알려 주는 것","id":"병원체별-방어-경로-아주-좁은-취약성이-알려-주는-것"},{"level":4,"title":"IL-12 / IFN-γ 축 — mycobacteria 전용 방어선","id":"il-12-ifn-γ-축-mycobacteria-전용-방어선"},{"level":4,"title":"IL-17 / TH17 축 — 곰팡이와 점막","id":"il-17-t-h-17-축-곰팡이와-점막"},{"level":4,"title":"Innate 신호전달의 결손","id":"innate-신호전달의-결손"},{"level":2,"title":"세포독성 경로의 결손 — 죽이지 못하면 염증이 폭주한다","id":"세포독성-경로의-결손-죽이지-못하면-염증이-폭주한다"},{"level":4,"title":"Familial hemophagocytic lymphohistiocytosis(HLH)","id":"familial-hemophagocytic-lymphohistiocytosis-hlh"},{"level":4,"title":"왜 «못 죽이는 것»이 «과잉 염증»이 되는가","id":"왜-못-죽이는-것-이-과잉-염증-이-되는가"},{"level":4,"title":"X-linked lymphoproliferative syndrome(XLP)","id":"x-linked-lymphoproliferative-syndrome-xlp"},{"level":2,"title":"Complement 결손 — 어느 부분이 빠졌는가에 따라 전혀 다른 병","id":"complement-결손-어느-부분이-빠졌는가에-따라-전혀-다른-병"},{"level":4,"title":"결손 위치별 표현형","id":"결손-위치별-표현형"},{"level":4,"title":"조절 단백질의 결손 — 억제가 빠지면 폭주한다","id":"조절-단백질의-결손-억제가-빠지면-폭주한다"},{"level":2,"title":"Phagocyte의 결손과, 염증 조절 자체의 결손","id":"phagocyte의-결손과-염증-조절-자체의-결손"},{"level":4,"title":"가지 못하는 경우 — Leukocyte adhesion deficiency(LAD)","id":"가지-못하는-경우-leukocyte-adhesion-deficiency-lad"},{"level":4,"title":"죽이지 못하는 경우 — Chronic granulomatous disease(CGD)","id":"죽이지-못하는-경우-chronic-granulomatous-disease-cgd"},{"level":4,"title":"Autoinflammatory disease — 조절 장치가 빠진 경우","id":"autoinflammatory-disease-조절-장치가-빠진-경우"},{"level":2,"title":"치료 — 결손을 교정하는 법, 그리고 훨씬 흔한 이차 면역결핍","id":"치료-결손을-교정하는-법-그리고-훨씬-흔한-이차-면역결핍"},{"level":4,"title":"조혈모세포이식(HSCT)","id":"조혈모세포이식-hsct"},{"level":4,"title":"유전자치료","id":"유전자치료"},{"level":4,"title":"이차 면역결핍 — 실제로는 이쪽이 압도적으로 흔하다","id":"이차-면역결핍-실제로는-이쪽이-압도적으로-흔하다"},{"level":2,"title":"병원체 쪽의 대응 — evasion과 subversion","id":"병원체-쪽의-대응-evasion과-subversion"},{"level":2,"title":"세포외 세균의 회피 전략","id":"세포외-세균의-회피-전략"},{"level":4,"title":"포식과 complement를 막는 장치","id":"포식과-complement를-막는-장치"},{"level":4,"title":"항원을 계속 바꾸는 전략","id":"항원을-계속-바꾸는-전략"},{"level":4,"title":"숙주 세포를 직접 조작하는 장치","id":"숙주-세포를-직접-조작하는-장치"},{"level":2,"title":"세포내 세균과 원충 — 숨기, 그리고 옷 갈아입기","id":"세포내-세균과-원충-숨기-그리고-옷-갈아입기"},{"level":4,"title":"세포내 세균: 숙주 세포 안이라는 은신처","id":"세포내-세균-숙주-세포-안이라는-은신처"},{"level":4,"title":"원충: 항원을 계속 바꿔 입는다","id":"원충-항원을-계속-바꿔-입는다"},{"level":2,"title":"RNA 바이러스의 항원 변이 — drift와 shift","id":"rna-바이러스의-항원-변이-drift와-shift"},{"level":4,"title":"Antigenic drift — 점진적 변화","id":"antigenic-drift-점진적-변화"},{"level":4,"title":"Antigenic shift — 급격한 교체","id":"antigenic-shift-급격한-교체"},{"level":2,"title":"DNA 바이러스의 전복 — 제시 차단, NK 대응, 그리고 잠복","id":"dna-바이러스의-전복-제시-차단-nk-대응-그리고-잠복"},{"level":4,"title":"항원 제시를 끊는 immunoevasin","id":"항원-제시를-끊는-immunoevasin"},{"level":4,"title":"그런데 class I을 내리면 NK cell이 온다","id":"그런데-class-i을-내리면-nk-cell이-온다"},{"level":4,"title":"Cytokine 신호의 교란","id":"cytokine-신호의-교란"},{"level":4,"title":"잠복(latency) — 복제를 멈춰 표적이 되지 않는 전략","id":"잠복-latency-복제를-멈춰-표적이-되지-않는-전략"},{"level":2,"title":"HIV와 AIDS — 면역계를 표적으로 삼는 감염","id":"hiv와-aids-면역계를-표적으로-삼는-감염"},{"level":4,"title":"기원과 분포","id":"기원과-분포"},{"level":2,"title":"바이러스의 구조와 생활사","id":"바이러스의-구조와-생활사"},{"level":4,"title":"구조","id":"구조"},{"level":4,"title":"유전체 구성","id":"유전체-구성"},{"level":4,"title":"생활사 — 치료 표적이 되는 단계들","id":"생활사-치료-표적이-되는-단계들"},{"level":2,"title":"전파, 보조수용체 향성, 그리고 유전적 저항","id":"전파-보조수용체-향성-그리고-유전적-저항"},{"level":4,"title":"전파 경로와 초기 사건","id":"전파-경로와-초기-사건"},{"level":4,"title":"보조수용체 향성 — R5와 X4","id":"보조수용체-향성-r5와-x4"},{"level":4,"title":"CCR5Δ32 — 자연이 제공한 증명","id":"ccr5δ32-자연이-제공한-증명"},{"level":2,"title":"감염의 경과 — 왜 면역이 억제는 하되 제거하지 못하는가","id":"감염의-경과-왜-면역이-억제는-하되-제거하지-못하는가"},{"level":4,"title":"세 단계의 경과","id":"세-단계의-경과"},{"level":4,"title":"면역 반응은 분명히 작동한다 — 그런데도","id":"면역-반응은-분명히-작동한다-그런데도"},{"level":4,"title":"CD4 T cell은 어떻게 소실되는가","id":"cd4-t-cell은-어떻게-소실되는가"},{"level":4,"title":"숙주 유전자와 진행 속도","id":"숙주-유전자와-진행-속도"},{"level":2,"title":"AIDS의 임상상과 치료 — 기전에서 도출된 약물","id":"aids의-임상상과-치료-기전에서-도출된-약물"},{"level":4,"title":"CD4 수가 예측하는 감염","id":"cd4-수가-예측하는-감염"},{"level":4,"title":"항레트로바이러스 치료","id":"항레트로바이러스-치료"},{"level":4,"title":"왜 «병용»이어야 하는가","id":"왜-병용-이어야-하는가"},{"level":4,"title":"치료의 효과와 한계","id":"치료의-효과와-한계"},{"level":2,"title":"백신은 왜 어려운가, 그리고 예방이 실제로 작동하는 방식","id":"백신은-왜-어려운가-그리고-예방이-실제로-작동하는-방식"},{"level":4,"title":"HIV 백신의 구조적 난제","id":"hiv-백신의-구조적-난제"},{"level":4,"title":"그래서 실제로 효과를 낸 것은 무엇인가","id":"그래서-실제로-효과를-낸-것은-무엇인가"},{"level":2,"title":"이 장의 정리","id":"이-장의-정리"},{"level":4,"title":"진단의 논리","id":"진단의-논리"},{"level":4,"title":"원발성 면역결핍","id":"원발성-면역결핍"},{"level":4,"title":"회피와 전복","id":"회피와-전복"},{"level":4,"title":"HIV / AIDS","id":"hiv-aids"}]},{"id":"ch13-exercises","section":"Part V · 건강과 질병에서의 immune system","title":"13장 연습문제 · Failures of Host Defense","sub":"Failures of Host Defense","file":"ch13-exercises.html","sections":[]},{"id":"ch14","section":"Part V · 건강과 질병에서의 immune system","title":"14장 · Allergy and Allergic Diseases","sub":"Allergy and Allergic Diseases","file":"ch14.html","sections":[{"level":2,"title":"Hypersensitivity — 방어 기전이 병을 만들 때","id":"hypersensitivity-방어-기전이-병을-만들-때"},{"level":4,"title":"Gell과 Coombs의 네 가지 유형","id":"gell과-coombs의-네-가지-유형"},{"level":2,"title":"Sensitization — 첫 노출에서 무슨 일이 일어나는가","id":"sensitization-첫-노출에서-무슨-일이-일어나는가"},{"level":4,"title":"IgE로 가는 class switching","id":"ige로-가는-class-switching"},{"level":4,"title":"IgE의 특이한 점 — 대부분이 «세포에 붙어» 있다","id":"ige의-특이한-점-대부분이-세포에-붙어-있다"},{"level":2,"title":"알레르겐은 무엇이 다른가","id":"알레르겐은-무엇이-다른가"},{"level":4,"title":"왜 하필 protease인가 — 장벽을 스스로 여는 항원","id":"왜-하필-protease인가-장벽을-스스로-여는-항원"},{"level":4,"title":"사람에서의 증거 — 장벽 결손이 알레르기를 만든다","id":"사람에서의-증거-장벽-결손이-알레르기를-만든다"},{"level":2,"title":"유전과 환경 — 왜 어떤 사람만 알레르기가 생기는가","id":"유전과-환경-왜-어떤-사람만-알레르기가-생기는가"},{"level":4,"title":"유전 쪽","id":"유전-쪽"},{"level":4,"title":"환경 쪽 — 위생 가설과 그 현대적 형태","id":"환경-쪽-위생-가설과-그-현대적-형태"},{"level":2,"title":"Regulatory T cell — 알레르기를 막고 있는 쪽","id":"regulatory-t-cell-알레르기를-막고-있는-쪽"},{"level":4,"title":"무엇이 다른가","id":"무엇이-다른가"},{"level":4,"title":"Treg는 어떻게 억제하는가","id":"t-reg-는-어떻게-억제하는가"},{"level":4,"title":"이 기전이 치료의 근거가 된다","id":"이-기전이-치료의-근거가-된다"},{"level":2,"title":"Mast cell — 조직에 배치된 방아쇠","id":"mast-cell-조직에-배치된-방아쇠"},{"level":4,"title":"FcεRI — 고친화도 IgE 수용체","id":"fcεri-고친화도-ige-수용체"},{"level":4,"title":"두 가지 mast cell","id":"두-가지-mast-cell"},{"level":4,"title":"방출되는 것들 — 세 시간대","id":"방출되는-것들-세-시간대"},{"level":4,"title":"조직마다 다른 결과","id":"조직마다-다른-결과"},{"level":2,"title":"Eosinophil과 basophil — 후기 반응과 만성 염증의 주역","id":"eosinophil과-basophil-후기-반응과-만성-염증의-주역"},{"level":4,"title":"Eosinophil","id":"eosinophil"},{"level":4,"title":"Basophil","id":"basophil"},{"level":2,"title":"즉시형과 후기형, 그리고 투여 경로가 결정하는 것","id":"즉시형과-후기형-그리고-투여-경로가-결정하는-것"},{"level":4,"title":"두 개의 봉우리","id":"두-개의-봉우리"},{"level":4,"title":"같은 알레르겐, 다른 병 — 경로가 결정한다","id":"같은-알레르겐-다른-병-경로가-결정한다"},{"level":4,"title":"Anaphylaxis","id":"anaphylaxis"},{"level":2,"title":"Asthma와 알레르기 비염 — 기도의 알레르기 질환","id":"asthma와-알레르기-비염-기도의-알레르기-질환"},{"level":4,"title":"Asthma의 세 축","id":"asthma의-세-축"},{"level":4,"title":"TH2 편향의 실험적 증명","id":"t-h-2-편향의-실험적-증명"},{"level":4,"title":"알레르기 비염과 결막염","id":"알레르기-비염과-결막염"},{"level":2,"title":"식품 알레르기와, 알레르기 질환의 치료 전략","id":"식품-알레르기와-알레르기-질환의-치료-전략"},{"level":4,"title":"왜 어떤 음식은 알레르겐이 되는가","id":"왜-어떤-음식은-알레르겐이-되는가"},{"level":4,"title":"감작이 일어나는 곳은 장이 아닐 수 있다","id":"감작이-일어나는-곳은-장이-아닐-수-있다"},{"level":4,"title":"치료 — 네 갈래","id":"치료-네-갈래"},{"level":2,"title":"IgE에 의존하지 않는 과민반응 — Type II와 Type III","id":"ige에-의존하지-않는-과민반응-type-ii와-type-iii"},{"level":4,"title":"Type II — 고정된 항원에 붙은 항체","id":"type-ii-고정된-항원에-붙은-항체"},{"level":4,"title":"Type III — 떠다니는 복합체가 어딘가에 걸릴 때","id":"type-iii-떠다니는-복합체가-어딘가에-걸릴-때"},{"level":4,"title":"Serum sickness — Type III의 교과서적 모델","id":"serum-sickness-type-iii의-교과서적-모델"},{"level":2,"title":"Type IV — T cell이 만드는 지연형 과민반응","id":"type-iv-t-cell이-만드는-지연형-과민반응"},{"level":4,"title":"기전","id":"기전"},{"level":4,"title":"대표적인 예","id":"대표적인-예"},{"level":2,"title":"Celiac disease — 알레르기와 자가면역의 경계","id":"celiac-disease-알레르기와-자가면역의-경계"},{"level":4,"title":"병태생리 — 세 단계","id":"병태생리-세-단계"},{"level":4,"title":"왜 자가항체가 생기는가","id":"왜-자가항체가-생기는가"},{"level":4,"title":"임상","id":"임상"},{"level":2,"title":"이 장의 정리","id":"이-장의-정리"},{"level":4,"title":"분류","id":"분류"},{"level":4,"title":"Type I의 성립","id":"type-i의-성립"},{"level":4,"title":"효과기","id":"효과기"},{"level":4,"title":"질환과 치료","id":"질환과-치료"},{"level":4,"title":"IgE 비의존 유형","id":"ige-비의존-유형"}]},{"id":"ch14-exercises","section":"Part V · 건강과 질병에서의 immune system","title":"14장 연습문제 · Allergy and Allergic Diseases","sub":"Allergy and Allergic Diseases","file":"ch14-exercises.html","sections":[]},{"id":"ch15","section":"Part V · 건강과 질병에서의 immune system","title":"15장 · Autoimmunity and Transplantation","sub":"Autoimmunity and Transplantation","file":"ch15.html","sections":[{"level":2,"title":"자기와 비자기, 그리고 그 구분이 실패할 때","id":"자기와-비자기-그리고-그-구분이-실패할-때"},{"level":4,"title":"자가면역이 성립하려면 무엇이 필요한가","id":"자가면역이-성립하려면-무엇이-필요한가"},{"level":2,"title":"Tolerance의 겹겹이 쌓인 장치들","id":"tolerance의-겹겹이-쌓인-장치들"},{"level":4,"title":"중추성 tolerance — 만들어지는 단계에서 거르기","id":"중추성-tolerance-만들어지는-단계에서-거르기"},{"level":4,"title":"AIRE — 흉선에서 «몸 전체»를 보여 주는 장치","id":"aire-흉선에서-몸-전체-를-보여-주는-장치"},{"level":4,"title":"말초성 tolerance — 빠져나간 세포를 다루기","id":"말초성-tolerance-빠져나간-세포를-다루기"},{"level":2,"title":"면역특권 부위와 regulatory T cell","id":"면역특권-부위와-regulatory-t-cell"},{"level":4,"title":"Immunologically privileged sites","id":"immunologically-privileged-sites"},{"level":4,"title":"Regulatory T cell — 능동적 억제","id":"regulatory-t-cell-능동적-억제"},{"level":2,"title":"자가면역 반응의 성립, 분류, 그리고 만성화","id":"자가면역-반응의-성립-분류-그리고-만성화"},{"level":4,"title":"«원인»을 어떻게 증명하는가","id":"원인-을-어떻게-증명하는가"},{"level":4,"title":"분류 — 장기 특이적 vs 전신성","id":"분류-장기-특이적-vs-전신성"},{"level":4,"title":"왜 만성이 되는가 — 양성 되먹임","id":"왜-만성이-되는가-양성-되먹임"},{"level":2,"title":"손상 기전 (1) — 혈구를 표적으로 하는 자가항체","id":"손상-기전-1-혈구를-표적으로-하는-자가항체"},{"level":4,"title":"세포 표면 항원에 붙은 항체 — Type II","id":"세포-표면-항원에-붙은-항체-type-ii"},{"level":4,"title":"치사량 미만의 보체 — 죽이지 않고 자극하기","id":"치사량-미만의-보체-죽이지-않고-자극하기"},{"level":2,"title":"손상 기전 (2) — 수용체와 세포외기질을 겨냥하는 자가항체","id":"손상-기전-2-수용체와-세포외기질을-겨냥하는-자가항체"},{"level":4,"title":"수용체에 대한 항체 — 파괴가 아니라 신호의 왜곡","id":"수용체에-대한-항체-파괴가-아니라-신호의-왜곡"},{"level":4,"title":"세포외기질에 대한 항체","id":"세포외기질에-대한-항체"},{"level":4,"title":"면역복합체 — Type III","id":"면역복합체-type-iii"},{"level":2,"title":"손상 기전 (3) — T cell이 직접 만드는 파괴","id":"손상-기전-3-t-cell이-직접-만드는-파괴"},{"level":4,"title":"1형 당뇨병","id":"1형-당뇨병"},{"level":4,"title":"다발성 경화증","id":"다발성-경화증"},{"level":4,"title":"류마티스 관절염","id":"류마티스-관절염"},{"level":2,"title":"유전적 소인 — 무엇이 위험을 만드는가","id":"유전적-소인-무엇이-위험을-만드는가"},{"level":4,"title":"성별이라는 강력한 변수","id":"성별이라는-강력한-변수"},{"level":4,"title":"위험 유전자는 몇 개의 기능 범주로 묶인다","id":"위험-유전자는-몇-개의-기능-범주로-묶인다"},{"level":4,"title":"단일유전자 자가면역 — 원리를 드러내는 예외","id":"단일유전자-자가면역-원리를-드러내는-예외"},{"level":2,"title":"MHC — 가장 강력한 유전 위험인자","id":"mhc-가장-강력한-유전-위험인자"},{"level":4,"title":"대표적 연관","id":"대표적-연관"},{"level":4,"title":"어떻게 위험이나 방어를 만드는가","id":"어떻게-위험이나-방어를-만드는가"},{"level":4,"title":"Innate 이상도 기여한다","id":"innate-이상도-기여한다"},{"level":2,"title":"환경 방아쇠 — 감염, 약물, 그리고 우연","id":"환경-방아쇠-감염-약물-그리고-우연"},{"level":4,"title":"감염이 tolerance를 깨는 방식","id":"감염이-tolerance를-깨는-방식"},{"level":4,"title":"약물과 독소","id":"약물과-독소"},{"level":4,"title":"우연 — 설명되지 않는 부분","id":"우연-설명되지-않는-부분"},{"level":2,"title":"이식거부 — 정상적으로 작동하는 면역이 문제가 될 때","id":"이식거부-정상적으로-작동하는-면역이-문제가-될-때"},{"level":4,"title":"거부의 표적 — alloantigen","id":"거부의-표적-alloantigen"},{"level":4,"title":"왜 alloreactivity는 이렇게 강한가","id":"왜-alloreactivity는-이렇게-강한가"},{"level":2,"title":"Alloantigen을 제시하는 두 가지 길","id":"alloantigen을-제시하는-두-가지-길"},{"level":4,"title":"Direct pathway(직접 경로)","id":"direct-pathway-직접-경로"},{"level":4,"title":"Indirect pathway(간접 경로)","id":"indirect-pathway-간접-경로"},{"level":4,"title":"거부의 세 유형 — 시간이 기전을 말해 준다","id":"거부의-세-유형-시간이-기전을-말해-준다"},{"level":2,"title":"임상 이식, GVHD, 그리고 조절의 가능성","id":"임상-이식-gvhd-그리고-조절의-가능성"},{"level":4,"title":"임상에서의 이식","id":"임상에서의-이식"},{"level":4,"title":"이식편대숙주병(GVHD) — 방향이 뒤바뀐 거부","id":"이식편대숙주병-gvhd-방향이-뒤바뀐-거부"},{"level":4,"title":"조절의 가능성 — Treg","id":"조절의-가능성-t-reg"},{"level":2,"title":"태아 — 반복적으로 용인되는 동종이식편","id":"태아-반복적으로-용인되는-동종이식편"},{"level":4,"title":"제안된 기전들","id":"제안된-기전들"},{"level":4,"title":"이 관용이 깨질 때","id":"이-관용이-깨질-때"},{"level":2,"title":"이 장의 정리","id":"이-장의-정리"},{"level":4,"title":"Tolerance의 층","id":"tolerance의-층"},{"level":4,"title":"손상 기전","id":"손상-기전"},{"level":4,"title":"유전과 환경","id":"유전과-환경"},{"level":4,"title":"이식","id":"이식"}]},{"id":"ch15-exercises","section":"Part V · 건강과 질병에서의 immune system","title":"15장 연습문제 · Autoimmunity and Transplantation","sub":"Autoimmunity and Transplantation","file":"ch15-exercises.html","sections":[]},{"id":"ch16","section":"Part VI · immune response의 조작","title":"16장 · Manipulation of the Immune Response","sub":"Manipulation of the Immune Response","file":"ch16.html","sections":[{"level":2,"title":"면역 반응을 조작하는 세 가지 방향","id":"면역-반응을-조작하는-세-가지-방향"},{"level":2,"title":"고전적 면역억제제 — 스테로이드와 세포독성 약물","id":"고전적-면역억제제-스테로이드와-세포독성-약물"},{"level":4,"title":"Corticosteroid — 가장 오래되고 가장 광범위한 약","id":"corticosteroid-가장-오래되고-가장-광범위한-약"},{"level":4,"title":"세포독성 약물 — 분열하는 세포를 죽인다","id":"세포독성-약물-분열하는-세포를-죽인다"},{"level":2,"title":"신호 경로를 겨냥하는 약물 — 이식을 가능하게 만든 전환","id":"신호-경로를-겨냥하는-약물-이식을-가능하게-만든-전환"},{"level":4,"title":"Calcineurin 억제제 — 활성화 신호를 끊는다","id":"calcineurin-억제제-활성화-신호를-끊는다"},{"level":4,"title":"Rapamycin(sirolimus) — 다른 지점을 막는다","id":"rapamycin-sirolimus-다른-지점을-막는다"},{"level":4,"title":"JAK 억제제 — cytokine 신호를 세포 안에서 끊는다","id":"jak-억제제-cytokine-신호를-세포-안에서-끊는다"},{"level":2,"title":"항체를 약으로 쓰기 — 면역원성이라는 문제와 그 해결","id":"항체를-약으로-쓰기-면역원성이라는-문제와-그-해결"},{"level":4,"title":"문제 — 항체 자체가 항원이 된다","id":"문제-항체-자체가-항원이-된다"},{"level":4,"title":"해결 — 점진적 «인간화»","id":"해결-점진적-인간화"},{"level":4,"title":"어떻게 작용하는가","id":"어떻게-작용하는가"},{"level":4,"title":"임상 적용 두 가지","id":"임상-적용-두-가지"},{"level":2,"title":"표적을 좁혀 가기 — cytokine, 이동, 공자극, 그리고 tolerance 유도","id":"표적을-좁혀-가기-cytokine-이동-공자극-그리고-tolerance-유도"},{"level":4,"title":"Cytokine 차단","id":"cytokine-차단"},{"level":4,"title":"세포 이동 차단","id":"세포-이동-차단"},{"level":4,"title":"공자극 차단","id":"공자극-차단"},{"level":4,"title":"항원 투여를 통한 tolerance 유도","id":"항원-투여를-통한-tolerance-유도"},{"level":2,"title":"종양 면역 — 반응을 끌어올려야 하는 경우","id":"종양-면역-반응을-끌어올려야-하는-경우"},{"level":4,"title":"면역계가 종양을 실제로 인식한다는 근거","id":"면역계가-종양을-실제로-인식한다는-근거"},{"level":4,"title":"Immunoediting — 감시, 평형, 탈출","id":"immunoediting-감시-평형-탈출"},{"level":4,"title":"종양의 회피 전략","id":"종양의-회피-전략"},{"level":2,"title":"종양 항원과, 그것을 겨냥하는 세포·항체 치료","id":"종양-항원과-그것을-겨냥하는-세포-항체-치료"},{"level":4,"title":"어떤 항원을 표적으로 삼을 것인가","id":"어떤-항원을-표적으로-삼을-것인가"},{"level":4,"title":"CAR T 세포 — 수용체를 새로 설계하기","id":"car-t-세포-수용체를-새로-설계하기"},{"level":4,"title":"단클론항체를 이용한 종양 치료","id":"단클론항체를-이용한-종양-치료"},{"level":2,"title":"종양 백신과 checkpoint blockade","id":"종양-백신과-checkpoint-blockade"},{"level":4,"title":"예방 백신이 실제로 암을 막는다","id":"예방-백신이-실제로-암을-막는다"},{"level":4,"title":"Checkpoint blockade — 브레이크를 푸는 발상","id":"checkpoint-blockade-브레이크를-푸는-발상"},{"level":4,"title":"무엇이 반응을 예측하는가","id":"무엇이-반응을-예측하는가"},{"level":2,"title":"백신 — 의학이 만든 가장 큰 효과","id":"백신-의학이-만든-가장-큰-효과"},{"level":4,"title":"좋은 백신의 조건","id":"좋은-백신의-조건"},{"level":4,"title":"왜 «중화항체»가 대부분의 답인가","id":"왜-중화항체-가-대부분의-답인가"},{"level":2,"title":"백신의 종류 — 약독화, 불활화, 그리고 투여 경로","id":"백신의-종류-약독화-불활화-그리고-투여-경로"},{"level":4,"title":"생백신 vs 불활화 백신","id":"생백신-vs-불활화-백신"},{"level":4,"title":"투여 경로가 반응의 «장소»를 정한다","id":"투여-경로가-반응의-장소-를-정한다"},{"level":4,"title":"백일해 — 안전성과 효과의 균형이라는 교훈","id":"백일해-안전성과-효과의-균형이라는-교훈"},{"level":2,"title":"결합백신, adjuvant, 그리고 새로운 플랫폼","id":"결합백신-adjuvant-그리고-새로운-플랫폼"},{"level":4,"title":"결합백신 — linked recognition의 응용","id":"결합백신-linked-recognition의-응용"},{"level":4,"title":"Adjuvant — 왜 필요한가","id":"adjuvant-왜-필요한가"},{"level":4,"title":"펩타이드·DNA·세포 기반 접근","id":"펩타이드-dna-세포-기반-접근"},{"level":2,"title":"이 장의 정리","id":"이-장의-정리"},{"level":4,"title":"억누르기","id":"억누르기"},{"level":4,"title":"끌어올리기 — 종양","id":"끌어올리기-종양"},{"level":4,"title":"미리 만들어 두기 — 백신","id":"미리-만들어-두기-백신"}]},{"id":"ch16-exercises","section":"Part VI · immune response의 조작","title":"16장 연습문제 · Manipulation of the Immune Response","sub":"Manipulation of the Immune Response","file":"ch16-exercises.html","sections":[]}];
+
+/* ============================================================
+   Janeway Web Book — navigation runtime (hand-maintained).
+
+   book.js holds only the generated BOOK_PAGES data; this file holds the
+   behaviour, so regenerating the table of contents never overwrites it.
+
+   Provides:
+     · home page  — part → chapter list, subsections collapsed by default
+     · chapter    — slide-in sidebar for jumping to any other chapter
+     · chapter    — Previous / Next pager beneath the content
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var pages = window.BOOK_PAGES || [];
+  if (!pages.length) return;
+
+  var fileName = decodeURIComponent((location.pathname.split('/').pop() || 'index.html'));
+  if (!fileName) fileName = 'index.html';
+  var current = null;
+  for (var i = 0; i < pages.length; i++) {
+    if (pages[i].file === fileName) { current = pages[i]; break; }
+  }
+  var curIndex = current ? pages.indexOf(current) : -1;
+
+  var BOOK_TITLE = "Janeway's Immunobiology";
+  var SVG_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
+  var SVG_BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+
+  /* Each chapter page supplies its own part label, and the wording drifted
+     between build sessions ("Part IV · adaptive immune response" vs
+     "Part IV · 적응 면역 반응"). Group by the part numeral instead of the raw
+     string so one part yields one heading. */
+  var PART_NAMES = {
+    I: 'Part I · Immunobiology와 innate immunity 입문',
+    II: 'Part II · Antigen의 인식',
+    III: 'Part III · 성숙한 lymphocyte receptor repertoire의 발달',
+    IV: 'Part IV · Adaptive immune response',
+    V: 'Part V · 건강과 질병에서의 immune system',
+    VI: 'Part VI · immune response의 조작'
+  };
+  function partKey(p) {
+    var m = /Part\s+([IVX]+)/i.exec(p.section || '');
+    return m ? m[1].toUpperCase() : (p.section || '기타');
+  }
+  function partLabel(p) {
+    var key = partKey(p);
+    return PART_NAMES[key] || p.section || '기타';
+  }
+
+  /* A chapter page and its exercises page are one entry in the reader's mind,
+     so present them together even though they are two files. */
+  function isExercises(p) { return /-exercises$/i.test(p.id); }
+  function baseId(p) { return p.id.replace(/-exercises$/i, ''); }
+
+  function groupPages() {
+    var groups = [];
+    var byBase = {};
+    pages.forEach(function (p) {
+      if (isExercises(p)) return;
+      var g = { main: p, exercises: null };
+      byBase[p.id] = g;
+      groups.push(g);
+    });
+    pages.forEach(function (p) {
+      if (!isExercises(p)) return;
+      var g = byBase[baseId(p)];
+      if (g) g.exercises = p;
+      else groups.push({ main: p, exercises: null });
+    });
+    return groups;
+  }
+
+  /* The generated title looks like "6장 · T Lymphocyte에 대한 Antigen Presentation".
+     Split it so the chapter number can be styled as an eyebrow. */
+  function splitTitle(title) {
+    var parts = String(title).split(' · ');
+    if (parts.length < 2) return { num: '', rest: title };
+    return { num: parts[0], rest: parts.slice(1).join(' · ') };
+  }
+
+  /* ---------------- home page ---------------- */
+
+  function makeHomeTOC() {
+    var root = document.querySelector('#tocHome');
+    if (!root) return;
+    root.innerHTML = '';
+
+    var groups = groupPages();
+    var lastPart = null;
+    var holder = null;
+
+    groups.forEach(function (g) {
+      var p = g.main;
+      if (partKey(p) !== lastPart) {
+        holder = document.createElement('section');
+        holder.className = 'home-section';
+        var h = document.createElement('div');
+        h.className = 'home-section-title';
+        h.textContent = partLabel(p);
+        holder.appendChild(h);
+        root.appendChild(holder);
+        lastPart = partKey(p);
+      }
+
+      var card = document.createElement('div');
+      card.className = 'home-chapter-card';
+
+      var t = splitTitle(p.title);
+      var a = document.createElement('a');
+      a.className = 'home-chapter';
+      a.href = p.file;
+      a.innerHTML = '<span class="home-num">' + esc(t.num) + '</span>' +
+        '<span class="home-title">' + esc(t.rest) + '</span>';
+      card.appendChild(a);
+
+      var meta = document.createElement('div');
+      meta.className = 'home-meta';
+      var count = document.createElement('span');
+      count.className = 'home-count';
+      count.textContent = (p.sections ? p.sections.length : 0) + '개 소절';
+      meta.appendChild(count);
+      if (g.exercises) {
+        var ex = document.createElement('a');
+        ex.className = 'home-exlink';
+        ex.href = g.exercises.file;
+        ex.textContent = '연습문제';
+        meta.appendChild(ex);
+      }
+      card.appendChild(meta);
+
+      if (p.sections && p.sections.length) {
+        var det = document.createElement('details');
+        det.className = 'home-details';
+        var sum = document.createElement('summary');
+        sum.innerHTML = SVG_CHEV + '<span>소절 목차 펼치기</span>';
+        det.appendChild(sum);
+        var wrap = document.createElement('div');
+        wrap.className = 'home-subsections';
+        p.sections.forEach(function (s) {
+          var x = document.createElement('a');
+          x.className = 'home-subsection level-' + s.level;
+          x.href = p.file + '#' + encodeURIComponent(s.id);
+          x.textContent = s.title;
+          wrap.appendChild(x);
+        });
+        det.appendChild(wrap);
+        det.addEventListener('toggle', function () {
+          sum.querySelector('span').textContent =
+            det.open ? '소절 목차 접기' : '소절 목차 펼치기';
+        });
+        card.appendChild(det);
+      }
+
+      holder.appendChild(card);
+    });
+
+    wireHomeToolbar(root);
+  }
+
+  function wireHomeToolbar(root) {
+    var expandBtn = document.getElementById('homeExpandAll');
+    if (expandBtn) {
+      expandBtn.addEventListener('click', function () {
+        var opening = expandBtn.getAttribute('aria-pressed') !== 'true';
+        root.querySelectorAll('details.home-details').forEach(function (d) { d.open = opening; });
+        expandBtn.setAttribute('aria-pressed', opening ? 'true' : 'false');
+        expandBtn.querySelector('.lbl').textContent = opening ? '소절 모두 접기' : '소절 모두 펼치기';
+      });
+    }
+  }
+
+  /* Home has no reader chrome of its own, so it carries its own theme switch.
+     Chapter pages keep using the toggle their own template already provides. */
+  function wireHomeTheme() {
+    var btn = document.getElementById('homeThemeBtn');
+    if (!btn) return;
+    var KEY = 'janewaybook_theme';
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) { /* private mode */ }
+    if (saved === 'dark' || saved === 'light') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+    function currentIsDark() {
+      var t = document.documentElement.getAttribute('data-theme');
+      if (t) return t === 'dark';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    function sync() { btn.setAttribute('aria-label', currentIsDark() ? '밝은 테마로' : '어두운 테마로'); }
+    btn.addEventListener('click', function () {
+      var next = currentIsDark() ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem(KEY, next); } catch (e) { /* ignore */ }
+      sync();
+    });
+    sync();
+  }
+
+  /* ---------------- chapter sidebar ---------------- */
+
+  function makeSidebar() {
+    var topInner = document.querySelector('header.top .top-inner');
+
+    var btn = document.createElement('button');
+    btn.id = 'bookNavBtn';
+    btn.type = 'button';
+    btn.className = 'bk-btn bk-iconbtn';
+    btn.innerHTML = SVG_BOOK;
+    btn.setAttribute('aria-label', '다른 장으로 이동');
+    btn.setAttribute('title', '다른 장으로 이동');
+    if (topInner) {
+      var brand = topInner.querySelector('.brand');
+      if (brand) topInner.insertBefore(btn, brand); else topInner.prepend(btn);
+    } else {
+      btn.style.cssText = 'position:fixed;left:14px;bottom:14px;z-index:90';
+      document.body.appendChild(btn);
+    }
+
+    var scrim = document.createElement('div');
+    scrim.id = 'bookScrim';
+
+    var panel = document.createElement('aside');
+    panel.id = 'bookPanel';
+    panel.setAttribute('aria-label', '책 전체 목차');
+    panel.setAttribute('aria-hidden', 'true');
+
+    var head = document.createElement('div');
+    head.className = 'book-head';
+    var hwrap = document.createElement('div');
+    hwrap.innerHTML = '<h2>' + esc(BOOK_TITLE) + '</h2><p>전체 ' + groupPages().length + '개 장</p>';
+    var close = document.createElement('button');
+    close.className = 'book-close';
+    close.type = 'button';
+    close.innerHTML = '&times;';
+    close.setAttribute('aria-label', '목차 닫기');
+    head.append(hwrap, close);
+
+    var list = document.createElement('nav');
+    list.className = 'book-list';
+    var lastPart = null;
+
+    groupPages().forEach(function (g) {
+      var p = g.main;
+      if (partKey(p) !== lastPart) {
+        var sec = document.createElement('div');
+        sec.className = 'book-part';
+        sec.textContent = partLabel(p);
+        list.appendChild(sec);
+        lastPart = partKey(p);
+      }
+
+      var chapter = document.createElement('div');
+      chapter.className = 'book-chapter';
+      var row = document.createElement('div');
+      row.className = 'book-row';
+
+      var t = splitTitle(p.title);
+      var link = document.createElement('a');
+      link.className = 'book-link';
+      link.href = p.file;
+      link.innerHTML = '<span class="chapter-num">' + esc(t.num) + '</span>' +
+        '<span class="chapter-title">' + esc(t.rest) + '</span>';
+      var isCurrentChapter = !!current && baseId(current) === p.id;
+      if (current && p.id === current.id) {
+        link.classList.add('current');
+        link.setAttribute('aria-current', 'page');
+      }
+      row.appendChild(link);
+
+      var sublist = null;
+      if (p.sections && p.sections.length) {
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'book-subtoggle';
+        toggle.innerHTML = SVG_CHEV;
+        toggle.setAttribute('aria-label', t.num + ' 소절 목차');
+        toggle.setAttribute('aria-expanded', isCurrentChapter ? 'true' : 'false');
+        row.appendChild(toggle);
+
+        sublist = document.createElement('div');
+        sublist.className = 'book-sublist';
+        if (isCurrentChapter) sublist.classList.add('expanded');
+        p.sections.forEach(function (s) {
+          var a = document.createElement('a');
+          a.className = 'book-sublink level-' + s.level;
+          a.href = p.file + '#' + encodeURIComponent(s.id);
+          a.textContent = s.title;
+          if (isCurrentChapter && decodeURIComponent(location.hash.slice(1)) === s.id) {
+            a.classList.add('active-section');
+          }
+          sublist.appendChild(a);
+        });
+
+        toggle.addEventListener('click', function () {
+          var open = sublist.classList.toggle('expanded');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+
+      chapter.appendChild(row);
+      if (sublist) chapter.appendChild(sublist);
+
+      if (g.exercises) {
+        var ex = document.createElement('a');
+        ex.className = 'book-exlink';
+        ex.href = g.exercises.file;
+        ex.textContent = '☆ 연습문제';
+        if (current && g.exercises.id === current.id) {
+          ex.classList.add('current');
+          ex.setAttribute('aria-current', 'page');
+        }
+        chapter.appendChild(ex);
+      }
+
+      list.appendChild(chapter);
+    });
+
+    var foot = document.createElement('div');
+    foot.style.cssText = 'padding:10px 12px 4px';
+    var home = document.createElement('a');
+    home.className = 'book-exlink book-homelink';
+    home.href = 'index.html';
+    home.textContent = '← 전체 목차 홈';
+    foot.appendChild(home);
+    list.appendChild(foot);
+
+    panel.append(head, list);
+    document.body.append(scrim, panel);
+
+    var lastFocus = null;
+    function open() {
+      lastFocus = document.activeElement;
+      panel.classList.add('show');
+      scrim.classList.add('show');
+      panel.setAttribute('aria-hidden', 'false');
+      close.focus();
+      var cur = panel.querySelector('.book-link.current, .book-exlink.current');
+      if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'center' });
+    }
+    function shut() {
+      panel.classList.remove('show');
+      scrim.classList.remove('show');
+      panel.setAttribute('aria-hidden', 'true');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    btn.addEventListener('click', open);
+    close.addEventListener('click', shut);
+    scrim.addEventListener('click', shut);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('show')) shut();
+    });
+  }
+
+  /* ---------------- previous / next ---------------- */
+
+  function makePager() {
+    if (!current) return;
+    var main = document.querySelector('main');
+    if (!main) return;
+
+    var prev = curIndex > 0 ? pages[curIndex - 1] : null;
+    var next = curIndex >= 0 && curIndex < pages.length - 1 ? pages[curIndex + 1] : null;
+
+    var pager = document.createElement('nav');
+    pager.id = 'bookPager';
+    pager.setAttribute('aria-label', '이전 / 다음 페이지');
+
+    function make(p, cls, label, fallbackText) {
+      var a = document.createElement('a');
+      a.className = 'book-page-link ' + cls;
+      if (p) {
+        a.href = p.file;
+      } else {
+        a.href = 'index.html';
+        a.classList.add('home');
+      }
+      a.innerHTML = '<span class="label">' + label + '</span>' +
+        '<span class="title">' + esc(p ? p.title : fallbackText) + '</span>';
+      return a;
+    }
+
+    pager.append(
+      make(prev, 'prev', '← Previous', '전체 목차'),
+      make(next, 'next', 'Next →', '전체 목차')
+    );
+    main.insertAdjacentElement('afterend', pager);
+  }
+
+  function init() {
+    makeHomeTOC();
+    wireHomeTheme();
+    if (current) { makeSidebar(); makePager(); }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<!--BOOK-NAV-END-->

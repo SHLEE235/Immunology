@@ -1,0 +1,303 @@
+/* ============================================================
+   Janeway Web Book — shared navigation layer
+   Loaded by index.html and by every chapter page.
+
+   Chapter pages define their own palette (--paper, --ink, --accent …)
+   in an inline <style> block, so every rule here uses those variables
+   and inherits each chapter's colours and light/dark state for free.
+   The book-level palette below is scoped to .book-home so it can never
+   clobber a chapter's own palette.
+   ============================================================ */
+
+/* ---------- book-level palette (home page only) ---------- */
+:root{
+  --bk-paper:#F6F4F1;
+  --bk-paper-raised:#FFFDFB;
+  --bk-paper-sunken:#EBE7E1;
+  --bk-ink:#1D2126;
+  --bk-ink-soft:#525B65;
+  --bk-ink-faint:#8A929B;
+  --bk-accent:#2C3440;
+  --bk-accent-soft:#5A6675;
+  --bk-accent2:#7A6652;
+  --bk-line:#DDD8D1;
+  --bk-line-soft:#EBE7E1;
+  --bk-shadow:0 1px 2px rgba(28,30,36,.05), 0 8px 24px -12px rgba(28,30,36,.16);
+  --bk-font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --bk-font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bk-paper:#14161A;
+    --bk-paper-raised:#1C1F25;
+    --bk-paper-sunken:#0E1013;
+    --bk-ink:#E8EAED;
+    --bk-ink-soft:#AEB6C0;
+    --bk-ink-faint:#727C87;
+    --bk-accent:#C3CEDC;
+    --bk-accent-soft:#8E9CAD;
+    --bk-accent2:#C4A882;
+    --bk-line:#2A2E35;
+    --bk-line-soft:#1F2228;
+    --bk-shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bk-paper:#14161A;
+  --bk-paper-raised:#1C1F25;
+  --bk-paper-sunken:#0E1013;
+  --bk-ink:#E8EAED;
+  --bk-ink-soft:#AEB6C0;
+  --bk-ink-faint:#727C87;
+  --bk-accent:#C3CEDC;
+  --bk-accent-soft:#8E9CAD;
+  --bk-accent2:#C4A882;
+  --bk-line:#2A2E35;
+  --bk-line-soft:#1F2228;
+  --bk-shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.55);
+}
+
+/* The home page maps the book palette onto the same variable names the
+   navigation components use, so one set of rules serves both contexts. */
+body.book-home{
+  --paper:var(--bk-paper); --paper_raised:var(--bk-paper-raised); --paper_sunken:var(--bk-paper-sunken);
+  --ink:var(--bk-ink); --ink_soft:var(--bk-ink-soft); --ink_faint:var(--bk-ink-faint);
+  --accent:var(--bk-accent); --accent_soft:var(--bk-accent-soft); --accent2:var(--bk-accent2);
+  --line:var(--bk-line); --line_soft:var(--bk-line-soft);
+  --shadow:var(--bk-shadow); --font-ui:var(--bk-font-ui); --font-mono:var(--bk-font-mono);
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-ui); -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- home page ---------- */
+.book-home header.book-top{
+  position:sticky; top:0; z-index:40;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(10px) saturate(1.1);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--line);
+}
+.book-home .book-top-inner{
+  max-width:960px; margin:0 auto; padding:14px 20px;
+  display:flex; align-items:flex-start; gap:12px;
+}
+.book-home .book-brand{flex:1; min-width:0}
+.book-home .kicker{
+  font:600 10.5px/1.3 var(--font-mono); letter-spacing:.09em;
+  text-transform:uppercase; color:var(--accent2);
+}
+.book-home h1{margin:3px 0 0; font-size:22px; line-height:1.25; letter-spacing:-.01em; font-weight:800}
+.book-home .subtitle{margin:5px 0 0; color:var(--ink_soft); font-size:12.5px; line-height:1.55}
+.book-home main{max-width:960px; margin:0 auto; padding:24px 20px 80px}
+.home-intro{
+  margin:0 0 22px; padding:13px 15px; border:1px solid var(--line);
+  border-radius:10px; background:var(--paper_raised);
+  color:var(--ink_soft); font-size:12.5px; line-height:1.65;
+}
+.home-toolbar{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px}
+.home-section{margin:0 0 30px}
+.home-section-title{
+  font:700 10px/1.3 var(--font-mono); letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink_faint); padding:6px 2px 10px;
+}
+.home-chapter-card{
+  border:1px solid var(--line); border-radius:13px; background:var(--paper_raised);
+  box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden;
+}
+.home-chapter{
+  display:block; padding:16px 18px 14px; color:inherit; text-decoration:none;
+}
+.home-chapter:hover{background:var(--paper_sunken)}
+.home-num{
+  display:block; font:700 10px/1.3 var(--font-mono);
+  letter-spacing:.09em; text-transform:uppercase; color:var(--accent2);
+}
+.home-title{
+  display:block; font-size:18px; line-height:1.35; font-weight:800;
+  color:var(--accent); margin-top:4px;
+}
+.home-meta{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  padding:0 18px 14px; margin-top:-4px;
+}
+.home-exlink{
+  display:inline-block; padding:5px 11px; border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent2) 45%,var(--line));
+  background:color-mix(in srgb,var(--accent2) 10%,transparent);
+  color:var(--accent2); text-decoration:none;
+  font-size:11.5px; font-weight:700; line-height:1.4;
+}
+.home-exlink:hover{background:color-mix(in srgb,var(--accent2) 20%,transparent)}
+.home-count{color:var(--ink_faint); font:600 11px/1.4 var(--font-mono)}
+
+/* collapsible subsection list — closed by default */
+.home-details{border-top:1px dashed var(--line)}
+.home-details>summary{
+  list-style:none; cursor:pointer; padding:10px 18px;
+  color:var(--ink_soft); font-size:12px; font-weight:700;
+  display:flex; align-items:center; gap:7px; user-select:none;
+}
+.home-details>summary::-webkit-details-marker{display:none}
+.home-details>summary:hover{background:var(--paper_sunken); color:var(--accent)}
+.home-details>summary .chev{
+  width:14px; height:14px; flex:none; transition:transform .18s ease;
+  color:var(--ink_faint);
+}
+.home-details[open]>summary .chev{transform:rotate(90deg)}
+.home-details[open]>summary{color:var(--accent)}
+.home-subsections{
+  margin:0 18px 14px 26px; border-left:2px solid var(--line);
+  padding:6px 0 6px 10px;
+}
+.home-subsection{
+  display:block; color:var(--ink_soft); text-decoration:none;
+  font-size:12.5px; line-height:1.45; padding:5px 9px; border-radius:7px;
+}
+.home-subsection:hover{background:var(--paper_sunken); color:var(--accent)}
+.home-subsection.level-3{padding-left:18px; font-size:12px}
+.home-subsection.level-4{padding-left:27px; font-size:11.5px; color:var(--ink_faint)}
+.book-home footer.book-foot{
+  max-width:960px; margin:0 auto; padding:0 20px 60px;
+  color:var(--ink_faint); font-size:11.5px; line-height:1.7; text-align:center;
+}
+
+/* ---------- shared button ---------- */
+.bk-btn{
+  appearance:none; border:1px solid var(--line); background:var(--paper_raised);
+  color:var(--ink); height:36px; padding:0 12px; border-radius:9px;
+  font-family:var(--font-ui); font-size:12.5px; font-weight:600;
+  cursor:pointer; white-space:nowrap; flex:none;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.bk-btn:hover{background:var(--paper_sunken)}
+.bk-btn:active{transform:scale(.97)}
+.bk-btn svg{width:16px; height:16px}
+.bk-iconbtn{width:36px; padding:0; justify-content:center}
+
+/* ---------- chapter sidebar ---------- */
+#bookScrim{
+  position:fixed; inset:0; background:rgba(10,10,14,.45);
+  backdrop-filter:blur(2px); z-index:100;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+#bookScrim.show{opacity:1; pointer-events:auto}
+#bookPanel{
+  position:fixed; left:0; top:0; height:100%; width:min(360px,90vw);
+  background:var(--paper_raised); border-right:1px solid var(--line);
+  z-index:105; transform:translateX(-100%);
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+  display:flex; flex-direction:column;
+  box-shadow:12px 0 34px -22px rgba(0,0,0,.4);
+}
+#bookPanel.show{transform:translateX(0)}
+.book-head{
+  padding:16px 18px; border-bottom:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+}
+.book-head h2{margin:0; font-size:15px; line-height:1.3; font-weight:800}
+.book-head p{margin:4px 0 0; color:var(--ink_faint); font:600 10.5px/1.3 var(--font-mono); letter-spacing:.06em}
+.book-close{
+  appearance:none; border:1px solid var(--line); background:transparent;
+  color:var(--ink); width:32px; height:32px; border-radius:8px;
+  cursor:pointer; font-size:17px; line-height:1; flex:none;
+}
+.book-close:hover{background:var(--paper_sunken)}
+.book-list{overflow:auto; overscroll-behavior:contain; padding:10px 10px 28px; flex:1}
+.book-part{
+  margin:10px 2px 6px; padding:7px 10px 4px; color:var(--ink_faint);
+  font:700 9.5px/1.3 var(--font-mono); letter-spacing:.09em; text-transform:uppercase;
+}
+.book-chapter{margin-bottom:2px}
+.book-row{display:flex; align-items:stretch; gap:2px}
+.book-link{
+  flex:1; min-width:0; display:block; padding:9px 11px; border-radius:9px;
+  color:var(--ink); text-decoration:none; line-height:1.35;
+}
+.book-link:hover{background:var(--paper_sunken)}
+.book-link.current{
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  color:var(--accent);
+}
+.chapter-num{
+  display:block; font:700 9.5px/1.2 var(--font-mono);
+  color:var(--accent2); letter-spacing:.08em; text-transform:uppercase;
+}
+.book-link.current .chapter-num{color:var(--accent)}
+.chapter-title{display:block; font-size:13.5px; margin-top:2px}
+.book-link.current .chapter-title{font-weight:800}
+.book-subtoggle{
+  appearance:none; border:none; background:transparent; color:var(--ink_faint);
+  width:30px; border-radius:8px; cursor:pointer; flex:none;
+  display:flex; align-items:center; justify-content:center;
+}
+.book-subtoggle:hover{background:var(--paper_sunken); color:var(--accent)}
+.book-subtoggle svg{width:13px; height:13px; transition:transform .18s ease}
+.book-subtoggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.book-subtoggle[aria-expanded="true"]{color:var(--accent)}
+.book-sublist{display:none; padding:2px 0 8px 16px}
+.book-sublist.expanded{display:block}
+.book-sublink{
+  display:block; padding:5px 9px; border-left:2px solid var(--line);
+  color:var(--ink_soft); text-decoration:none; font-size:11.5px; line-height:1.45;
+}
+.book-sublink:hover{background:var(--paper_sunken); color:var(--accent)}
+.book-sublink.level-3{padding-left:20px; font-size:11px}
+.book-sublink.level-4{padding-left:31px; font-size:10.5px; color:var(--ink_faint)}
+.book-sublink.active-section{
+  border-left-color:var(--accent2); color:var(--accent2); font-weight:700;
+  background:color-mix(in srgb,var(--accent2) 9%,transparent);
+}
+.book-exlink{
+  display:block; margin:1px 0 0 11px; padding:5px 10px; border-radius:7px;
+  color:var(--ink_faint); text-decoration:none; font-size:11px; font-weight:600;
+}
+.book-exlink:hover{background:var(--paper_sunken); color:var(--accent2)}
+.book-exlink.current{color:var(--accent2); font-weight:800}
+
+/* ---------- previous / next pager ---------- */
+#bookPager{
+  max-width:720px; margin:8px auto 0; padding:0 18px 44px;
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.book-page-link{
+  display:flex; flex-direction:column; gap:4px; min-width:0;
+  padding:13px 15px; border:1px solid var(--line); border-radius:11px;
+  background:var(--paper_raised); text-decoration:none; color:var(--ink);
+  box-shadow:var(--shadow);
+}
+.book-page-link:hover{background:var(--paper_sunken); border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.book-page-link.next{text-align:right; align-items:flex-end}
+.book-page-link .label{
+  font:700 9.5px/1.3 var(--font-mono); letter-spacing:.09em;
+  color:var(--accent2); text-transform:uppercase;
+}
+.book-page-link .title{
+  font-size:12.5px; font-weight:700; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden; max-width:100%;
+}
+.book-page-link.disabled{opacity:.4; pointer-events:none}
+
+/* ---------- chapter header: keep every control reachable on phones ---------- */
+@media (max-width:560px){
+  header.top .top-inner{flex-wrap:wrap; gap:8px}
+  header.top .top-inner .brand{flex:1 1 120px; order:1}
+  header.top .top-inner #bookNavBtn{order:2}
+  header.top .top-inner #themeBtn{order:3}
+  header.top .top-inner::after{content:""; order:4; flex-basis:100%; height:0}
+  header.top .top-inner #markFilterBtn{order:5}
+  header.top .top-inner #expandAll{order:6}
+  header.top .top-inner .fontctl{order:7}
+  header.top .top-inner #tocBtn{order:8}
+  #bookPager{grid-template-columns:1fr; padding-left:14px; padding-right:14px}
+  .book-page-link{padding:11px 13px}
+  .book-page-link.next{text-align:left; align-items:flex-start}
+  .book-home .book-top-inner{padding:12px 14px}
+  .book-home main{padding:18px 14px 60px}
+  .book-home h1{font-size:19px}
+  .home-title{font-size:16px}
+  .home-subsections{margin-left:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  #bookPanel,#bookScrim,.book-subtoggle svg,.home-details>summary .chev{transition:none}
+}
